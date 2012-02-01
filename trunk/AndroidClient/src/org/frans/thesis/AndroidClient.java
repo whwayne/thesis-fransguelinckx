@@ -174,6 +174,18 @@ public class AndroidClient extends Activity {
                 break;
             }
             case PING:{
+            	if (mTabletopInterface == null) {
+                	break;
+                }
+            	try {
+                    String message = (String)msg.obj;
+                    String reply = mTabletopInterface.ping(message);
+                    Message replyMsg = mHandler.obtainMessage(MESSAGE_POST_TOAST, reply);
+                    mHandler.sendMessage(replyMsg);
+                } catch (BusException ex) {
+                    logException("TabletopInterface.getContact()", ex);
+                }
+                break;
             }
             }
         }
