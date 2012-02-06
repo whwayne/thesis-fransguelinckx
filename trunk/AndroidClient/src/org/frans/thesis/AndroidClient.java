@@ -17,6 +17,9 @@ import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class AndroidClient extends Activity {
@@ -30,6 +33,9 @@ public class AndroidClient extends Activity {
     private static final int MESSAGE_POST_TOAST = 1;
     private static final int MESSAGE_START_PROGRESS_DIALOG = 2;
     private static final int MESSAGE_STOP_PROGRESS_DIALOG = 3;
+    
+    private TextView textView;
+    private Button pingButton;
     
     private ProgressDialog mDialog;
     private BusHandler mBusHandler;
@@ -63,14 +69,29 @@ public class AndroidClient extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
+        textView = (TextView) findViewById(R.id.textView);
+        pingButton = (Button) findViewById(R.id.pingButton);
+        
+       setPingButtonClickListener();
+        
         HandlerThread busThread = new HandlerThread("BusHandler");
         busThread.start();
-        mBusHandler = new BusHandler(busThread.getLooper());
+        mBusHandler = new BusHandler(busThread.getLooper(), textView);
         mBusHandler.sendEmptyMessage(BusHandler.CONNECT);
         mHandler.sendEmptyMessage(MESSAGE_START_PROGRESS_DIALOG);
     }
     
-    @Override
+    private void setPingButtonClickListener() {
+		this.pingButton.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View view) {
+				mBusHandler.sendEmptyMessage(BusHandler.PING);
+			}
+		});
+	}
+
+	@Override
     protected void onDestroy() {
         super.onDestroy();
         mBusHandler.sendEmptyMessage(BusHandler.DISCONNECT);
@@ -97,16 +118,21 @@ public class AndroidClient extends Activity {
         private boolean mIsConnected;
         private boolean mIsStoppingDiscovery;
         
-        public BusHandler(Looper looper) {
+        private TextView textView;
+        
+        public BusHandler(Looper looper, TextView textView) {
             super(looper);
             mIsConnected = false;
             mIsStoppingDiscovery = false;
+            this.textView = textView;
         }
         
         @Override
         public void handleMessage(Message msg) {
             switch(msg.what) {
             case CONNECT: {
+            	this.textView.setText("Connecting");
+            	
             	mBus = new BusAttachment(getPackageName(), BusAttachment.RemoteMessage.Receive);
                 
                 mBus.registerBusListener(new BusListener() {
@@ -139,6 +165,9 @@ public class AndroidClient extends Activity {
                 if (mIsStoppingDiscovery) {
                     break;
                 }
+
+            	this.textView.setText("Joining session");
+            	
                 short contactPort = CONTACT_PORT;
                 SessionOpts sessionOpts = new SessionOpts();
                 Mutable.IntegerValue sessionId = new Mutable.IntegerValue();
@@ -154,7 +183,7 @@ public class AndroidClient extends Activity {
                 logStatus("BusAttachment.joinSession()", status);
 
                 if (status == Status.OK) {
-                	mProxyObj = mBus.getProxyBusObject(SERVICE_NAME, "/addressbook", sessionId.value,
+                	mProxyObj = mBus.getProxyBusObject(SERVICE_NAME, "/tabletopservive", sessionId.value,
                 				                       new Class[] { TabletopInterface.class });
                    	mTabletopInterface = mProxyObj.getInterface(TabletopInterface.class);
                 	mSessionId = sessionId.value;
@@ -164,6 +193,8 @@ public class AndroidClient extends Activity {
                 break;
             }
             case DISCONNECT: {
+            	this.textView.setText("Disconnecting");
+            	
                 mIsStoppingDiscovery = true;
                 if (mIsConnected) {
                     Status status = mBus.leaveSession(mSessionId);
@@ -174,6 +205,8 @@ public class AndroidClient extends Activity {
                 break;
             }
             case PING:{
+            	this.textView.setText("Ping");
+            	
             	if (mTabletopInterface == null) {
                 	break;
                 }
