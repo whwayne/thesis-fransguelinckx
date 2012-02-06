@@ -1,4 +1,4 @@
-package org.frans.thesis;
+package org.frans.thesis.service;
 
 import org.alljoyn.bus.BusException;
 import org.alljoyn.bus.annotation.BusInterface;
