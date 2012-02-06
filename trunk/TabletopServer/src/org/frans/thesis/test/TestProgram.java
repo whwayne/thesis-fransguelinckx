@@ -2,14 +2,24 @@ package org.frans.thesis.test;
 
 import org.alljoyn.bus.BusAttachment;
 import org.alljoyn.bus.Status;
+import org.frans.thesis.GUI.CFScene;
 import org.frans.thesis.service.TabletopServer;
+import org.mt4j.MTApplication;
 
-public class TestProgram {
+public class TestProgram extends MTApplication{
+	
+	private static final long serialVersionUID = -7674275591986637141L;
+
 	static {
 		System.loadLibrary("alljoyn_java");
 	}
 	
 	public static void main(String[] args) {
+		initialize();
+		connect();
+	}
+
+	private static void connect() {
 		try {
             /* Create a bus connection */
 			System.out.print("Connecting...   ");
@@ -47,6 +57,11 @@ public class TestProgram {
         } catch (InterruptedException ex) {
             System.out.println("Interrupted");
         }
+	}
+
+	@Override
+	public void startUp() {
+		this.addScene(new CFScene(this, "CFScene"));
 	}
 
 }
