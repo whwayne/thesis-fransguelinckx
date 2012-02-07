@@ -165,8 +165,6 @@ public class AndroidClient extends Activity {
                 if (mIsStoppingDiscovery) {
                     break;
                 }
-
-//            	this.textView.setText("Joining session");
             	
                 short contactPort = CONTACT_PORT;
                 SessionOpts sessionOpts = new SessionOpts();
@@ -183,7 +181,7 @@ public class AndroidClient extends Activity {
                 logStatus("BusAttachment.joinSession()", status);
 
                 if (status == Status.OK) {
-                	mProxyObj = mBus.getProxyBusObject(SERVICE_NAME, "/tabletopservive", sessionId.value,
+                	mProxyObj = mBus.getProxyBusObject(SERVICE_NAME, "/tabletopservice", sessionId.value,
                 				                       new Class[] { TabletopInterface.class });
                    	mTabletopInterface = mProxyObj.getInterface(TabletopInterface.class);
                 	mSessionId = sessionId.value;
@@ -193,8 +191,6 @@ public class AndroidClient extends Activity {
                 break;
             }
             case DISCONNECT: {
-//            	this.textView.setText("Disconnecting");
-            	
                 mIsStoppingDiscovery = true;
                 if (mIsConnected) {
                     Status status = mBus.leaveSession(mSessionId);
@@ -205,7 +201,6 @@ public class AndroidClient extends Activity {
                 break;
             }
             case PING:{
-//            	this.textView.setText("Ping");
             	logInfo("Ping");
             	if (mTabletopInterface == null) {
                 	break;
