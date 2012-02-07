@@ -78,7 +78,7 @@ public class AndroidClient extends Activity {
         busThread.start();
         mBusHandler = new BusHandler(busThread.getLooper(), textView);
         mBusHandler.sendEmptyMessage(BusHandler.CONNECT);
-        mHandler.sendEmptyMessage(MESSAGE_START_PROGRESS_DIALOG);
+//        mHandler.sendEmptyMessage(MESSAGE_START_PROGRESS_DIALOG);
     }
     
     private void setPingButtonClickListener() {
@@ -144,7 +144,7 @@ public class AndroidClient extends Activity {
                          * the indicated well-known name.  If the program is already a member of 
                          * a session (i.e. connected to a service) we will not attempt to join 
                          * another session.
-                         * It is possible to join multiple session however joining multiple 
+                         * It is possible to join multiple sessions however joining multiple 
                          * sessions is not shown in this sample. 
                          */
                     	if (! mIsConnected){
@@ -166,7 +166,7 @@ public class AndroidClient extends Activity {
                     break;
                 }
 
-            	this.textView.setText("Joining session");
+//            	this.textView.setText("Joining session");
             	
                 short contactPort = CONTACT_PORT;
                 SessionOpts sessionOpts = new SessionOpts();
@@ -193,7 +193,7 @@ public class AndroidClient extends Activity {
                 break;
             }
             case DISCONNECT: {
-            	this.textView.setText("Disconnecting");
+//            	this.textView.setText("Disconnecting");
             	
                 mIsStoppingDiscovery = true;
                 if (mIsConnected) {
@@ -205,8 +205,8 @@ public class AndroidClient extends Activity {
                 break;
             }
             case PING:{
-            	this.textView.setText("Ping");
-            	
+//            	this.textView.setText("Ping");
+            	logInfo("Ping");
             	if (mTabletopInterface == null) {
                 	break;
                 }
