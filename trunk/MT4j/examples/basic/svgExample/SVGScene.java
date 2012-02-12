@@ -10,7 +10,6 @@ import org.mt4j.util.math.Vector3D;
 
 public class SVGScene extends AbstractScene {
 	
-//	private String svgPath = System.getProperty("user.dir")+File.separator + "examples"+File.separator +"basic"+ File.separator + "svgExample"+ File.separator + "data" + File.separator;
 	private String svgPath =  "basic" + MTApplication.separator + "svgExample" + MTApplication.separator + "data" + MTApplication.separator;
 
 	public SVGScene(MTApplication mtApplication, String name) {
