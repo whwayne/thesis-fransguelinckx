@@ -2,7 +2,6 @@ package org.frans.thesis.GUI;
 
 import java.util.ArrayList;
 
-import org.frans.thesis.service.CFMobileDeviceProxy;
 import org.mt4j.MTApplication;
 import org.mt4j.sceneManagement.AbstractScene;
 import org.mt4j.util.math.Vector3D;
@@ -19,10 +18,12 @@ public class CFScene extends AbstractScene {
 
 	public CFScene(MTApplication mtApplication, String name) {
 		super(mtApplication, name);
-		cfComponents = new ArrayList<CFComponent>();
+		this.cfComponents = new ArrayList<CFComponent>();
+		this.cfMobileDeviceProxies = new ArrayList<CFMobileDeviceProxy>();
 
 		this.addCFImage(new CFImage(getMTApplication(), "foto1.jpg", this));
 		this.addCFImage(new CFImage(getMTApplication(), "foto2.jpg", this));
+		this.addCFMobileDeviceProxy(new CFMobileDeviceProxy(getMTApplication(), this));
 	}
 
 	protected void addCFImage(CFImage image) {
