@@ -23,7 +23,7 @@ public class CFScene extends AbstractScene {
 
 		this.addCFImage(new CFImage(getMTApplication(), "foto1.jpg", this));
 		this.addCFImage(new CFImage(getMTApplication(), "foto2.jpg", this));
-		this.addCFMobileDeviceProxy(new CFMobileDeviceProxy(getMTApplication(), this));
+		this.addCFMobileDeviceProxy(new CFMobileDeviceProxy(getMTApplication(), this, "Frans' phone"));
 	}
 
 	protected void addCFImage(CFImage image) {
