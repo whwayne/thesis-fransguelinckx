@@ -1,7 +1,7 @@
 package org.frans.thesis.GUI;
 
 import org.mt4j.MTApplication;
-import org.mt4j.components.visibleComponents.shapes.MTRectangle;
+import org.mt4j.components.visibleComponents.widgets.MTImage;
 import org.mt4j.input.gestureAction.DefaultRotateAction;
 import org.mt4j.input.gestureAction.DefaultScaleAction;
 import org.mt4j.input.inputProcessors.IGestureEventListener;
@@ -20,7 +20,7 @@ public class CFImage extends CFComponent implements IGestureEventListener{
 			+ MTApplication.separator + "thesis" + MTApplication.separator
 			+ "GUI" + MTApplication.separator + "data"
 			+ MTApplication.separator;
-	private MTRectangle rectangle;
+	private MTImage rectangle;
 	private MTApplication mtApplication;
 
 	private CFScene scene;
@@ -29,7 +29,7 @@ public class CFImage extends CFComponent implements IGestureEventListener{
 		this.mtApplication = mtApplication;
 		this.scene = scene;
 		PImage pImage = getMTApplication().loadImage(imagePath + imageName);
-		this.rectangle = new MTRectangle(pImage, this.mtApplication);
+		this.rectangle = new MTImage(pImage, this.mtApplication);
 		this.scaleImageToStackSize();
 		
 		this.getComponent().unregisterAllInputProcessors();
@@ -49,7 +49,7 @@ public class CFImage extends CFComponent implements IGestureEventListener{
 		return this.scene;
 	}
 
-	public MTRectangle getComponent() {
+	public MTImage getComponent() {
 		return this.rectangle;
 	}
 
@@ -79,5 +79,4 @@ public class CFImage extends CFComponent implements IGestureEventListener{
 	public boolean isStackable() {
 		return true;
 	}
-
 }

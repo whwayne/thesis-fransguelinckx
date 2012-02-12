@@ -3,6 +3,8 @@ package org.frans.thesis.GUI;
 import java.util.ArrayList;
 
 import org.mt4j.MTApplication;
+import org.mt4j.input.gestureAction.DefaultLassoAction;
+import org.mt4j.input.inputProcessors.componentProcessors.lassoProcessor.LassoProcessor;
 import org.mt4j.sceneManagement.AbstractScene;
 import org.mt4j.util.math.Vector3D;
 
@@ -13,6 +15,7 @@ public class CFScene extends AbstractScene {
 	private ArrayList<CFMobileDeviceProxy> getCfMobileDeviceProxies() {
 		return cfMobileDeviceProxies;
 	}
+	private LassoProcessor lassoProcessor;
 
 	private final float CRITICAL_STACK_DISTANCE = 100;
 
@@ -20,6 +23,10 @@ public class CFScene extends AbstractScene {
 		super(mtApplication, name);
 		this.cfComponents = new ArrayList<CFComponent>();
 		this.cfMobileDeviceProxies = new ArrayList<CFMobileDeviceProxy>();
+
+		this.lassoProcessor = new LassoProcessor(getMTApplication(), getCanvas(), getSceneCam());
+		getCanvas().registerInputProcessor(lassoProcessor);
+		getCanvas().addGestureListener(LassoProcessor.class, new DefaultLassoAction(getMTApplication(), getCanvas().getClusterManager(), getCanvas()));
 
 		this.addCFImage(new CFImage(getMTApplication(), "foto1.jpg", this));
 		this.addCFImage(new CFImage(getMTApplication(), "foto2.jpg", this));
@@ -30,6 +37,7 @@ public class CFScene extends AbstractScene {
 		if(!this.getCfComponents().contains(image)){
 			this.getCanvas().addChild(image.getComponent());	
 			this.getCfComponents().add(image);
+			this.lassoProcessor.addClusterable(image.getComponent());
 		}
 	}
 	

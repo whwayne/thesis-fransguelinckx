@@ -4,7 +4,7 @@ import org.mt4j.components.TransformSpace;
 import org.mt4j.components.visibleComponents.shapes.MTRectangle;
 import org.mt4j.util.math.Vector3D;
 
-public abstract class CFComponent {
+public abstract class CFComponent{
 	
 	private static final float STANDARD_MEASURE = 100;
 

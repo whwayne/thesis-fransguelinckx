@@ -27,7 +27,7 @@ public class CFMobileDeviceProxy extends CFComponent {
 		this.mtApplication = mtApplication;
 		this.name = name;
 		IFont fontArial = FontManager.getInstance().createFont(mtApplication, "arial.ttf", 
-				50, 	//Font size
+				25, 	//Font size
 				white,  //Font fill color
 				white);	//Font outline color
 		//Create a textfield
