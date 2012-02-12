@@ -5,7 +5,7 @@ import org.alljoyn.bus.annotation.BusInterface;
 import org.alljoyn.bus.annotation.BusMethod;
 
 @BusInterface (name = "org.frans.thesis.TabltopInterface")
-public interface TabletopInterface {
+public interface CFTabletopInterface {
 	
 	@BusMethod
 	public String ping(String message) throws BusException;
