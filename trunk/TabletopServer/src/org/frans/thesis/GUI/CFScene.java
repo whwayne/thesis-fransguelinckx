@@ -22,9 +22,9 @@ public class CFScene extends AbstractScene {
 //		getCanvas().registerInputProcessor(lassoProcessor);
 //		getCanvas().addGestureListener(LassoProcessor.class, new DefaultLassoAction(getMTApplication(), getCanvas().getClusterManager(), getCanvas()));
 
-		this.addCFImage(new CFImage(getMTApplication(), "foto1.jpg", this));
-		this.addCFImage(new CFImage(getMTApplication(), "foto2.jpg", this));
-		this.addCFMobileDeviceProxy(new CFMobileDeviceProxy(getMTApplication(), this, "Frans' phone"));
+//		this.addCFImage(new CFImage(getMTApplication(), "foto1.jpg", this));
+//		this.addCFImage(new CFImage(getMTApplication(), "foto2.jpg", this));
+		this.addCFMobileDeviceProxy(new CFMobileDeviceProxy(getMTApplication(), "Frans' phone"));
 		this.height = getMTApplication().getHeight();
 		this.width = getMTApplication().getWidth();
 	}

@@ -6,8 +6,8 @@ import org.mt4j.components.visibleComponents.font.FontManager;
 import org.mt4j.components.visibleComponents.font.IFont;
 import org.mt4j.components.visibleComponents.shapes.MTRectangle;
 import org.mt4j.components.visibleComponents.widgets.MTTextArea;
+import org.mt4j.input.gestureAction.DefaultDragAction;
 import org.mt4j.input.gestureAction.DefaultRotateAction;
-import org.mt4j.input.gestureAction.DefaultScaleAction;
 import org.mt4j.input.inputProcessors.IGestureEventListener;
 import org.mt4j.input.inputProcessors.MTGestureEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.dragProcessor.DragProcessor;
@@ -20,7 +20,7 @@ import org.mt4j.util.math.Vector3D;
 import processing.core.PApplet;
 import processing.core.PImage;
 
-public class CFMobileDeviceProxy extends CFComponent implements IGestureEventListener {
+public class CFMobileDeviceProxy extends CFComponent {
 
 	private MTRectangle component;
 	private String imagePath = "org" + MTApplication.separator + "frans"
@@ -31,12 +31,10 @@ public class CFMobileDeviceProxy extends CFComponent implements IGestureEventLis
 	private MTApplication mtApplication;
 
 	private String name;
-	private CFScene scene;
 	private MTColor white = new MTColor(255, 255, 255);
 	
-	public CFMobileDeviceProxy(MTApplication mtApplication, CFScene scene,
+	public CFMobileDeviceProxy(MTApplication mtApplication,
 			String name) {
-		this.scene = scene;
 		this.mtApplication = mtApplication;
 		this.name = name;
 		setUpComponent(mtApplication);
@@ -46,13 +44,23 @@ public class CFMobileDeviceProxy extends CFComponent implements IGestureEventLis
 		this.getMTComponent().removeAllGestureEventListeners();
 		
 		this.getMTComponent().registerInputProcessor(new DragProcessor(mtApplication));
-		this.getMTComponent().addGestureListener(DragProcessor.class, new DefaultScaleAction());
+		this.getMTComponent().addGestureListener(DragProcessor.class, new DefaultDragAction());
 		
 		this.getMTComponent().registerInputProcessor(new RotateProcessor(mtApplication));
 		this.getMTComponent().addGestureListener(RotateProcessor.class, new DefaultRotateAction());
 		
 		this.getMTComponent().registerInputProcessor(new TapProcessor(mtApplication));
-		this.getMTComponent().addGestureListener(TapProcessor.class, this);
+		this.getMTComponent().addGestureListener(TapProcessor.class, new IGestureEventListener() {
+			
+			@Override
+			public boolean processGestureEvent(MTGestureEvent me) {
+				TapEvent tapEvent = (TapEvent) me;
+				if(tapEvent.isTapped()){
+					showMenu();
+				}
+				return false;
+			}
+		});
 		
 		this.getMTComponent().setNoStroke(true);
 		this.getMTComponent().setDrawSmooth(true);
@@ -71,10 +79,6 @@ public class CFMobileDeviceProxy extends CFComponent implements IGestureEventLis
 		System.out.println("Download photos");
 	}
 
-	private CFScene getCFScene() {
-		return scene;
-	}
-
 	@Override
 	public MTRectangle getMTComponent() {
 		return this.component;
@@ -86,19 +90,6 @@ public class CFMobileDeviceProxy extends CFComponent implements IGestureEventLis
 
 	@Override
 	public boolean isStackable() {
-		return false;
-	}
-	
-	@Override
-	public boolean processGestureEvent(MTGestureEvent ge) {
-		TapEvent de = (TapEvent)ge;
-		switch (de.getId()) {
-		case TapEvent.BUTTON_UP:
-			this.showMenu();
-			break;
-		default:
-			break;
-		}		
 		return false;
 	}
 
