@@ -47,6 +47,10 @@ public abstract class CFComponent {
 	protected void reposition(Vector3D position) {
 		this.getMTComponent().setPositionGlobal(position);
 	}
+	
+	protected void rotate(Vector3D vector, float degrees){
+		this.getMTComponent().rotateZ(vector,degrees, TransformSpace.GLOBAL);
+	}
 
 	protected void rotateRandomlyForStack() {
 		this.getMTComponent().rotateZ(

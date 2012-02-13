@@ -22,7 +22,6 @@ import processing.core.PImage;
 
 public class CFMobileDeviceProxy extends CFComponent {
 
-	private MTRectangle component;
 	private String imagePath = "org" + MTApplication.separator + "frans"
 			+ MTApplication.separator + "thesis" + MTApplication.separator
 			+ "GUI" + MTApplication.separator + "data"
@@ -32,13 +31,91 @@ public class CFMobileDeviceProxy extends CFComponent {
 
 	private String name;
 	private MTColor white = new MTColor(255, 255, 255);
+	private CFScene scene;
 
-	public CFMobileDeviceProxy(MTApplication mtApplication, String name) {
+	public CFMobileDeviceProxy(MTApplication mtApplication, String name,
+			CFScene scene) {
+		this.scene = scene;
 		this.mtApplication = mtApplication;
 		this.name = name;
 		setUpComponent(mtApplication);
 		this.scaleImageToStackSize();
 
+		setUpGestures(mtApplication);
+
+		this.getMTComponent().setNoStroke(true);
+		this.getMTComponent().setDrawSmooth(true);
+		createMenu();
+	}
+
+	private void createMenu() {
+		this.menu = new CFComponentMenu(this, mtApplication);
+		this.menu.addMenuItem("photos.png", new CFComponentMenuItemListener() {
+
+			@Override
+			public void processEvent() {
+				downloadPhotos();
+			}
+		});
+		this.menu.addMenuItem("calendar.png",
+				new CFComponentMenuItemListener() {
+
+					@Override
+					public void processEvent() {
+						downloadCalendar();
+					}
+				});
+		this.menu.addMenuItem("pdf.png",
+				new CFComponentMenuItemListener() {
+
+					@Override
+					public void processEvent() {
+						downloadPdf();
+					}
+				});
+		this.menu.addMenuItem("pdf.png",
+				new CFComponentMenuItemListener() {
+
+					@Override
+					public void processEvent() {
+						downloadPdf();
+					}
+				});
+		this.menu.addMenuItem("pdf.png",
+				new CFComponentMenuItemListener() {
+
+					@Override
+					public void processEvent() {
+						downloadPdf();
+					}
+				});
+		this.menu.addMenuItem("pdf.png",
+				new CFComponentMenuItemListener() {
+
+					@Override
+					public void processEvent() {
+						downloadPdf();
+					}
+				});
+		this.menu.addMenuItem("pdf.png",
+				new CFComponentMenuItemListener() {
+
+					@Override
+					public void processEvent() {
+						downloadPdf();
+					}
+				});
+		this.menu.addMenuItem("pdf.png",
+				new CFComponentMenuItemListener() {
+
+					@Override
+					public void processEvent() {
+						downloadPdf();
+					}
+				});
+	}
+
+	private void setUpGestures(MTApplication mtApplication) {
 		this.getMTComponent().unregisterAllInputProcessors();
 		this.getMTComponent().removeAllGestureEventListeners();
 
@@ -66,26 +143,6 @@ public class CFMobileDeviceProxy extends CFComponent {
 						return false;
 					}
 				});
-
-		this.getMTComponent().setNoStroke(true);
-		this.getMTComponent().setDrawSmooth(true);
-
-		this.menu = new CFComponentMenu(this, mtApplication);
-		this.menu.addMenuItem("photos.png", new CFComponentMenuItemListener() {
-
-			@Override
-			public void processEvent() {
-				downloadPhotos();
-			}
-		});
-		this.menu.addMenuItem("calendar.png",
-				new CFComponentMenuItemListener() {
-
-					@Override
-					public void processEvent() {
-						downloadCalendar();
-					}
-				});
 	}
 
 	private void downloadCalendar() {
@@ -94,6 +151,20 @@ public class CFMobileDeviceProxy extends CFComponent {
 
 	private void downloadPhotos() {
 		System.out.println("Download photos");
+		this.getScene().addCFImage(
+				new CFImage((MTApplication) this.getMTApplication(),
+						"foto2.jpg", this.getScene()));
+		this.getScene().addCFImage(
+				new CFImage((MTApplication) this.getMTApplication(),
+						"foto3.jpg", this.getScene()));
+	}
+
+	private void downloadPdf() {
+		System.out.println("Download pdf");
+	}
+
+	private CFScene getScene() {
+		return this.scene;
 	}
 
 	private CFComponentMenu getMenu() {

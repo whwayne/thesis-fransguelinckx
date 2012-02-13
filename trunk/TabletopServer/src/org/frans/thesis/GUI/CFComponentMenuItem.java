@@ -6,6 +6,7 @@ import org.mt4j.input.inputProcessors.IGestureEventListener;
 import org.mt4j.input.inputProcessors.MTGestureEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapProcessor;
+import org.mt4j.util.math.Vector3D;
 
 import processing.core.PImage;
 
@@ -64,5 +65,9 @@ public class CFComponentMenuItem extends CFComponent {
 
 	public void setVisible(boolean visible) {
 		this.getImage().setVisible(visible);
+	}
+
+	protected void setPosition(Vector3D position) {
+		this.getMTComponent().setPositionGlobal(position);
 	}
 }

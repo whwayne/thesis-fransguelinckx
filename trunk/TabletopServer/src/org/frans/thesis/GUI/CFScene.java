@@ -28,7 +28,7 @@ public class CFScene extends AbstractScene {
 		// this.addCFImage(new CFImage(getMTApplication(), "foto1.jpg", this));
 		// this.addCFImage(new CFImage(getMTApplication(), "foto2.jpg", this));
 		this.addCFMobileDeviceProxy(new CFMobileDeviceProxy(getMTApplication(),
-				"Frans' phone"));
+				"Frans' phone", this));
 		this.height = getMTApplication().getHeight();
 		this.width = getMTApplication().getWidth();
 	}

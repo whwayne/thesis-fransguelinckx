@@ -3,6 +3,7 @@ package org.frans.thesis.GUI;
 import java.util.ArrayList;
 
 import org.mt4j.MTApplication;
+import org.mt4j.util.math.Vector3D;
 
 public class CFComponentMenu {
 	private CFComponent component;
@@ -45,8 +46,14 @@ public class CFComponentMenu {
 	}
 
 	private void repositionMenuItems() {
-		// TODO Auto-generated method stub
-
+		Vector3D initialPosition = new Vector3D(this.getCFComponent().getPosition());
+		initialPosition.translate(new Vector3D(0, -75, 0));
+		float degrees = 0;
+		for(CFComponentMenuItem item : this.getMenuItems()){
+			item.setPosition(initialPosition);
+			item.rotate(this.getCFComponent().getMTComponent().getCenterPointGlobal(), degrees);
+			degrees += 30;
+		}
 	}
 
 	protected void setVisible(boolean visible) {
