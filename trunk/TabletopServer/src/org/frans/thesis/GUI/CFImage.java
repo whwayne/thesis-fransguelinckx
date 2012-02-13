@@ -15,47 +15,49 @@ import org.mt4j.input.inputProcessors.componentProcessors.scaleProcessor.ScalePr
 import processing.core.PApplet;
 import processing.core.PImage;
 
-public class CFImage extends CFComponent implements IGestureEventListener{
+public class CFImage extends CFComponent implements IGestureEventListener {
 
 	private static String imagePath = "org" + MTApplication.separator + "frans"
 			+ MTApplication.separator + "thesis" + MTApplication.separator
 			+ "GUI" + MTApplication.separator + "data"
 			+ MTApplication.separator;
-	
+
 	private MTApplication mtApplication;
 
 	private CFScene scene;
-	
+
 	public CFImage(MTApplication mtApplication, String imageName, CFScene scene) {
 		this.mtApplication = mtApplication;
 		this.scene = scene;
 		PImage pImage = getMTApplication().loadImage(imagePath + imageName);
 		this.component = new MTRectangle(pImage, this.mtApplication);
 		this.scaleImageToStackSize();
-		
+
 		this.getMTComponent().unregisterAllInputProcessors();
 		this.getMTComponent().removeAllGestureEventListeners();
-		
-		this.getMTComponent().registerInputProcessor(new DragProcessor(mtApplication));
+
+		this.getMTComponent().registerInputProcessor(
+				new DragProcessor(mtApplication));
 		this.getMTComponent().addGestureListener(DragProcessor.class, this);
-		
-		this.getMTComponent().registerInputProcessor(new ScaleProcessor(mtApplication));
-		this.getMTComponent().addGestureListener(ScaleProcessor.class, new DefaultScaleAction());
-		
-		this.getMTComponent().registerInputProcessor(new RotateProcessor(mtApplication));
-		this.getMTComponent().addGestureListener(RotateProcessor.class, new DefaultRotateAction());
-		
+
+		this.getMTComponent().registerInputProcessor(
+				new ScaleProcessor(mtApplication));
+		this.getMTComponent().addGestureListener(ScaleProcessor.class,
+				new DefaultScaleAction());
+
+		this.getMTComponent().registerInputProcessor(
+				new RotateProcessor(mtApplication));
+		this.getMTComponent().addGestureListener(RotateProcessor.class,
+				new DefaultRotateAction());
+
 		this.getMTComponent().setNoStroke(true);
 		this.getMTComponent().setDrawSmooth(true);
 	}
 
-	private CFScene getCFScene(){
+	private CFScene getCFScene() {
 		return this.scene;
 	}
 
-	protected MTRectangle getMTComponent() {
-		return this.component;
-	}
 	protected MTImage getImage() {
 		return (MTImage) this.component;
 	}
@@ -65,25 +67,33 @@ public class CFImage extends CFComponent implements IGestureEventListener{
 	}
 
 	@Override
+	protected MTRectangle getMTComponent() {
+		return this.component;
+	}
+
+	@Override
 	public boolean isStackable() {
 		return true;
 	}
 
 	@Override
 	public boolean processGestureEvent(MTGestureEvent ge) {
-		DragEvent de = (DragEvent)ge;
-		de.getTargetComponent().translateGlobal(de.getTranslationVect()); //Moves the component
+		DragEvent de = (DragEvent) ge;
+		de.getTargetComponent().translateGlobal(de.getTranslationVect()); // Moves
+																			// the
+																			// component
 		switch (de.getId()) {
 		case MTGestureEvent.GESTURE_ENDED:
-			if(this.getCFScene().isCloseToCFComponent(this)){
-				if(this.getCFScene().getNearCFComponents(this).get(0).isStackable()){
+			if (this.getCFScene().isCloseToCFComponent(this)) {
+				if (this.getCFScene().getNearCFComponents(this).get(0)
+						.isStackable()) {
 					this.getCFScene().addToStack(this);
 				}
 			}
 			break;
 		default:
 			break;
-		}		
+		}
 		return false;
 	}
 }

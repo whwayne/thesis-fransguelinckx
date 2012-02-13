@@ -18,41 +18,47 @@ public class CFScene extends AbstractScene {
 		this.cfComponents = new ArrayList<CFComponent>();
 		this.cfMobileDeviceProxies = new ArrayList<CFMobileDeviceProxy>();
 
-//		this.lassoProcessor = new LassoProcessor(getMTApplication(), getCanvas(), getSceneCam());
-//		getCanvas().registerInputProcessor(lassoProcessor);
-//		getCanvas().addGestureListener(LassoProcessor.class, new DefaultLassoAction(getMTApplication(), getCanvas().getClusterManager(), getCanvas()));
+		// this.lassoProcessor = new LassoProcessor(getMTApplication(),
+		// getCanvas(), getSceneCam());
+		// getCanvas().registerInputProcessor(lassoProcessor);
+		// getCanvas().addGestureListener(LassoProcessor.class, new
+		// DefaultLassoAction(getMTApplication(),
+		// getCanvas().getClusterManager(), getCanvas()));
 
-//		this.addCFImage(new CFImage(getMTApplication(), "foto1.jpg", this));
-//		this.addCFImage(new CFImage(getMTApplication(), "foto2.jpg", this));
-		this.addCFMobileDeviceProxy(new CFMobileDeviceProxy(getMTApplication(), "Frans' phone"));
+		// this.addCFImage(new CFImage(getMTApplication(), "foto1.jpg", this));
+		// this.addCFImage(new CFImage(getMTApplication(), "foto2.jpg", this));
+		this.addCFMobileDeviceProxy(new CFMobileDeviceProxy(getMTApplication(),
+				"Frans' phone"));
 		this.height = getMTApplication().getHeight();
 		this.width = getMTApplication().getWidth();
 	}
 
 	protected void addCFImage(CFImage image) {
-		if(!this.getCfComponents().contains(image)){
-			this.getCanvas().addChild(image.getMTComponent());	
+		if (!this.getCfComponents().contains(image)) {
+			this.getCanvas().addChild(image.getMTComponent());
 			this.getCfComponents().add(image);
-//			this.lassoProcessor.addClusterable((IdragClusterable) image.getComponent());
+			// this.lassoProcessor.addClusterable((IdragClusterable)
+			// image.getComponent());
 		}
 	}
 
-	protected void addCFMobileDeviceProxy(CFMobileDeviceProxy proxy){
-		if(!this.getCfMobileDeviceProxies().contains(proxy)){
-			this.getCanvas().addChild(proxy.getMTComponent());	
+	protected void addCFMobileDeviceProxy(CFMobileDeviceProxy proxy) {
+		if (!this.getCfMobileDeviceProxies().contains(proxy)) {
+			this.getCanvas().addChild(proxy.getMTComponent());
 			this.getCfMobileDeviceProxies().add(proxy);
 		}
 	}
 
 	protected void addToStack(CFComponent component1) {
-		ArrayList<CFComponent> nearCFComponents = this.getNearCFComponents(component1);
+		ArrayList<CFComponent> nearCFComponents = this
+				.getNearCFComponents(component1);
 		component1.scaleImageToStackSize();
 		Vector3D position = component1.getPosition();
-		for(CFComponent component2 : nearCFComponents){
-			if(component2.isStackable()){
+		for (CFComponent component2 : nearCFComponents) {
+			if (component2.isStackable()) {
 				component2.scaleImageToStackSize();
 				component2.reposition(position);
-//				image2.rotateRandomlyForStack();
+				// image2.rotateRandomlyForStack();
 			}
 		}
 	}
@@ -60,20 +66,22 @@ public class CFScene extends AbstractScene {
 	private ArrayList<CFComponent> getCfComponents() {
 		return cfComponents;
 	}
-	
+
 	private ArrayList<CFMobileDeviceProxy> getCfMobileDeviceProxies() {
 		return cfMobileDeviceProxies;
 	}
-//	private LassoProcessor lassoProcessor;
-	
+
+	// private LassoProcessor lassoProcessor;
+
 	private int getHeight() {
 		return height;
 	}
 
 	protected ArrayList<CFComponent> getNearCFComponents(CFComponent component1) {
 		ArrayList<CFComponent> result = new ArrayList<CFComponent>();
-		for(CFComponent component2 : this.getCfComponents()){
-			if(!component2.equals(component1) && component1.getDistanceto(component2) < this.CRITICAL_STACK_DISTANCE){
+		for (CFComponent component2 : this.getCfComponents()) {
+			if (!component2.equals(component1)
+					&& component1.getDistanceto(component2) < this.CRITICAL_STACK_DISTANCE) {
 				result.add(component2);
 			}
 		}
@@ -88,9 +96,10 @@ public class CFScene extends AbstractScene {
 	public void init() {
 	}
 
-	protected boolean isCloseToCFComponent(CFComponent image1){
-		for(CFComponent image2 : this.getCfComponents()){
-			if(!image2.equals(image1) && image1.getDistanceto(image2) < this.CRITICAL_STACK_DISTANCE){
+	protected boolean isCloseToCFComponent(CFComponent image1) {
+		for (CFComponent image2 : this.getCfComponents()) {
+			if (!image2.equals(image1)
+					&& image1.getDistanceto(image2) < this.CRITICAL_STACK_DISTANCE) {
 				return true;
 			}
 		}

@@ -32,60 +32,81 @@ public class CFMobileDeviceProxy extends CFComponent {
 
 	private String name;
 	private MTColor white = new MTColor(255, 255, 255);
-	
-	public CFMobileDeviceProxy(MTApplication mtApplication,
-			String name) {
+
+	public CFMobileDeviceProxy(MTApplication mtApplication, String name) {
 		this.mtApplication = mtApplication;
 		this.name = name;
 		setUpComponent(mtApplication);
 		this.scaleImageToStackSize();
-		
+
 		this.getMTComponent().unregisterAllInputProcessors();
 		this.getMTComponent().removeAllGestureEventListeners();
-		
-		this.getMTComponent().registerInputProcessor(new DragProcessor(mtApplication));
-		this.getMTComponent().addGestureListener(DragProcessor.class, new DefaultDragAction());
-		
-		this.getMTComponent().registerInputProcessor(new RotateProcessor(mtApplication));
-		this.getMTComponent().addGestureListener(RotateProcessor.class, new DefaultRotateAction());
-		
-		this.getMTComponent().registerInputProcessor(new TapProcessor(mtApplication));
-		this.getMTComponent().addGestureListener(TapProcessor.class, new IGestureEventListener() {
-			
-			@Override
-			public boolean processGestureEvent(MTGestureEvent me) {
-				TapEvent tapEvent = (TapEvent) me;
-				if(tapEvent.isTapped()){
-					showMenu();
-				}
-				return false;
-			}
-		});
-		
+
+		this.getMTComponent().registerInputProcessor(
+				new DragProcessor(mtApplication));
+		this.getMTComponent().addGestureListener(DragProcessor.class,
+				new DefaultDragAction());
+
+		this.getMTComponent().registerInputProcessor(
+				new RotateProcessor(mtApplication));
+		this.getMTComponent().addGestureListener(RotateProcessor.class,
+				new DefaultRotateAction());
+
+		this.getMTComponent().registerInputProcessor(
+				new TapProcessor(mtApplication));
+		this.getMTComponent().addGestureListener(TapProcessor.class,
+				new IGestureEventListener() {
+
+					@Override
+					public boolean processGestureEvent(MTGestureEvent me) {
+						TapEvent tapEvent = (TapEvent) me;
+						if (tapEvent.isTapped()) {
+							showMenu();
+						}
+						return false;
+					}
+				});
+
 		this.getMTComponent().setNoStroke(true);
 		this.getMTComponent().setDrawSmooth(true);
-		
+
 		this.menu = new CFComponentMenu(this, mtApplication);
 		this.menu.addMenuItem("photos.png", new CFComponentMenuItemListener() {
-			
+
 			@Override
 			public void processEvent() {
 				downloadPhotos();
 			}
 		});
+		this.menu.addMenuItem("calendar.png",
+				new CFComponentMenuItemListener() {
+
+					@Override
+					public void processEvent() {
+						downloadCalendar();
+					}
+				});
 	}
 
-	private void downloadPhotos(){
+	private void downloadCalendar() {
+		System.out.println("Download calendar");
+	}
+
+	private void downloadPhotos() {
 		System.out.println("Download photos");
+	}
+
+	private CFComponentMenu getMenu() {
+		return this.menu;
+	}
+
+	private PApplet getMTApplication() {
+		return this.mtApplication;
 	}
 
 	@Override
 	public MTRectangle getMTComponent() {
 		return this.component;
-	}
-
-	private PApplet getMTApplication() {
-		return this.mtApplication;
 	}
 
 	@Override
@@ -125,14 +146,10 @@ public class CFMobileDeviceProxy extends CFComponent {
 	}
 
 	private void showMenu() {
-		if(this.getMenu().isVisible()){
+		if (this.getMenu().isVisible()) {
 			this.getMenu().setVisible(false);
-		}else{
+		} else {
 			this.getMenu().setVisible(true);
 		}
-	}
-	
-	private CFComponentMenu getMenu(){
-		return this.menu;
 	}
 }

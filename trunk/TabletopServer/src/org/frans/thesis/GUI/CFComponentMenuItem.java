@@ -2,10 +2,8 @@ package org.frans.thesis.GUI;
 
 import org.mt4j.MTApplication;
 import org.mt4j.components.visibleComponents.shapes.MTRectangle;
-import org.mt4j.input.gestureAction.DefaultDragAction;
 import org.mt4j.input.inputProcessors.IGestureEventListener;
 import org.mt4j.input.inputProcessors.MTGestureEvent;
-import org.mt4j.input.inputProcessors.componentProcessors.dragProcessor.DragProcessor;
 import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapProcessor;
 
@@ -13,17 +11,13 @@ import processing.core.PImage;
 
 public class CFComponentMenuItem extends CFComponent {
 
-	private CFComponentMenuItemListener listener;
-	private MTRectangle image;
-
-	private MTRectangle getImage() {
-		return image;
-	}
-
 	private static String imagePath = "org" + MTApplication.separator + "frans"
 			+ MTApplication.separator + "thesis" + MTApplication.separator
 			+ "GUI" + MTApplication.separator + "data"
 			+ MTApplication.separator;
+	private MTRectangle image;
+
+	private CFComponentMenuItemListener listener;
 
 	public CFComponentMenuItem(String fileName,
 			CFComponentMenuItemListener listener, MTApplication mtApplication) {
@@ -54,8 +48,8 @@ public class CFComponentMenuItem extends CFComponent {
 				});
 	}
 
-	public void setVisible(boolean visible) {
-		this.getImage().setVisible(visible);
+	private MTRectangle getImage() {
+		return image;
 	}
 
 	@Override
@@ -66,5 +60,9 @@ public class CFComponentMenuItem extends CFComponent {
 	@Override
 	protected boolean isStackable() {
 		return false;
+	}
+
+	public void setVisible(boolean visible) {
+		this.getImage().setVisible(visible);
 	}
 }

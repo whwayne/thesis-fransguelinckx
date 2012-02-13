@@ -6,17 +6,11 @@ import org.mt4j.MTApplication;
 
 public class CFComponentMenu {
 	private CFComponent component;
-	private CFComponent getCFComponent() {
-		return component;
-	}
-
-	private MTApplication getMtApplication() {
-		return mtApplication;
-	}
+	private ArrayList<CFComponentMenuItem> menuItems;
 
 	private MTApplication mtApplication;
+
 	private boolean visible = false;
-	private ArrayList<CFComponentMenuItem> menuItems;
 
 	public CFComponentMenu(CFComponent component, MTApplication mtApplication) {
 		this.component = component;
@@ -26,23 +20,33 @@ public class CFComponentMenu {
 
 	protected void addMenuItem(String fileName,
 			CFComponentMenuItemListener listener) {
-		CFComponentMenuItem menuItem = new CFComponentMenuItem(fileName, listener, getMtApplication()); 
+		CFComponentMenuItem menuItem = new CFComponentMenuItem(fileName,
+				listener, getMtApplication());
 		this.menuItems.add(menuItem);
-		this.getCFComponent().getMTComponent().addChild(menuItem.getMTComponent());
+		this.getCFComponent().getMTComponent()
+				.addChild(menuItem.getMTComponent());
 		this.repositionMenuItems();
 	}
 
-	private void repositionMenuItems() {
-		// TODO Auto-generated method stub
-		
+	private CFComponent getCFComponent() {
+		return component;
 	}
 
 	private ArrayList<CFComponentMenuItem> getMenuItems() {
 		return this.menuItems;
 	}
 
+	private MTApplication getMtApplication() {
+		return mtApplication;
+	}
+
 	protected boolean isVisible() {
 		return this.visible;
+	}
+
+	private void repositionMenuItems() {
+		// TODO Auto-generated method stub
+
 	}
 
 	protected void setVisible(boolean visible) {
