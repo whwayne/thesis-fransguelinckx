@@ -2,6 +2,7 @@ package org.frans.thesis.GUI;
 
 import java.util.ArrayList;
 
+import org.frans.thesis.service.CFTabletopService;
 import org.mt4j.MTApplication;
 import org.mt4j.sceneManagement.AbstractScene;
 import org.mt4j.util.math.Vector3D;
@@ -17,16 +18,7 @@ public class CFScene extends AbstractScene {
 		super(mtApplication, name);
 		this.cfComponents = new ArrayList<CFComponent>();
 		this.cfMobileDeviceProxies = new ArrayList<CFMobileDeviceProxy>();
-
-		// this.lassoProcessor = new LassoProcessor(getMTApplication(),
-		// getCanvas(), getSceneCam());
-		// getCanvas().registerInputProcessor(lassoProcessor);
-		// getCanvas().addGestureListener(LassoProcessor.class, new
-		// DefaultLassoAction(getMTApplication(),
-		// getCanvas().getClusterManager(), getCanvas()));
-
-		// this.addCFImage(new CFImage(getMTApplication(), "foto1.jpg", this));
-		// this.addCFImage(new CFImage(getMTApplication(), "foto2.jpg", this));
+		
 		this.addCFMobileDeviceProxy(new CFMobileDeviceProxy(getMTApplication(),
 				"Frans' phone", this));
 		this.height = getMTApplication().getHeight();
@@ -37,8 +29,6 @@ public class CFScene extends AbstractScene {
 		if (!this.getCfComponents().contains(image)) {
 			this.getCanvas().addChild(image.getMTComponent());
 			this.getCfComponents().add(image);
-			// this.lassoProcessor.addClusterable((IdragClusterable)
-			// image.getComponent());
 		}
 	}
 
@@ -58,7 +48,6 @@ public class CFScene extends AbstractScene {
 			if (component2.isStackable()) {
 				component2.scaleImageToStackSize();
 				component2.reposition(position);
-				// image2.rotateRandomlyForStack();
 			}
 		}
 	}
