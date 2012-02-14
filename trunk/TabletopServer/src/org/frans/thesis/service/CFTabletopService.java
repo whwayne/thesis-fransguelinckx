@@ -29,18 +29,17 @@ public class CFTabletopService {
     }
 
     private static final short CONTACT_PORT=42;
+    private static boolean sessionEstablished = false;
+    private static int sessionId;
 
-    static boolean sessionEstablished = false;
-    static int sessionId;
-
-    public static class SimpleService implements CFTabletopInterface, BusObject {
+    public class SimpleService implements CFTabletopInterface, BusObject {
 
         public String ping(String str){
             return str;
         }   
     }
 
-    private static class MyBusListener extends BusListener {
+    private class MyBusListener extends BusListener {
         public void nameOwnerChanged(String busName, String previousOwner, String newOwner){
             if ("org.alljoyn.bus.samples.simple".equals(busName)) {
                 System.out.println("BusAttachement.nameOwnerChanged(" + busName + ", " + previousOwner + ", " + newOwner);
@@ -49,12 +48,9 @@ public class CFTabletopService {
     }
 
     public  void connect() {
-
         BusAttachment mBus;
         mBus = new BusAttachment("AppName", BusAttachment.RemoteMessage.Receive);
-
         Status status;
-
         SimpleService mySimpleService = new SimpleService();
 
         status = mBus.registerBusObject(mySimpleService, "/SimpleService");
@@ -75,7 +71,6 @@ public class CFTabletopService {
         System.out.println("BusAttachment.connect successful on " + System.getProperty("org.alljoyn.bus.samples.simple"));        
 
         Mutable.ShortValue contactPort = new Mutable.ShortValue(CONTACT_PORT);
-
         SessionOpts sessionOpts = new SessionOpts();
         sessionOpts.traffic = SessionOpts.TRAFFIC_MESSAGES;
         sessionOpts.isMultipoint = false;
