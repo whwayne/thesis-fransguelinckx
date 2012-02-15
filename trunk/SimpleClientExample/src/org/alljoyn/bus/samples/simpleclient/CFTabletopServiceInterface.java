@@ -31,13 +31,10 @@ import org.alljoyn.bus.annotation.BusMethod;
 public interface CFTabletopServiceInterface {
 
     @BusMethod
-    int attach(String name) throws BusException;
+    public void attach(String name) throws BusException;
     
     @BusMethod
-    void detach(int id) throws BusException;
-    
-    @BusMethod
-    void notify(int id) throws BusException;
+    public void detach(String name) throws BusException;
     
     /*
      * The BusMethod annotation signifies that this function should be used as part of the AllJoyn

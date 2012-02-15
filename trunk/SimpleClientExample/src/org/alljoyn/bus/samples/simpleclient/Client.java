@@ -307,6 +307,11 @@ public class Client extends Activity {
                 	mSessionId = sessionId.value;
                 	mIsConnected = true;
                 	mHandler.sendEmptyMessage(MESSAGE_STOP_PROGRESS_DIALOG);
+                	try {
+						mSimpleInterface.attach(android.os.Build.DEVICE);
+					} catch (BusException ex) {
+	                    logException("SimpleInterface.Ping()", ex);
+					}
                 }
                 break;
             }
