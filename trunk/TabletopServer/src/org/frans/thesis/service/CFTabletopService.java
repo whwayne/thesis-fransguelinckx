@@ -52,8 +52,8 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 	}
 
 	public CFTabletopService() {
-		this.connect();
 		this.listeners = new ArrayList<TabletopServiceLister>();
+//		this.connect();
 	}
 	
 	public void addTabletopServiceListener(TabletopServiceLister listener){
@@ -68,7 +68,7 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 		}
 	}
 
-	private void connect() {
+	public void connect() {
 		BusAttachment mBus;
 		mBus = new BusAttachment("AppName", BusAttachment.RemoteMessage.Receive);
 		Status status;
@@ -175,16 +175,18 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 	}
 
 	@Override
-	public void attach(String name) throws BusException {
+	public boolean attach(String name) throws BusException {
 		for(TabletopServiceLister  listener : this.getListeners()){
 			listener.addMobileDevice(name);
 		}
+		return true;
 	}
 
 	@Override
-	public void detach(String name) throws BusException {
+	public boolean detach(String name) throws BusException {
 		for(TabletopServiceLister  listener : this.getListeners()){
 			listener.removeMobileDevice(name);
 		}
+		return true;
 	}
 }

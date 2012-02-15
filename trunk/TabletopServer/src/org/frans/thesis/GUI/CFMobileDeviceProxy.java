@@ -21,6 +21,9 @@ import processing.core.PApplet;
 import processing.core.PImage;
 
 public class CFMobileDeviceProxy extends CFComponent {
+	
+
+	IFont fontArial;
 
 	private String imagePath = "org" + MTApplication.separator + "frans"
 			+ MTApplication.separator + "thesis" + MTApplication.separator
@@ -38,7 +41,11 @@ public class CFMobileDeviceProxy extends CFComponent {
 		this.scene = scene;
 		this.mtApplication = mtApplication;
 		this.name = name;
-		setUpComponent(mtApplication);
+		IFont fontArial = FontManager.getInstance().createFont(mtApplication,
+				FontManager.DEFAULT_FONT, 40, // Font size
+				white, // Font fill color
+				white); // Font outline color
+		setUpComponent(mtApplication, fontArial);
 		this.scaleImageToStackSize();
 
 		setUpGestures(mtApplication);
@@ -155,13 +162,9 @@ public class CFMobileDeviceProxy extends CFComponent {
 		return false;
 	}
 
-	private void setUpComponent(MTApplication mtApplication) {
-		IFont fontArial = FontManager.getInstance().createFont(mtApplication,
-				"arial.ttf", 40, // Font size
-				white, // Font fill color
-				white); // Font outline color
+	private void setUpComponent(MTApplication mtApplication, IFont font) {
 		// Create a textfield
-		MTTextArea textField = new MTTextArea(mtApplication, fontArial);
+		MTTextArea textField = new MTTextArea(mtApplication, font);
 		textField.setNoStroke(true);
 		textField.setNoFill(true);
 		textField.setText(this.name);
@@ -176,7 +179,7 @@ public class CFMobileDeviceProxy extends CFComponent {
 		height += mtImage.getHeightXY(TransformSpace.GLOBAL);
 		float width = Math.max(textField.getWidthXY(TransformSpace.GLOBAL),
 				mtImage.getWidthXY(TransformSpace.GLOBAL));
-		this.component = new MTRectangle(width, height, mtApplication);
+		this.component = new MTRectangle(100, 100, mtApplication);
 
 		this.component.addChild(textField);
 		this.component.addChild(mtImage);
