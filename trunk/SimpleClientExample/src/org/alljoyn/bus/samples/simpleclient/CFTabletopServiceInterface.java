@@ -28,8 +28,17 @@ import org.alljoyn.bus.annotation.BusMethod;
  * to assign an interface name since it helps promote code reuse.
  */
 @BusInterface(name = "org.alljoyn.bus.samples.simple.SimpleInterface")
-public interface SimpleInterface {
+public interface CFTabletopServiceInterface {
 
+    @BusMethod
+    int attach(String name) throws BusException;
+    
+    @BusMethod
+    void detach(int id) throws BusException;
+    
+    @BusMethod
+    void notify(int id) throws BusException;
+    
     /*
      * The BusMethod annotation signifies that this function should be used as part of the AllJoyn
      * interface.  The runtime is smart enough to figure out what the input and output of the method
@@ -39,5 +48,5 @@ public interface SimpleInterface {
      * this fact.
      */
     @BusMethod
-    String Ping(String inStr) throws BusException;
+    String ping(String inStr) throws BusException;
 }

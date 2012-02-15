@@ -175,7 +175,7 @@ public class Client extends Activity {
 
         private BusAttachment mBus;
         private ProxyBusObject mProxyObj;
-        private SimpleInterface mSimpleInterface;
+        private CFTabletopServiceInterface mSimpleInterface;
         
         private int 	mSessionId;
         private boolean mIsInASession;
@@ -299,10 +299,10 @@ public class Client extends Activity {
                 	mProxyObj =  mBus.getProxyBusObject(SERVICE_NAME, 
                 										"/SimpleService",
                 										sessionId.value,
-                										new Class<?>[] { SimpleInterface.class });
+                										new Class<?>[] { CFTabletopServiceInterface.class });
 
                 	/* We make calls to the methods of the AllJoyn object through one of its interfaces. */
-                	mSimpleInterface =  mProxyObj.getInterface(SimpleInterface.class);
+                	mSimpleInterface =  mProxyObj.getInterface(CFTabletopServiceInterface.class);
                 	
                 	mSessionId = sessionId.value;
                 	mIsConnected = true;
@@ -333,7 +333,7 @@ public class Client extends Activity {
                 try {
                 	if (mSimpleInterface != null) {
                 		sendUiMessage(MESSAGE_PING, msg.obj);
-                		String reply = mSimpleInterface.Ping((String) msg.obj);
+                		String reply = mSimpleInterface.ping((String) msg.obj);
                 		sendUiMessage(MESSAGE_PING_REPLY, reply);
                 	}
                 } catch (BusException ex) {
