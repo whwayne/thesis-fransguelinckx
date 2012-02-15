@@ -3,7 +3,6 @@ package org.frans.thesis.GUI;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.frans.thesis.service.CFTabletopService;
 import org.frans.thesis.service.TabletopServiceLister;
 import org.mt4j.MTApplication;
 import org.mt4j.sceneManagement.AbstractScene;

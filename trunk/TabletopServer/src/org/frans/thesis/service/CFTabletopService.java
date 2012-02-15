@@ -25,7 +25,6 @@ import org.alljoyn.bus.Mutable;
 import org.alljoyn.bus.SessionOpts;
 import org.alljoyn.bus.SessionPortListener;
 import org.alljoyn.bus.Status;
-import org.frans.thesis.GUI.CFScene;
 
 public class CFTabletopService implements CFTabletopServiceInterface, BusObject {
 	
@@ -47,7 +46,7 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 	}
 
 	private static boolean sessionEstablished = false;
-	private static int sessionId;
+//	private static int sessionId;
 	static {
 		System.loadLibrary("alljoyn_java");
 	}
@@ -119,7 +118,7 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 						System.out.println(String
 								.format("SessionPortListener.sessionJoined(%d, %d, %s)",
 										sessionPort, id, joiner));
-						sessionId = id;
+//						sessionId = id;
 						sessionEstablished = true;
 					}
 				});
