@@ -176,12 +176,15 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 
 	@Override
 	public void attach(String name) throws BusException {
-		// TODO Auto-generated method stub
+		for(TabletopServiceLister  listener : this.getListeners()){
+			listener.addMobileDevice(name);
+		}
 	}
 
 	@Override
 	public void detach(String name) throws BusException {
-		// TODO Auto-generated method stub
-		
+		for(TabletopServiceLister  listener : this.getListeners()){
+			listener.removeMobileDevice(name);
+		}
 	}
 }
