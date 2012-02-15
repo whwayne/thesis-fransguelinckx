@@ -307,11 +307,6 @@ public class Client extends Activity {
                 	mSessionId = sessionId.value;
                 	mIsConnected = true;
                 	mHandler.sendEmptyMessage(MESSAGE_STOP_PROGRESS_DIALOG);
-                	try {
-						mSimpleInterface.attach(android.os.Build.DEVICE);
-					} catch (BusException ex) {
-	                    logException("SimpleInterface.Ping()", ex);
-					}
                 }
                 break;
             }
@@ -338,8 +333,10 @@ public class Client extends Activity {
                 try {
                 	if (mSimpleInterface != null) {
                 		sendUiMessage(MESSAGE_PING, msg.obj);
-                		String reply = mSimpleInterface.ping((String) msg.obj);
-                		sendUiMessage(MESSAGE_PING_REPLY, reply);
+//                		String reply = mSimpleInterface.ping((String) msg.obj);
+						mSimpleInterface.attach(android.os.Build.DEVICE);
+                		sendUiMessage(MESSAGE_PING_REPLY, "reply");
+//						mSimpleInterface.attach(android.os.Build.DEVICE);
                 	}
                 } catch (BusException ex) {
                     logException("SimpleInterface.Ping()", ex);

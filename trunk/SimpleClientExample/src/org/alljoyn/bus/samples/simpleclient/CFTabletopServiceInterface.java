@@ -19,6 +19,7 @@ package org.alljoyn.bus.samples.simpleclient;
 import org.alljoyn.bus.BusException;
 import org.alljoyn.bus.annotation.BusInterface;
 import org.alljoyn.bus.annotation.BusMethod;
+import org.alljoyn.bus.annotation.BusSignal;
 
 /*
  * The BusInterface annotation is used to tell the code that this interface is an AllJoyn interface.
@@ -31,10 +32,10 @@ import org.alljoyn.bus.annotation.BusMethod;
 public interface CFTabletopServiceInterface {
 
     @BusMethod
-    public void attach(String name) throws BusException;
+    public boolean attach(String name) throws BusException;
     
     @BusMethod
-    public void detach(String name) throws BusException;
+    public boolean detach(String name) throws BusException;
     
     /*
      * The BusMethod annotation signifies that this function should be used as part of the AllJoyn
