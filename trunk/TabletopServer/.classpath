@@ -35,7 +35,11 @@
 	<classpathentry kind="lib" path="mt4jLibs/jogl/gluegen-rt-natives-macosx-universal.jar"/>
 	<classpathentry kind="lib" path="mt4jLibs/jogl/gluegen-rt-natives-windows-amd64.jar"/>
 	<classpathentry kind="lib" path="mt4jLibs/jogl/gluegen-rt-natives-windows-i586.jar"/>
-	<classpathentry kind="lib" path="mt4jLibs/jogl/gluegen-rt.jar"/>
+	<classpathentry kind="lib" path="mt4jLibs/jogl/gluegen-rt.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="TabletopServer/lib"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="mt4jLibs/jogl/jogl-natives-linux-amd64.jar"/>
 	<classpathentry kind="lib" path="mt4jLibs/jogl/jogl-natives-linux-i586.jar"/>
 	<classpathentry kind="lib" path="mt4jLibs/jogl/jogl-natives-macosx-ppc.jar"/>

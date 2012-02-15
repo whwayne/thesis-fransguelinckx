@@ -30,8 +30,8 @@ public class CFMobileDeviceProxy extends CFComponent {
 	private MTApplication mtApplication;
 
 	private String name;
-	private MTColor white = new MTColor(255, 255, 255);
 	private CFScene scene;
+	private MTColor white = new MTColor(255, 255, 255);
 
 	public CFMobileDeviceProxy(MTApplication mtApplication, String name,
 			CFScene scene) {
@@ -115,38 +115,12 @@ public class CFMobileDeviceProxy extends CFComponent {
 				});
 	}
 
-	private void setUpGestures(MTApplication mtApplication) {
-		this.getMTComponent().unregisterAllInputProcessors();
-		this.getMTComponent().removeAllGestureEventListeners();
-
-		this.getMTComponent().registerInputProcessor(
-				new DragProcessor(mtApplication));
-		this.getMTComponent().addGestureListener(DragProcessor.class,
-				new DefaultDragAction());
-
-		this.getMTComponent().registerInputProcessor(
-				new RotateProcessor(mtApplication));
-		this.getMTComponent().addGestureListener(RotateProcessor.class,
-				new DefaultRotateAction());
-
-		this.getMTComponent().registerInputProcessor(
-				new TapProcessor(mtApplication));
-		this.getMTComponent().addGestureListener(TapProcessor.class,
-				new IGestureEventListener() {
-
-					@Override
-					public boolean processGestureEvent(MTGestureEvent me) {
-						TapEvent tapEvent = (TapEvent) me;
-						if (tapEvent.isTapped()) {
-							showMenu();
-						}
-						return false;
-					}
-				});
-	}
-
 	private void downloadCalendar() {
 		System.out.println("Download calendar");
+	}
+
+	private void downloadPdf() {
+		System.out.println("Download pdf");
 	}
 
 	private void downloadPhotos() {
@@ -157,14 +131,6 @@ public class CFMobileDeviceProxy extends CFComponent {
 		this.getScene().addCFImage(
 				new CFImage((MTApplication) this.getMTApplication(),
 						"foto3.jpg", this.getScene()));
-	}
-
-	private void downloadPdf() {
-		System.out.println("Download pdf");
-	}
-
-	private CFScene getScene() {
-		return this.scene;
 	}
 
 	private CFComponentMenu getMenu() {
@@ -178,6 +144,10 @@ public class CFMobileDeviceProxy extends CFComponent {
 	@Override
 	public MTRectangle getMTComponent() {
 		return this.component;
+	}
+
+	private CFScene getScene() {
+		return this.scene;
 	}
 
 	@Override
@@ -214,6 +184,36 @@ public class CFMobileDeviceProxy extends CFComponent {
 				.getHeightXY(TransformSpace.GLOBAL), 0));
 		this.component.setNoFill(true);
 		this.component.setNoStroke(true);
+	}
+
+	private void setUpGestures(MTApplication mtApplication) {
+		this.getMTComponent().unregisterAllInputProcessors();
+		this.getMTComponent().removeAllGestureEventListeners();
+
+		this.getMTComponent().registerInputProcessor(
+				new DragProcessor(mtApplication));
+		this.getMTComponent().addGestureListener(DragProcessor.class,
+				new DefaultDragAction());
+
+		this.getMTComponent().registerInputProcessor(
+				new RotateProcessor(mtApplication));
+		this.getMTComponent().addGestureListener(RotateProcessor.class,
+				new DefaultRotateAction());
+
+		this.getMTComponent().registerInputProcessor(
+				new TapProcessor(mtApplication));
+		this.getMTComponent().addGestureListener(TapProcessor.class,
+				new IGestureEventListener() {
+
+					@Override
+					public boolean processGestureEvent(MTGestureEvent me) {
+						TapEvent tapEvent = (TapEvent) me;
+						if (tapEvent.isTapped()) {
+							showMenu();
+						}
+						return false;
+					}
+				});
 	}
 
 	private void showMenu() {

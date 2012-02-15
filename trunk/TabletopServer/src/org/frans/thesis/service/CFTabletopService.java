@@ -15,124 +15,172 @@
  */
 package org.frans.thesis.service;
 
+import java.util.ArrayList;
+
 import org.alljoyn.bus.BusAttachment;
+import org.alljoyn.bus.BusException;
 import org.alljoyn.bus.BusListener;
 import org.alljoyn.bus.BusObject;
 import org.alljoyn.bus.Mutable;
 import org.alljoyn.bus.SessionOpts;
 import org.alljoyn.bus.SessionPortListener;
 import org.alljoyn.bus.Status;
+import org.frans.thesis.GUI.CFScene;
 
-public class CFTabletopService {
-    static { 
-        System.loadLibrary("alljoyn_java");
-    }
+public class CFTabletopService implements CFTabletopServiceInterface, BusObject {
+	
+	private static class MyBusListener extends BusListener {
+		@Override
+		public void nameOwnerChanged(String busName, String previousOwner,
+				String newOwner) {
+			if ("org.alljoyn.bus.samples.simple".equals(busName)) {
+				System.out.println("BusAttachement.nameOwnerChanged(" + busName
+						+ ", " + previousOwner + ", " + newOwner);
+			}
+		}
+	}
+	
+	private static final short CONTACT_PORT = 42;
+	private ArrayList<TabletopServiceListener> listeners;
+	private static boolean sessionEstablished = false;
+	private static int sessionId;
+	static {
+		System.loadLibrary("alljoyn_java");
+	}
+	private CFScene scene;
 
-    private static final short CONTACT_PORT=42;
-    private static boolean sessionEstablished = false;
-    private static int sessionId;
+	public CFTabletopService() {
+		this.connect();
+		this.listeners = new ArrayList<TabletopServiceListener>();
+	}
+	
+	protected void addTabletopServiceListener(TabletopServiceListener listener){
+		if(){
+			
+		}
+	}
 
-    public class SimpleService implements CFTabletopInterface, BusObject {
+	private void connect() {
+		BusAttachment mBus;
+		mBus = new BusAttachment("AppName", BusAttachment.RemoteMessage.Receive);
+		Status status;
 
-        public String ping(String str){
-            return str;
-        }   
-    }
+		status = mBus.registerBusObject(this, "/SimpleService");
+		if (status != Status.OK) {
+			System.exit(0);
+			return;
+		}
+		System.out.println("BusAttachment.registerBusObject successful");
 
-    private class MyBusListener extends BusListener {
-        public void nameOwnerChanged(String busName, String previousOwner, String newOwner){
-            if ("org.alljoyn.bus.samples.simple".equals(busName)) {
-                System.out.println("BusAttachement.nameOwnerChanged(" + busName + ", " + previousOwner + ", " + newOwner);
-            }
-        }
-    }
+		BusListener listener = new MyBusListener();
+		mBus.registerBusListener(listener);
 
-    public  void connect() {
-        BusAttachment mBus;
-        mBus = new BusAttachment("AppName", BusAttachment.RemoteMessage.Receive);
-        Status status;
-        SimpleService mySimpleService = new SimpleService();
+		status = mBus.connect();
+		if (status != Status.OK) {
+			System.exit(0);
+			return;
+		}
+		System.out.println("BusAttachment.connect successful on "
+				+ System.getProperty("org.alljoyn.bus.samples.simple"));
 
-        status = mBus.registerBusObject(mySimpleService, "/SimpleService");
-        if (status != Status.OK) {
-            System.exit(0);
-            return;
-        }
-        System.out.println("BusAttachment.registerBusObject successful");
+		Mutable.ShortValue contactPort = new Mutable.ShortValue(CONTACT_PORT);
+		SessionOpts sessionOpts = new SessionOpts();
+		sessionOpts.traffic = SessionOpts.TRAFFIC_MESSAGES;
+		sessionOpts.isMultipoint = false;
+		sessionOpts.proximity = SessionOpts.PROXIMITY_ANY;
+		sessionOpts.transports = SessionOpts.TRANSPORT_ANY;
 
-        BusListener listener = new MyBusListener();
-        mBus.registerBusListener(listener);
+		status = mBus.bindSessionPort(contactPort, sessionOpts,
+				new SessionPortListener() {
+					@Override
+					public boolean acceptSessionJoiner(short sessionPort,
+							String joiner, SessionOpts sessionOpts) {
+						System.out
+								.println("SessionPortListener.acceptSessionJoiner called");
+						if (sessionPort == CONTACT_PORT) {
+							return true;
+						} else {
+							return false;
+						}
+					}
 
-        status = mBus.connect();
-        if (status != Status.OK) {
-            System.exit(0);
-            return;
-        }
-        System.out.println("BusAttachment.connect successful on " + System.getProperty("org.alljoyn.bus.samples.simple"));        
+					@Override
+					public void sessionJoined(short sessionPort, int id,
+							String joiner) {
+						System.out.println(String
+								.format("SessionPortListener.sessionJoined(%d, %d, %s)",
+										sessionPort, id, joiner));
+						sessionId = id;
+						sessionEstablished = true;
+					}
+				});
+		if (status != Status.OK) {
+			System.exit(0);
+			return;
+		}
+		System.out.println("BusAttachment.bindSessionPort successful");
 
-        Mutable.ShortValue contactPort = new Mutable.ShortValue(CONTACT_PORT);
-        SessionOpts sessionOpts = new SessionOpts();
-        sessionOpts.traffic = SessionOpts.TRAFFIC_MESSAGES;
-        sessionOpts.isMultipoint = false;
-        sessionOpts.proximity = SessionOpts.PROXIMITY_ANY;
-        sessionOpts.transports = SessionOpts.TRANSPORT_ANY;
+		int flags = 0; // do not use any request name flags
+		status = mBus.requestName("org.alljoyn.bus.samples.simple", flags);
+		if (status != Status.OK) {
+			System.exit(0);
+			return;
+		}
+		System.out
+				.println("BusAttachment.request 'org.alljoyn.bus.samples.simple' successful");
 
-        status = mBus.bindSessionPort(contactPort, sessionOpts, 
-                new SessionPortListener() {
-            public boolean acceptSessionJoiner(short sessionPort, String joiner, SessionOpts sessionOpts) {
-                System.out.println("SessionPortListener.acceptSessionJoiner called");
-                if (sessionPort == CONTACT_PORT) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-            public void sessionJoined(short sessionPort, int id, String joiner) {
-                System.out.println(String.format("SessionPortListener.sessionJoined(%d, %d, %s)", sessionPort, id, joiner));
-                sessionId = id;
-                sessionEstablished = true;
-            }
-        });
-        if (status != Status.OK) {
-            System.exit(0);
-            return;
-        }
-        System.out.println("BusAttachment.bindSessionPort successful");
+		status = mBus.advertiseName("org.alljoyn.bus.samples.simple",
+				SessionOpts.TRANSPORT_ANY);
+		if (status != Status.OK) {
+			System.out.println("Status = " + status);
+			mBus.releaseName("org.alljoyn.bus.samples.simple");
+			System.exit(0);
+			return;
+		}
+		System.out
+				.println("BusAttachment.advertiseName 'org.alljoyn.bus.samples.simple' successful");
 
-        int flags = 0; //do not use any request name flags
-        status = mBus.requestName("org.alljoyn.bus.samples.simple", flags);
-        if (status != Status.OK) {
-            System.exit(0);
-            return;
-        }
-        System.out.println("BusAttachment.request 'org.alljoyn.bus.samples.simple' successful");
+		while (!sessionEstablished) {
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				System.out.println("Thead Exception caught");
+				e.printStackTrace();
+			}
+		}
+		System.out.println("BusAttachment session established");
 
-        status = mBus.advertiseName("org.alljoyn.bus.samples.simple", SessionOpts.TRANSPORT_ANY);
-        if (status != Status.OK) {
-            System.out.println("Status = " + status);
-            mBus.releaseName("org.alljoyn.bus.samples.simple");
-            System.exit(0);
-            return;
-        }
-        System.out.println("BusAttachment.advertiseName 'org.alljoyn.bus.samples.simple' successful");
+		while (true) {
+			try {
+				Thread.sleep(10000);
+			} catch (InterruptedException e) {
+				System.out.println("Thead Exception caught");
+				e.printStackTrace();
+			}
+		}
+	}
 
-        while (!sessionEstablished) {
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-                System.out.println("Thead Exception caught");
-                e.printStackTrace();
-            }
-        }
-        System.out.println("BusAttachment session established");
+	@Override
+	public String ping(String str) {
+		System.out.println("Ping: " + str);
+		return str;
+	}
 
-        while (true) {
-            try {
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
-                System.out.println("Thead Exception caught");
-                e.printStackTrace();
-            }
-        }
-    }
+	@Override
+	public int attach(String name) throws BusException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void detach(int id) throws BusException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void notify(int id) throws BusException {
+		// TODO Auto-generated method stub
+		
+	}
 }

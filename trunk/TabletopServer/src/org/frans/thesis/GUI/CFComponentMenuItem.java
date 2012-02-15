@@ -63,11 +63,11 @@ public class CFComponentMenuItem extends CFComponent {
 		return false;
 	}
 
-	public void setVisible(boolean visible) {
-		this.getImage().setVisible(visible);
-	}
-
 	protected void setPosition(Vector3D position) {
 		this.getMTComponent().setPositionGlobal(position);
+	}
+
+	public void setVisible(boolean visible) {
+		this.getImage().setVisible(visible);
 	}
 }
