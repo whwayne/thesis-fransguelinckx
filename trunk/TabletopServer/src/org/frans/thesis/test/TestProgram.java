@@ -13,9 +13,10 @@ public class TestProgram extends MTApplication {
 
 	@Override
 	public void startUp() {
+		CFTabletopService service = new CFTabletopService();
 		CFScene scene = new CFScene(this, "CFScene");
-		new CFTabletopService(scene);
 		this.addScene(scene);
+		service.addTabletopServiceListener(scene);
 	}
 
 }

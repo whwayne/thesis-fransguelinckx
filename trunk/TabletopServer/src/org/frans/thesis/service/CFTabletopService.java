@@ -41,22 +41,31 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 	}
 	
 	private static final short CONTACT_PORT = 42;
-	private ArrayList<TabletopServiceListener> listeners;
+	private ArrayList<TabletopServiceLister> listeners;
+	private ArrayList<TabletopServiceLister> getListeners() {
+		return listeners;
+	}
+
 	private static boolean sessionEstablished = false;
 	private static int sessionId;
 	static {
 		System.loadLibrary("alljoyn_java");
 	}
-	private CFScene scene;
 
 	public CFTabletopService() {
 		this.connect();
-		this.listeners = new ArrayList<TabletopServiceListener>();
+		this.listeners = new ArrayList<TabletopServiceLister>();
 	}
 	
-	protected void addTabletopServiceListener(TabletopServiceListener listener){
-		if(){
-			
+	public void addTabletopServiceListener(TabletopServiceLister listener){
+		if(!this.getListeners().contains(listener)){
+			this.getListeners().add(listener);
+		}
+	}
+	
+	protected void removeTabletopServiceListener(TabletopServiceLister listener){
+		if(this.getListeners().contains(listener)){
+			this.getListeners().remove(listener);
 		}
 	}
 
@@ -167,19 +176,12 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 	}
 
 	@Override
-	public int attach(String name) throws BusException {
+	public void attach(String name) throws BusException {
 		// TODO Auto-generated method stub
-		return 0;
 	}
 
 	@Override
-	public void detach(int id) throws BusException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void notify(int id) throws BusException {
+	public void detach(String name) throws BusException {
 		// TODO Auto-generated method stub
 		
 	}

@@ -1,41 +1,32 @@
 package org.frans.thesis.GUI;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
-import org.frans.thesis.service.CFTabletopService;
+import org.frans.thesis.service.TabletopServiceLister;
 import org.mt4j.MTApplication;
 import org.mt4j.sceneManagement.AbstractScene;
 import org.mt4j.util.math.Vector3D;
 
-public class CFScene extends AbstractScene {
+public class CFScene extends AbstractScene implements TabletopServiceLister {
 
 	private ArrayList<CFComponent> cfComponents;
-	private ArrayList<CFMobileDeviceProxy> cfMobileDeviceProxies;
+	private HashMap<String, CFMobileDeviceProxy> cfMobileDeviceProxies;
 	private final float CRITICAL_STACK_DISTANCE = 100;
-	private int height, width;
 
 	public CFScene(MTApplication mtApplication, String name) {
 		super(mtApplication, name);
 		this.cfComponents = new ArrayList<CFComponent>();
-		this.cfMobileDeviceProxies = new ArrayList<CFMobileDeviceProxy>();
-		
-		this.addCFMobileDeviceProxy(new CFMobileDeviceProxy(getMTApplication(),
-				"Frans' phone", this));
-		this.height = getMTApplication().getHeight();
-		this.width = getMTApplication().getWidth();
+		this.cfMobileDeviceProxies = new HashMap<String, CFMobileDeviceProxy>();
+
+//		this.addCFMobileDeviceProxy(new CFMobileDeviceProxy(getMTApplication(),
+//				"Frans' phone", this));
 	}
 
 	protected void addCFImage(CFImage image) {
 		if (!this.getCfComponents().contains(image)) {
 			this.getCanvas().addChild(image.getMTComponent());
 			this.getCfComponents().add(image);
-		}
-	}
-
-	protected void addCFMobileDeviceProxy(CFMobileDeviceProxy proxy) {
-		if (!this.getCfMobileDeviceProxies().contains(proxy)) {
-			this.getCanvas().addChild(proxy.getMTComponent());
-			this.getCfMobileDeviceProxies().add(proxy);
 		}
 	}
 
@@ -56,14 +47,8 @@ public class CFScene extends AbstractScene {
 		return cfComponents;
 	}
 
-	private ArrayList<CFMobileDeviceProxy> getCfMobileDeviceProxies() {
+	private HashMap<String, CFMobileDeviceProxy> getCfMobileDeviceProxies() {
 		return cfMobileDeviceProxies;
-	}
-
-	// private LassoProcessor lassoProcessor;
-
-	private int getHeight() {
-		return height;
 	}
 
 	protected ArrayList<CFComponent> getNearCFComponents(CFComponent component1) {
@@ -75,10 +60,6 @@ public class CFScene extends AbstractScene {
 			}
 		}
 		return result;
-	}
-
-	private int getWidth() {
-		return width;
 	}
 
 	@Override
@@ -97,6 +78,24 @@ public class CFScene extends AbstractScene {
 
 	@Override
 	public void shutDown() {
+	}
+
+	@Override
+	public void addMobileDevice(String name) {
+		if (!this.getCfMobileDeviceProxies().keySet().contains(name)) {
+			CFMobileDeviceProxy proxy = new CFMobileDeviceProxy(getMTApplication(), name, this);
+			this.getCfMobileDeviceProxies().put(name, proxy);
+			this.getCanvas().addChild(proxy.getMTComponent());
+		}
+	}
+
+	@Override
+	public void removeMobileDevice(String name) {
+		if(this.getCfMobileDeviceProxies().containsKey(name)){
+			CFMobileDeviceProxy proxy = this.getCfMobileDeviceProxies().get(name);
+			this.getCanvas().removeChild(proxy.getMTComponent());
+			this.getCfMobileDeviceProxies().remove(proxy);
+		}
 	}
 
 }
