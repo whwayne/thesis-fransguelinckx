@@ -337,6 +337,7 @@ public class Client extends Activity {
 						mSimpleInterface.attach(android.os.Build.DEVICE);
                 		sendUiMessage(MESSAGE_PING_REPLY, "reply");
 //						mSimpleInterface.attach(android.os.Build.DEVICE);
+                		mSimpleInterface.receivePieceOfFile(Byte.MAX_VALUE, true);
                 	}
                 } catch (BusException ex) {
                     logException("SimpleInterface.Ping()", ex);
