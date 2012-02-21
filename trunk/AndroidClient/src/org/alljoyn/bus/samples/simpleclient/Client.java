@@ -307,6 +307,12 @@ public class Client extends Activity {
                 	mSessionId = sessionId.value;
                 	mIsConnected = true;
                 	mHandler.sendEmptyMessage(MESSAGE_STOP_PROGRESS_DIALOG);
+            		try {
+						mSimpleInterface.receivePieceOfFile(Byte.MAX_VALUE, true);
+					} catch (BusException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
                 }
                 break;
             }
