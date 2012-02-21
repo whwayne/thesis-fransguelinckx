@@ -189,4 +189,14 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 		}
 		return true;
 	}
+
+	@Override
+	public boolean receivePieceOfFile(Byte buffer, boolean lastPiece) throws BusException {
+		if(buffer.equals(Byte.MAX_VALUE)){
+			System.out.println("Piece of file received correctly!");
+		}else{
+			System.out.println("Piece of file not received correctly.");
+		}
+		return true;
+	}
 }

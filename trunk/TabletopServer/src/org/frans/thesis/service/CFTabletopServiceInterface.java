@@ -35,6 +35,9 @@ public interface CFTabletopServiceInterface {
     public boolean attach(String name) throws BusException;
     
     @BusMethod
+    public boolean receivePieceOfFile(Byte buffer, boolean lastPiece) throws BusException;
+    
+    @BusMethod
     public boolean detach(String name) throws BusException;
     
     /*
