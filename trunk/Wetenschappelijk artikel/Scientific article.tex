@@ -1,0 +1,82 @@
+\documentclass{IEEEconf}
+\usepackage{biblatex}
+\bibliography{References.bib}
+\title{Exploring collaboration on a tabletop and mobile devices}
+\author{%
+                Frans Guelinckx \\
+                \begin{affiliation}
+                  Department of Computer Science \\
+                  Catholic University of Leuven (Belgium)
+                \end{affiliation} \\
+                \email{frans.guelinckx@gmail.com}
+}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+In recent years touch-sensitive surfaces have gained interest in the academic world as well as the commercial world. Multitouch smartphones' and tablet computers' sales numbers keep increasing \cite{idcphonetracker} and large multitouch surfaces such as the Microsoft Surface are finding their way to the costumer. While smartphones and tablets are mainly focused on the use by a single user, because of the relatively small screen estate, large-screen tabletops are great for the collaboration between a number of participants on a specific task. \newline
+Despite of the vast interest in the domain of surface computing, not much efforts have been made yet to combine these two platforms and create a new way of collaborating by using personal data (obtained through mobile devices) and sharing it on the tabletop. \newline
+In this paper we try to close the gap between personal mobile devices and large tabletops by designing an open framework that should enable future developers to focus on their application in stead of worrying about device discovery, making and closing connections, data transfer, basic GUI elements etc.
+\end{abstract}
+
+\section{Introduction}
+Probleemstelling uitleggen: \newline
+mobile device is persoonlijk met persoonlijke data erop (heel kort houden, iedereen weet dat al) \newline
+tabletop is ideaal voor samenwerken, naar analogie met echte tafel (again, heel kort houden) \newline
+Klein stap om over te gaan naar applicaties die gebaseerd zijn op proximity (iemand benadert een tabletop en kan daar direct mee interageren en data van op mobile device gebruiken) \newline
+Probleem: groot gapend gat voor developers tussen die twee platformen (voorlopig nog zelf zorgen voor device discovery, connection maken, data transfer, basis GUI elementen en support voor collaboration). Geen framework/toolkit die leven een klein beetje makkelijk kan maken. \newline
+Oplossing: ik ontwerp en implementeer een framework dat precies dat gat opvult/probeert op te vullen. Added value is dat niemand het al heeft gedaan, zij het maar gedeeltelijk, zij het gesloten en betalend.
+
+\section{Related work}
+Subsections uiteindelijk laten vallen
+\subsection{Collaboration on tabletops}
+Gebruikers bakenen onbewust hun territorium af \newline
+Turning stuff the "right way up" and scaling accordingly \newline
+
+\subsection{Use of mobile devices and tabletops}
+Cruiser: deed precies wat ik deed maar is ondertussen gesloten en wordt gecommercialiseerd. \newline
+Paper: Table-Centric Interactive Spaces for Real-Time Collaboration. Wims, connectivity between objects and their source,...
+
+\section{Framework design}
+\subsection{Design criteria}
+Open: support for multiple mobile platforms. \newline
+layered: developers laten kiezen welke lagen van mijn framework ze willen gebruiken. Bvb enkel connection en data transfer, zodat ze de rest zelf kunnen kiezen.
+extensible: bouwt gedeeltelijk voor op layered aanpak. Functionaliteit die aangeboden wordt 'generisch' houden, bvb support voor verschillende types data. Ik schrijf code om jpg, ics, pdf te ondersteunen, maar de stap naar ondersteuning voor bestandsextensie ".whatever" of cloud-service X zou zeer klein moeten zijn.
+
+\subsection{High level design}
+Zie blog: mijn 5 lagen opsommen en toelichten
+
+\section{Implementation}
+Naam implementation is slecht. en eventueel onder framework design (vorig punt) onderbrengen
+\subsection{Connection}
+Discovery van alljoyn uitleggen.
+\subsection{RMI}
+RMI aangeboden door alljoyn uitleggen
+\subsection{File transfer}
+Mijn file transfer die geschreven is on top of alljoyn toelichten. Alljoyn biedt enkel rmi, waar bovenop ik file transfer heb geschreven: arrays van byte worden achtereenvolgens doorgestuurd en terug samengesteld aan de andere kant. \newline
+Ook uitleggen dat mobile devices om de x-aantal seconden vragen of ze bvb foto's moeten doorsturen. Dit in plaats van ook een service aan te bieden op de mobile devices die aangesproken kan worden door de tabletop app. Voornamelijk om aan mijn kant tijd te besparen.
+\subsection{Mobile device application}
+Deze moet gebruikers toestaan om te kiezen welke bestanden ze naar de tabletop willen sturen.
+\subsection{Tabletop application}
+Niet zozeer een applicatie, eerder een toolkit om snel tot een tabletop applicatie te komen. Elementen om verbonden apparaten, afbeeldingen, kalenders, pdfs,... te tonen die ook makkelijk gemanipuleerd kunnen worden. \newline
+Soort van WIMs van de mobile devices om de oorsprong van elementen aan te geven en nieuwe data te downloaden naar het mobile device.
+\subsection{Aid for collaboration}
+Territorial use van de tabletop \newline
+Turning stuff the right way up \newline
+Scaling \newline
+Kopieermachine voor elementen zodat gebruikers makkelijk dingen kunnen delen. \newline
+
+\section{Conclusion and future work}
+eindigen met een sterke concluderende alinea die samenvat wat ge verwezenlijkt hebt
+en hoe dat het probleem goed opgelost heeft
+\subsection{Extend support for mobile platforms}
+Als alljoyn uitgebreid wordt ook in mijn framework de nieuwe platforms ondersteunen.
+\subsection{Incorporate cloud services}
+Er niet enkel vanuit gaan dat iedereen alles bewaart op mobile devices, maar ook ondersteuning bieden voor clous services (photostream, dropbox, ...) en het mobile devices gebruiken als een soort van authenticatie voor die services.
+
+\section{Acknowledgments}
+Thomas en vincent voor het gebruik van hun toestel \newline
+Mijn begeleiders voor de kritiek, idee‘n, en goeie raad.
+
+\printbibliography
+\end{document}  

@@ -1,0 +1,41 @@
+% $ biblatex auxiliary file $
+% $ biblatex version 0.9 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated as
+% required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+\entry{idcphonetracker}{online}{}
+  \name{author}{1}{%
+    {{IDC}{I.}%
+     {}{}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{I1}
+  \strng{fullhash}{I1}
+  \field{sortinit}{I}
+  \field{title}{Smartphone Market Hits All-Time Quarterly High Due To Seasonal
+  Strength and Wider Variety of Offerings, According to IDC}
+  \verb{url}
+  \verb http://www.idc.com/getdoc.jsp?containerId=prUS23299912
+  \endverb
+  \field{month}{02}
+  \field{year}{2012}
+\endentry
+
+\lossort
+\endlossort
+
+\endinput
