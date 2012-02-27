@@ -23,7 +23,7 @@ import processing.core.PImage;
 public class CFMobileDeviceProxy extends CFComponent {
 	
 
-	IFont fontArial;
+//	IFont fontArial;
 
 	private String imagePath = "org" + MTApplication.separator + "frans"
 			+ MTApplication.separator + "thesis" + MTApplication.separator
@@ -41,11 +41,11 @@ public class CFMobileDeviceProxy extends CFComponent {
 		this.scene = scene;
 		this.mtApplication = mtApplication;
 		this.name = name;
-		IFont fontArial = FontManager.getInstance().createFont(mtApplication,
-				FontManager.DEFAULT_FONT, 40, // Font size
-				white, // Font fill color
-				white); // Font outline color
-		setUpComponent(mtApplication, fontArial);
+//		IFont fontArial = FontManager.getInstance().createFont(mtApplication,
+//				FontManager.DEFAULT_FONT, 40, // Font size
+//				white, // Font fill color
+//				white); // Font outline color
+		setUpComponent(mtApplication);
 		this.scaleImageToStackSize();
 
 		setUpGestures(mtApplication);
@@ -162,29 +162,29 @@ public class CFMobileDeviceProxy extends CFComponent {
 		return false;
 	}
 
-	private void setUpComponent(MTApplication mtApplication, IFont font) {
+	private void setUpComponent(MTApplication mtApplication) {
 		// Create a textfield
-		MTTextArea textField = new MTTextArea(mtApplication, font);
-		textField.setNoStroke(true);
-		textField.setNoFill(true);
-		textField.setText(this.name);
-		textField.setPickable(false);
+//		MTTextArea textField = new MTTextArea(mtApplication, font);
+//		textField.setNoStroke(true);
+//		textField.setNoFill(true);
+//		textField.setText(this.name);
+//		textField.setPickable(false);
 
 		PImage pImage = getMTApplication().loadImage(imagePath);
 		MTRectangle mtImage = new MTRectangle(pImage, this.mtApplication);
 		mtImage.setNoStroke(true);
 		mtImage.setPickable(false);
 
-		float height = textField.getHeightXY(TransformSpace.GLOBAL);
-		height += mtImage.getHeightXY(TransformSpace.GLOBAL);
-		float width = Math.max(textField.getWidthXY(TransformSpace.GLOBAL),
-				mtImage.getWidthXY(TransformSpace.GLOBAL));
+//		float height = textField.getHeightXY(TransformSpace.GLOBAL);
+//		height += mtImage.getHeightXY(TransformSpace.GLOBAL);
+//		float width = Math.max(textField.getWidthXY(TransformSpace.GLOBAL),
+//				mtImage.getWidthXY(TransformSpace.GLOBAL));
 		this.component = new MTRectangle(100, 100, mtApplication);
 
-		this.component.addChild(textField);
+//		this.component.addChild(textField);
 		this.component.addChild(mtImage);
-		mtImage.translate(new Vector3D(0, textField
-				.getHeightXY(TransformSpace.GLOBAL), 0));
+//		mtImage.translate(new Vector3D(0, textField
+//				.getHeightXY(TransformSpace.GLOBAL), 0));
 		this.component.setNoFill(true);
 		this.component.setNoStroke(true);
 	}
