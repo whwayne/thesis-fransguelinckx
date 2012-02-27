@@ -15,6 +15,11 @@
  */
 package org.frans.thesis.service;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import org.alljoyn.bus.BusAttachment;
@@ -27,7 +32,7 @@ import org.alljoyn.bus.SessionPortListener;
 import org.alljoyn.bus.Status;
 
 public class CFTabletopService implements CFTabletopServiceInterface, BusObject {
-	
+
 	private static class MyBusListener extends BusListener {
 		@Override
 		public void nameOwnerChanged(String busName, String previousOwner,
@@ -38,32 +43,39 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 			}
 		}
 	}
-	
+
 	private static final short CONTACT_PORT = 42;
 	private ArrayList<TabletopServiceLister> listeners;
+
 	private ArrayList<TabletopServiceLister> getListeners() {
 		return listeners;
 	}
 
 	private static boolean sessionEstablished = false;
-//	private static int sessionId;
+	// private static int sessionId;
 	static {
 		System.loadLibrary("alljoyn_java");
 	}
 
 	public CFTabletopService() {
 		this.listeners = new ArrayList<TabletopServiceLister>();
-//		this.connect();
+		// this.connect();
+		try {
+			this.out = new FileOutputStream(file);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
-	
-	public void addTabletopServiceListener(TabletopServiceLister listener){
-		if(!this.getListeners().contains(listener)){
+
+	public void addTabletopServiceListener(TabletopServiceLister listener) {
+		if (!this.getListeners().contains(listener)) {
 			this.getListeners().add(listener);
 		}
 	}
-	
-	protected void removeTabletopServiceListener(TabletopServiceLister listener){
-		if(this.getListeners().contains(listener)){
+
+	protected void removeTabletopServiceListener(TabletopServiceLister listener) {
+		if (this.getListeners().contains(listener)) {
 			this.getListeners().remove(listener);
 		}
 	}
@@ -118,7 +130,7 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 						System.out.println(String
 								.format("SessionPortListener.sessionJoined(%d, %d, %s)",
 										sessionPort, id, joiner));
-//						sessionId = id;
+						// sessionId = id;
 						sessionEstablished = true;
 					}
 				});
@@ -176,7 +188,7 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 
 	@Override
 	public boolean attach(String name) throws BusException {
-		for(TabletopServiceLister  listener : this.getListeners()){
+		for (TabletopServiceLister listener : this.getListeners()) {
 			listener.addMobileDevice(name);
 		}
 		return true;
@@ -184,19 +196,36 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 
 	@Override
 	public boolean detach(String name) throws BusException {
-		for(TabletopServiceLister  listener : this.getListeners()){
+		for (TabletopServiceLister listener : this.getListeners()) {
 			listener.removeMobileDevice(name);
 		}
 		return true;
 	}
 
+	File file = new File("/home/frans/Desktop/testimage.jpg");
+	private FileOutputStream out;
+	private int off = 0;
 	@Override
-	public boolean receivePieceOfFile(Byte buffer, boolean lastPiece) throws BusException {
-		if(buffer.equals(Byte.MAX_VALUE)){
-			System.out.println("Piece of file received correctly!");
-		}else{
-			System.out.println("Piece of file not received correctly.");
+	public boolean receivePieceOfFile(byte[] buffer, boolean lastPiece)
+			throws BusException {
+
+		try {
+			out.write(buffer);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		off += 255;
+		if (lastPiece) {
+			try {
+				out.flush();
+				out.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
 		return true;
 	}
 }

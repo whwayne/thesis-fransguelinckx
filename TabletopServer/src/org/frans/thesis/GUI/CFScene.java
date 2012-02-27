@@ -19,9 +19,9 @@ public class CFScene extends AbstractScene implements TabletopServiceLister {
 		this.cfComponents = new ArrayList<CFComponent>();
 		this.cfMobileDeviceProxies = new HashMap<String, CFMobileDeviceProxy>();
 		
-		CFMobileDeviceProxy proxy = new CFMobileDeviceProxy(getMTApplication(), name, this);
+//		CFMobileDeviceProxy proxy = new CFMobileDeviceProxy(getMTApplication(), name, this);
 //		this.getCfMobileDeviceProxies().put(name, proxy);
-		this.getCanvas().addChild(proxy.getMTComponent());
+//		this.getCanvas().addChild(proxy.getMTComponent());
 	}
 
 	protected void addCFImage(CFImage image) {
@@ -84,7 +84,7 @@ public class CFScene extends AbstractScene implements TabletopServiceLister {
 	@Override
 	public void addMobileDevice(String name) {
 		if (!this.getCfMobileDeviceProxies().keySet().contains(name)) {
-			CFMobileDeviceProxy proxy = new CFMobileDeviceProxy(getMTApplication(), "name", this);
+			CFMobileDeviceProxy proxy = new CFMobileDeviceProxy(getMTApplication(), name, this);
 			this.getCfMobileDeviceProxies().put(name, proxy);
 			this.getCanvas().addChild(proxy.getMTComponent());
 		}
