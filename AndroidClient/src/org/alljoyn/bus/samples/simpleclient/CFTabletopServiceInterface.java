@@ -19,7 +19,6 @@ package org.alljoyn.bus.samples.simpleclient;
 import org.alljoyn.bus.BusException;
 import org.alljoyn.bus.annotation.BusInterface;
 import org.alljoyn.bus.annotation.BusMethod;
-import org.alljoyn.bus.annotation.BusSignal;
 
 /*
  * The BusInterface annotation is used to tell the code that this interface is an AllJoyn interface.
@@ -35,7 +34,7 @@ public interface CFTabletopServiceInterface {
     public boolean attach(String name) throws BusException;
     
     @BusMethod
-    public boolean receivePieceOfFile(Byte buffer, boolean lastPiece) throws BusException;
+    public boolean receivePieceOfFile(byte[] buf, boolean lastPiece) throws BusException;
     
     @BusMethod
     public boolean detach(String name) throws BusException;
