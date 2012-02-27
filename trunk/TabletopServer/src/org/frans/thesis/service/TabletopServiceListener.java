@@ -1,6 +1,6 @@
 package org.frans.thesis.service;
 
-public interface TabletopServiceLister {
+public interface TabletopServiceListener {
 	
 	public void addMobileDevice(String name);
 	

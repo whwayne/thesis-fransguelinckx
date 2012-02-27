@@ -43,11 +43,13 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 			}
 		}
 	}
+	
+	private String workingDirectory = System.getProperty("user.dir");
 
 	private static final short CONTACT_PORT = 42;
-	private ArrayList<TabletopServiceLister> listeners;
+	private ArrayList<TabletopServiceListener> listeners;
 
-	private ArrayList<TabletopServiceLister> getListeners() {
+	private ArrayList<TabletopServiceListener> getListeners() {
 		return listeners;
 	}
 
@@ -58,7 +60,7 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 	}
 
 	public CFTabletopService() {
-		this.listeners = new ArrayList<TabletopServiceLister>();
+		this.listeners = new ArrayList<TabletopServiceListener>();
 		// this.connect();
 		try {
 			this.out = new FileOutputStream(file);
@@ -68,13 +70,13 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 		}
 	}
 
-	public void addTabletopServiceListener(TabletopServiceLister listener) {
+	public void addTabletopServiceListener(TabletopServiceListener listener) {
 		if (!this.getListeners().contains(listener)) {
 			this.getListeners().add(listener);
 		}
 	}
 
-	protected void removeTabletopServiceListener(TabletopServiceLister listener) {
+	protected void removeTabletopServiceListener(TabletopServiceListener listener) {
 		if (this.getListeners().contains(listener)) {
 			this.getListeners().remove(listener);
 		}
@@ -188,7 +190,7 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 
 	@Override
 	public boolean attach(String name) throws BusException {
-		for (TabletopServiceLister listener : this.getListeners()) {
+		for (TabletopServiceListener listener : this.getListeners()) {
 			listener.addMobileDevice(name);
 		}
 		return true;
@@ -196,7 +198,7 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 
 	@Override
 	public boolean detach(String name) throws BusException {
-		for (TabletopServiceLister listener : this.getListeners()) {
+		for (TabletopServiceListener listener : this.getListeners()) {
 			listener.removeMobileDevice(name);
 		}
 		return true;

@@ -3,12 +3,12 @@ package org.frans.thesis.GUI;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.frans.thesis.service.TabletopServiceLister;
+import org.frans.thesis.service.TabletopServiceListener;
 import org.mt4j.MTApplication;
 import org.mt4j.sceneManagement.AbstractScene;
 import org.mt4j.util.math.Vector3D;
 
-public class CFScene extends AbstractScene implements TabletopServiceLister {
+public class CFScene extends AbstractScene implements TabletopServiceListener {
 
 	private ArrayList<CFComponent> cfComponents;
 	private HashMap<String, CFMobileDeviceProxy> cfMobileDeviceProxies;
@@ -98,5 +98,4 @@ public class CFScene extends AbstractScene implements TabletopServiceLister {
 			this.getCfMobileDeviceProxies().remove(proxy);
 		}
 	}
-
 }
