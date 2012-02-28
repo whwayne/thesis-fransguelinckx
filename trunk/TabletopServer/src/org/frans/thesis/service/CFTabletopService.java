@@ -16,10 +16,6 @@
 package org.frans.thesis.service;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import org.alljoyn.bus.BusAttachment;
@@ -201,6 +197,7 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 		this.getClientManager().receivePieceOfFile(name, buffer, lastPiece);
 		return true;
 	}
+	
 	protected void removeTabletopServiceListener(TabletopServiceListener listener) {
 		if (this.getListeners().contains(listener)) {
 			this.getListeners().remove(listener);
@@ -211,5 +208,10 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 		for(TabletopServiceListener listener : this.getListeners()){
 			listener.fileFinished(file);
 		}
+	}
+
+	@Override
+	public int getStatus(String name) throws BusException {
+		return this.getClientManager().getStatus(name);
 	}
 }

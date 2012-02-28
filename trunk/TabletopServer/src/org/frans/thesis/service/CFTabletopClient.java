@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.util.Calendar;
 
 public class CFTabletopClient {
+	
+	private static final int IDLE = 0;
+	private static final int REQUESTING_PHOTOS= 1;
 
 	private final String workingDirectory = System.getProperty("user.dir");
 	private String name;
@@ -14,10 +17,12 @@ public class CFTabletopClient {
 	private FileOutputStream out;
 	private boolean isReceivingFile = false;
 	private CFTabletopClientManager manager;
+	private int status;
 
 	public CFTabletopClient(String name, CFTabletopClientManager manager) {
 		this.name = name;
 		this.manager = manager;
+		this.status = IDLE;
 	}
 
 	protected void receivePieceOfFile(byte[] buffer, boolean lastPiece) {
@@ -69,6 +74,10 @@ public class CFTabletopClient {
 	
 	private CFTabletopClientManager getManager(){
 		return this.manager;
+	}
+
+	protected int getStatus() {
+		return this.status;
 	}
 
 }

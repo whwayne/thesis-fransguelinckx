@@ -37,4 +37,8 @@ public class CFTabletopClientManager {
 		this.getService().fileFinished(file);
 	}
 
+	protected int getStatus(String name) {
+		return this.getClients().get(name).getStatus();
+	}
+
 }
