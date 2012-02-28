@@ -29,7 +29,7 @@ public class CFImage extends CFComponent implements IGestureEventListener {
 	public CFImage(MTApplication mtApplication, String imageName, CFScene scene) {
 		this.mtApplication = mtApplication;
 		this.scene = scene;
-		PImage pImage = getMTApplication().loadImage(imagePath + imageName);
+		PImage pImage = getMTApplication().loadImage(imageName);
 		this.component = new MTRectangle(pImage, this.mtApplication);
 		this.scaleImageToStackSize();
 

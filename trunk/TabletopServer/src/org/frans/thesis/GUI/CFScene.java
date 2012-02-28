@@ -1,5 +1,6 @@
 package org.frans.thesis.GUI;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -97,5 +98,11 @@ public class CFScene extends AbstractScene implements TabletopServiceListener {
 			this.getCanvas().removeChild(proxy.getMTComponent());
 			this.getCfMobileDeviceProxies().remove(proxy);
 		}
+	}
+
+	@Override
+	public void fileFinished(File file) {
+		CFImage image = new CFImage(getMTApplication(), file.getName(), this);
+		this.addCFImage(image);
 	}
 }
