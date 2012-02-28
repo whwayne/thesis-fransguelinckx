@@ -44,30 +44,19 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 		}
 	}
 	
-	private String workingDirectory = System.getProperty("user.dir");
-
 	private static final short CONTACT_PORT = 42;
-	private ArrayList<TabletopServiceListener> listeners;
-
-	private ArrayList<TabletopServiceListener> getListeners() {
-		return listeners;
-	}
-
+	private CFTabletopClientManager clientManager;
 	private static boolean sessionEstablished = false;
 	// private static int sessionId;
 	static {
 		System.loadLibrary("alljoyn_java");
 	}
 
+	private ArrayList<TabletopServiceListener> listeners;
+
 	public CFTabletopService() {
+		this.clientManager = new CFTabletopClientManager(this);
 		this.listeners = new ArrayList<TabletopServiceListener>();
-		// this.connect();
-		try {
-			this.out = new FileOutputStream(file);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 	public void addTabletopServiceListener(TabletopServiceListener listener) {
@@ -76,10 +65,13 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 		}
 	}
 
-	protected void removeTabletopServiceListener(TabletopServiceListener listener) {
-		if (this.getListeners().contains(listener)) {
-			this.getListeners().remove(listener);
+	@Override
+	public boolean attach(String name) throws BusException {
+		this.getClientManager().addTabletopClient(name);
+		for (TabletopServiceListener listener : this.getListeners()) {
+			listener.addMobileDevice(name);
 		}
+		return true;
 	}
 
 	public void connect() {
@@ -183,20 +175,6 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 	}
 
 	@Override
-	public String ping(String str) {
-		System.out.println("Ping: " + str);
-		return str;
-	}
-
-	@Override
-	public boolean attach(String name) throws BusException {
-		for (TabletopServiceListener listener : this.getListeners()) {
-			listener.addMobileDevice(name);
-		}
-		return true;
-	}
-
-	@Override
 	public boolean detach(String name) throws BusException {
 		for (TabletopServiceListener listener : this.getListeners()) {
 			listener.removeMobileDevice(name);
@@ -204,30 +182,34 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 		return true;
 	}
 
-	File file = new File("/home/frans/Desktop/testimage.jpg");
-	private FileOutputStream out;
-	private int off = 0;
+	private ArrayList<TabletopServiceListener> getListeners() {
+		return listeners;
+	}
 	@Override
-	public boolean receivePieceOfFile(byte[] buffer, boolean lastPiece)
+	public String ping(String str) {
+		System.out.println("Ping: " + str);
+		return str;
+	}
+	
+	private CFTabletopClientManager getClientManager(){
+		return this.clientManager;
+	}
+	
+	@Override
+	public boolean receivePieceOfFile(String name, byte[] buffer, boolean lastPiece)
 			throws BusException {
-
-		try {
-			out.write(buffer);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		off += 255;
-		if (lastPiece) {
-			try {
-				out.flush();
-				out.close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-
+		this.getClientManager().receivePieceOfFile(name, buffer, lastPiece);
 		return true;
+	}
+	protected void removeTabletopServiceListener(TabletopServiceListener listener) {
+		if (this.getListeners().contains(listener)) {
+			this.getListeners().remove(listener);
+		}
+	}
+	
+	protected void fileFinished(File file){
+		for(TabletopServiceListener listener : this.getListeners()){
+			listener.fileFinished(file);
+		}
 	}
 }
