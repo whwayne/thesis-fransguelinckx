@@ -69,7 +69,7 @@ public class Client extends Activity {
 	private ArrayAdapter<String> mListViewArrayAdapter;
 	private ListView mListView;
 	private Menu menu;
-	
+
 	private final String deviceName = android.os.Build.DEVICE;
 
 	/* Handler used to make calls to AllJoyn methods. See onCreate(). */
@@ -200,6 +200,8 @@ public class Client extends Activity {
 		public static final int JOIN_SESSION = 2;
 		public static final int DISCONNECT = 3;
 		public static final int PING = 4;
+		public static final int START_POLLING_SERVER = 5;
+		public static final int SEND_PHOTOS = 6;
 
 		public BusHandler(Looper looper) {
 			super(looper);
@@ -353,6 +355,8 @@ public class Client extends Activity {
 
 					try {
 						mSimpleInterface.attach(android.os.Build.DEVICE);
+						msg = obtainMessage(START_POLLING_SERVER);
+						sendMessage(msg);
 					} catch (BusException e) {
 					}
 				}
@@ -368,6 +372,71 @@ public class Client extends Activity {
 				}
 				mBus.disconnect();
 				getLooper().quit();
+				break;
+			}
+
+			case START_POLLING_SERVER: {
+				boolean idle = true;
+				while (idle) {
+					int status = 0;
+					try {
+						status = mSimpleInterface.getStatus(deviceName);
+					} catch (BusException e) {
+						e.printStackTrace();
+					}
+					if (status != 0) {
+						idle = false;
+						Message message = obtainMessage(SEND_PHOTOS);
+						sendMessage(message);
+					} else {
+						logInfo("Client idle");
+					}
+					try {
+						Thread.sleep(2500);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+
+				break;
+			}
+
+			case SEND_PHOTOS: {
+				if (mSimpleInterface != null) {
+					sendUiMessage(MESSAGE_PING, msg.obj);
+					sendUiMessage(MESSAGE_PING_REPLY, "reply");
+					List<String> files = ReadSDCard();
+					FileInputStream in;
+					try {
+						for (String file : files) {
+							in = new FileInputStream(file);
+							byte[] buf = new byte[255];
+							int len;
+							while ((len = in.read(buf)) > 0) {
+								logInfo("" + len);
+								if (len != 255) {
+									mSimpleInterface.receivePieceOfFile(
+											deviceName, buf, true);
+								} else {
+									mSimpleInterface.receivePieceOfFile(
+											deviceName, buf, false);
+								}
+								buf = new byte[255];
+							}
+							in.close();
+						}
+						mSimpleInterface.setIdle(deviceName);
+					} catch (FileNotFoundException e) {
+						e.printStackTrace();
+					} catch (IOException e) {
+						e.printStackTrace();
+					} catch (BusException e) {
+						e.printStackTrace();
+					}
+					Message message = obtainMessage(START_POLLING_SERVER);
+					sendMessage(message);
+
+				}
 				break;
 			}
 
@@ -392,13 +461,14 @@ public class Client extends Activity {
 
 						byte[] buf = new byte[255];
 						int len;
-						int cont = 0;
 						while ((len = in.read(buf)) > 0) {
 							logInfo("" + len);
 							if (len != 255) {
-								mSimpleInterface.receivePieceOfFile(deviceName, buf, true);
+								mSimpleInterface.receivePieceOfFile(deviceName,
+										buf, true);
 							} else {
-								mSimpleInterface.receivePieceOfFile(deviceName, buf, false);
+								mSimpleInterface.receivePieceOfFile(deviceName,
+										buf, false);
 							}
 							buf = new byte[255];
 						}
@@ -436,6 +506,7 @@ public class Client extends Activity {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	private void logException(String msg, BusException ex) {
 		String log = String.format("%s: %s", msg, ex);
 		Message toastMsg = mHandler.obtainMessage(MESSAGE_POST_TOAST, log);
