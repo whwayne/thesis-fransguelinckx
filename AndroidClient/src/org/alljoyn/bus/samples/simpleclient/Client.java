@@ -69,6 +69,8 @@ public class Client extends Activity {
 	private ArrayAdapter<String> mListViewArrayAdapter;
 	private ListView mListView;
 	private Menu menu;
+	
+	private final String deviceName = android.os.Build.DEVICE;
 
 	/* Handler used to make calls to AllJoyn methods. See onCreate(). */
 	private BusHandler mBusHandler;
@@ -393,13 +395,10 @@ public class Client extends Activity {
 						int cont = 0;
 						while ((len = in.read(buf)) > 0) {
 							logInfo("" + len);
-							// out.write(buf, 0, len);
 							if (len != 255) {
-								mSimpleInterface.receivePieceOfFile(buf, true);
-
+								mSimpleInterface.receivePieceOfFile(deviceName, buf, true);
 							} else {
-								mSimpleInterface.receivePieceOfFile(buf, false);
-
+								mSimpleInterface.receivePieceOfFile(deviceName, buf, false);
 							}
 							buf = new byte[255];
 						}
@@ -409,7 +408,6 @@ public class Client extends Activity {
 					} catch (IOException e) {
 						e.printStackTrace();
 					} catch (BusException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 
