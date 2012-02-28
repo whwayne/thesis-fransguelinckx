@@ -1,5 +1,6 @@
 package org.frans.thesis.GUI;
 
+import org.frans.thesis.service.CFTabletopClient;
 import org.mt4j.MTApplication;
 import org.mt4j.components.visibleComponents.shapes.MTRectangle;
 import org.mt4j.input.gestureAction.DefaultDragAction;
@@ -20,6 +21,7 @@ public class CFMobileDeviceProxy extends CFComponent {
 
 //	IFont fontArial;
 
+	private CFTabletopClient tabletopClient;
 	private String imagePath = "org" + MTApplication.separator + "frans"
 			+ MTApplication.separator + "thesis" + MTApplication.separator
 			+ "GUI" + MTApplication.separator + "data"
@@ -32,10 +34,11 @@ public class CFMobileDeviceProxy extends CFComponent {
 	private MTColor white = new MTColor(255, 255, 255);
 
 	public CFMobileDeviceProxy(MTApplication mtApplication, String name,
-			CFScene scene) {
+			CFScene scene, CFTabletopClient tabletopClient) {
 		this.scene = scene;
 		this.mtApplication = mtApplication;
 		this.name = name;
+		this.tabletopClient = tabletopClient;
 //		IFont fontArial = FontManager.getInstance().createFont(mtApplication,
 //				FontManager.DEFAULT_FONT, 40, // Font size
 //				white, // Font fill color
@@ -124,17 +127,21 @@ public class CFMobileDeviceProxy extends CFComponent {
 	private void downloadPdf() {
 		System.out.println("Download pdf");
 	}
+	
+	private CFTabletopClient getTabletopClient(){
+		return this.tabletopClient;
+	}
 
 	private void downloadPhotos() {
+		this.getTabletopClient().setStatus(CFTabletopClient.REQUESTING_PHOTOS);
 		
-		
-		System.out.println("Download photos");
-		this.getScene().addCFImage(
-				new CFImage((MTApplication) this.getMTApplication(),
-						"foto2.jpg", this.getScene()));
-		this.getScene().addCFImage(
-				new CFImage((MTApplication) this.getMTApplication(),
-						"foto3.jpg", this.getScene()));
+//		System.out.println("Download photos");
+//		this.getScene().addCFImage(
+//				new CFImage((MTApplication) this.getMTApplication(),
+//						"foto2.jpg", this.getScene()));
+//		this.getScene().addCFImage(
+//				new CFImage((MTApplication) this.getMTApplication(),
+//						"foto3.jpg", this.getScene()));
 	}
 
 	private CFComponentMenu getMenu() {

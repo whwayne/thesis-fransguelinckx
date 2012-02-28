@@ -7,9 +7,9 @@ import java.io.IOException;
 import java.util.Calendar;
 
 public class CFTabletopClient {
-	
-	private static final int IDLE = 0;
-	private static final int REQUESTING_PHOTOS= 1;
+
+	public static final int IDLE = 0;
+	public static final int REQUESTING_PHOTOS = 1;
 
 	private final String workingDirectory = System.getProperty("user.dir");
 	private String name;
@@ -53,14 +53,14 @@ public class CFTabletopClient {
 		this.getOutputStream().close();
 		this.getManager().fileFinished(this.getFile());
 	}
-	
-	private File getFile(){
+
+	private File getFile() {
 		return this.file;
 	}
 
 	private void startNewFile() throws FileNotFoundException {
-		this.file = new File(this.workingDirectory + Calendar.getInstance().getTimeInMillis()
-				+ ".jpg");
+		this.file = new File(this.workingDirectory
+				+ Calendar.getInstance().getTimeInMillis() + ".jpg");
 		this.out = new FileOutputStream(file);
 	}
 
@@ -71,13 +71,17 @@ public class CFTabletopClient {
 	private void appendBuffer(byte[] buffer) throws IOException {
 		this.getOutputStream().write(buffer);
 	}
-	
-	private CFTabletopClientManager getManager(){
+
+	private CFTabletopClientManager getManager() {
 		return this.manager;
 	}
 
 	protected int getStatus() {
 		return this.status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
 	}
 
 }
