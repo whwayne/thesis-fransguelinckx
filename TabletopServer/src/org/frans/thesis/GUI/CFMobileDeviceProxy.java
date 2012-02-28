@@ -126,6 +126,8 @@ public class CFMobileDeviceProxy extends CFComponent {
 	}
 
 	private void downloadPhotos() {
+		
+		
 		System.out.println("Download photos");
 		this.getScene().addCFImage(
 				new CFImage((MTApplication) this.getMTApplication(),

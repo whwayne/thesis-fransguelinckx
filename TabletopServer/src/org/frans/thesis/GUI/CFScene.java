@@ -102,7 +102,7 @@ public class CFScene extends AbstractScene implements TabletopServiceListener {
 
 	@Override
 	public void fileFinished(File file) {
-		CFImage image = new CFImage(getMTApplication(), file.getName(), this);
+		CFImage image = new CFImage(getMTApplication(), file.getPath(), this);
 		this.addCFImage(image);
 	}
 }
