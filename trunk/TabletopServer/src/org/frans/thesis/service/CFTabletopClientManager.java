@@ -25,8 +25,10 @@ public class CFTabletopClientManager {
 		return this.clients;
 	}
 
-	protected void addTabletopClient(String name) {
-		this.getClients().put(name, new CFTabletopClient(name,this));
+	protected CFTabletopClient addTabletopClient(String name) {
+		CFTabletopClient tabletopClient = new CFTabletopClient(name, this);
+		this.getClients().put(name, tabletopClient);
+		return tabletopClient;
 	}
 	
 	private CFTabletopService getService(){
@@ -39,6 +41,10 @@ public class CFTabletopClientManager {
 
 	protected int getStatus(String name) {
 		return this.getClients().get(name).getStatus();
+	}
+
+	protected void setIdle(String name) {
+		this.getClients().get(name).setStatus(CFTabletopClient.IDLE);
 	}
 
 }

@@ -63,9 +63,9 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 
 	@Override
 	public boolean attach(String name) throws BusException {
-		this.getClientManager().addTabletopClient(name);
+		CFTabletopClient tabletopClient = this.getClientManager().addTabletopClient(name);
 		for (TabletopServiceListener listener : this.getListeners()) {
-			listener.addMobileDevice(name);
+			listener.addMobileDevice(name, tabletopClient);
 		}
 		return true;
 	}
@@ -213,5 +213,11 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 	@Override
 	public int getStatus(String name) throws BusException {
 		return this.getClientManager().getStatus(name);
+	}
+
+	@Override
+	public boolean setIdle(String name) throws BusException {
+		this.getClientManager().setIdle(name);
+		return false;
 	}
 }

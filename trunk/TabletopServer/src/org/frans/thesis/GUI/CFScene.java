@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.frans.thesis.service.CFTabletopClient;
 import org.frans.thesis.service.TabletopServiceListener;
 import org.mt4j.MTApplication;
 import org.mt4j.sceneManagement.AbstractScene;
@@ -83,9 +84,9 @@ public class CFScene extends AbstractScene implements TabletopServiceListener {
 	}
 
 	@Override
-	public void addMobileDevice(String name) {
+	public void addMobileDevice(String name, CFTabletopClient tabletopClient) {
 		if (!this.getCfMobileDeviceProxies().keySet().contains(name)) {
-			CFMobileDeviceProxy proxy = new CFMobileDeviceProxy(getMTApplication(), name, this);
+			CFMobileDeviceProxy proxy = new CFMobileDeviceProxy(getMTApplication(), name, this, tabletopClient);
 			this.getCfMobileDeviceProxies().put(name, proxy);
 			this.getCanvas().addChild(proxy.getMTComponent());
 		}
