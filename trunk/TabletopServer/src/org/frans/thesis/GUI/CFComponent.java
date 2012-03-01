@@ -6,7 +6,7 @@ import org.mt4j.util.math.Vector3D;
 
 public abstract class CFComponent {
 
-	private static final float STANDARD_MEASURE = 100;
+	private static final float STANDARD_MEASURE = 50;
 
 	protected MTRectangle component;
 
