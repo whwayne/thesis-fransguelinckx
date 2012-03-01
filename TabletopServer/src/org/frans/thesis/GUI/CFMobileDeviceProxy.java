@@ -2,7 +2,11 @@ package org.frans.thesis.GUI;
 
 import org.frans.thesis.service.CFTabletopClient;
 import org.mt4j.MTApplication;
+import org.mt4j.components.TransformSpace;
+import org.mt4j.components.visibleComponents.font.FontManager;
+import org.mt4j.components.visibleComponents.font.IFont;
 import org.mt4j.components.visibleComponents.shapes.MTRectangle;
+import org.mt4j.components.visibleComponents.widgets.MTTextArea;
 import org.mt4j.input.gestureAction.DefaultDragAction;
 import org.mt4j.input.gestureAction.DefaultRotateAction;
 import org.mt4j.input.inputProcessors.IGestureEventListener;
@@ -12,6 +16,7 @@ import org.mt4j.input.inputProcessors.componentProcessors.rotateProcessor.Rotate
 import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapProcessor;
 import org.mt4j.util.MTColor;
+import org.mt4j.util.math.Vector3D;
 
 import processing.core.PApplet;
 import processing.core.PImage;
@@ -78,46 +83,6 @@ public class CFMobileDeviceProxy extends CFComponent {
 						downloadPdf();
 					}
 				});
-		this.menu.addMenuItem("pdf.png",
-				new CFComponentMenuItemListener() {
-
-					@Override
-					public void processEvent() {
-						downloadPdf();
-					}
-				});
-		this.menu.addMenuItem("pdf.png",
-				new CFComponentMenuItemListener() {
-
-					@Override
-					public void processEvent() {
-						downloadPdf();
-					}
-				});
-		this.menu.addMenuItem("pdf.png",
-				new CFComponentMenuItemListener() {
-
-					@Override
-					public void processEvent() {
-						downloadPdf();
-					}
-				});
-		this.menu.addMenuItem("pdf.png",
-				new CFComponentMenuItemListener() {
-
-					@Override
-					public void processEvent() {
-						downloadPdf();
-					}
-				});
-		this.menu.addMenuItem("pdf.png",
-				new CFComponentMenuItemListener() {
-
-					@Override
-					public void processEvent() {
-						downloadPdf();
-					}
-				});
 	}
 
 	private void downloadCalendar() {
@@ -134,14 +99,6 @@ public class CFMobileDeviceProxy extends CFComponent {
 
 	private void downloadPhotos() {
 		this.getTabletopClient().setStatus(CFTabletopClient.REQUESTING_PHOTOS);
-		
-//		System.out.println("Download photos");
-//		this.getScene().addCFImage(
-//				new CFImage((MTApplication) this.getMTApplication(),
-//						"foto2.jpg", this.getScene()));
-//		this.getScene().addCFImage(
-//				new CFImage((MTApplication) this.getMTApplication(),
-//						"foto3.jpg", this.getScene()));
 	}
 
 	private CFComponentMenu getMenu() {
@@ -167,28 +124,29 @@ public class CFMobileDeviceProxy extends CFComponent {
 	}
 
 	private void setUpComponent(MTApplication mtApplication) {
+		IFont font = FontManager.getInstance().createFont(mtApplication, "SansSerif", 12, false);
+		MTTextArea textField = new MTTextArea(mtApplication, font);
 		// Create a textfield
-//		MTTextArea textField = new MTTextArea(mtApplication, font);
-//		textField.setNoStroke(true);
-//		textField.setNoFill(true);
-//		textField.setText(this.name);
-//		textField.setPickable(false);
+		textField.setNoStroke(true);
+		textField.setNoFill(true);
+		textField.setText(this.name);
+		textField.setPickable(false);
 
 		PImage pImage = getMTApplication().loadImage(imagePath);
 		MTRectangle mtImage = new MTRectangle(pImage, this.mtApplication);
 		mtImage.setNoStroke(true);
 		mtImage.setPickable(false);
 
-//		float height = textField.getHeightXY(TransformSpace.GLOBAL);
-//		height += mtImage.getHeightXY(TransformSpace.GLOBAL);
-//		float width = Math.max(textField.getWidthXY(TransformSpace.GLOBAL),
-//				mtImage.getWidthXY(TransformSpace.GLOBAL));
+		float height = textField.getHeightXY(TransformSpace.GLOBAL);
+		height += mtImage.getHeightXY(TransformSpace.GLOBAL);
+		float width = Math.max(textField.getWidthXY(TransformSpace.GLOBAL),
+				mtImage.getWidthXY(TransformSpace.GLOBAL));
 		this.component = new MTRectangle(100, 100, mtApplication);
 
-//		this.component.addChild(textField);
+		this.component.addChild(textField);
 		this.component.addChild(mtImage);
-//		mtImage.translate(new Vector3D(0, textField
-//				.getHeightXY(TransformSpace.GLOBAL), 0));
+		mtImage.translate(new Vector3D(0, textField
+				.getHeightXY(TransformSpace.GLOBAL), 0));
 		this.component.setNoFill(true);
 		this.component.setNoStroke(true);
 	}
