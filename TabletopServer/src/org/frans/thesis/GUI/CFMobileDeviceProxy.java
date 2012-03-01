@@ -15,7 +15,6 @@ import org.mt4j.input.inputProcessors.componentProcessors.dragProcessor.DragProc
 import org.mt4j.input.inputProcessors.componentProcessors.rotateProcessor.RotateProcessor;
 import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapProcessor;
-import org.mt4j.util.MTColor;
 import org.mt4j.util.math.Vector3D;
 
 import processing.core.PApplet;
@@ -23,9 +22,6 @@ import processing.core.PImage;
 
 public class CFMobileDeviceProxy extends CFComponent {
 	
-
-//	IFont fontArial;
-
 	private CFTabletopClient tabletopClient;
 	private String imagePath = "org" + MTApplication.separator + "frans"
 			+ MTApplication.separator + "thesis" + MTApplication.separator
@@ -36,7 +32,6 @@ public class CFMobileDeviceProxy extends CFComponent {
 
 	private String name;
 	private CFScene scene;
-	private MTColor white = new MTColor(255, 255, 255);
 
 	public CFMobileDeviceProxy(MTApplication mtApplication, String name,
 			CFScene scene, CFTabletopClient tabletopClient) {
@@ -124,8 +119,7 @@ public class CFMobileDeviceProxy extends CFComponent {
 	}
 
 	private void setUpComponent(MTApplication mtApplication) {
-		IFont font = FontManager.getInstance().createFont(mtApplication, "SansSerif", 12, false);
-		MTTextArea textField = new MTTextArea(mtApplication, font);
+		MTTextArea textField = new MTTextArea(mtApplication);
 		// Create a textfield
 		textField.setNoStroke(true);
 		textField.setNoFill(true);
