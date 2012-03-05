@@ -20,10 +20,6 @@ public class CFScene extends AbstractScene implements TabletopServiceListener {
 		super(mtApplication, name);
 		this.cfComponents = new ArrayList<CFComponent>();
 		this.cfMobileDeviceProxies = new HashMap<String, CFMobileDeviceProxy>();
-		
-//		CFMobileDeviceProxy proxy = new CFMobileDeviceProxy(getMTApplication(), name, this);
-//		this.getCfMobileDeviceProxies().put(name, proxy);
-//		this.getCanvas().addChild(proxy.getMTComponent());
 	}
 
 	protected void addCFImage(CFImage image) {
@@ -46,12 +42,11 @@ public class CFScene extends AbstractScene implements TabletopServiceListener {
 		ArrayList<CFComponent> nearCFComponents = this
 				.getNearCFComponents(component1);
 		component1.scaleImageToStackSize();
-		Vector3D position = component1.getPosition();
-		for (CFComponent component2 : nearCFComponents) {
-			if (component2.isStackable()) {
+		CFComponent component2 = nearCFComponents.get(0);
+		Vector3D position = component2.getPosition();
+		if(component2.isStackable()){
 				component2.scaleImageToStackSize();
-				component2.reposition(position);
-			}
+				component1.reposition(position);
 		}
 	}
 
