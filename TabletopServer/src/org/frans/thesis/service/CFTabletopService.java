@@ -41,12 +41,12 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 	}
 	
 	private static final short CONTACT_PORT = 42;
-	private CFTabletopClientManager clientManager;
 	private static boolean sessionEstablished = false;
 	// private static int sessionId;
 	static {
 		System.loadLibrary("alljoyn_java");
 	}
+	private CFTabletopClientManager clientManager;
 
 	private ArrayList<TabletopServiceListener> listeners;
 
@@ -178,17 +178,28 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 		return true;
 	}
 
+	protected void fileFinished(File file){
+		for(TabletopServiceListener listener : this.getListeners()){
+			listener.fileFinished(file);
+		}
+	}
+	private CFTabletopClientManager getClientManager(){
+		return this.clientManager;
+	}
+	
 	private ArrayList<TabletopServiceListener> getListeners() {
 		return listeners;
 	}
+	
+	@Override
+	public int getStatus(String name) throws BusException {
+		return this.getClientManager().getStatus(name);
+	}
+	
 	@Override
 	public String ping(String str) {
 		System.out.println("Ping: " + str);
 		return str;
-	}
-	
-	private CFTabletopClientManager getClientManager(){
-		return this.clientManager;
 	}
 	
 	@Override
@@ -197,22 +208,11 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 		this.getClientManager().receivePieceOfFile(name, buffer, lastPiece);
 		return true;
 	}
-	
+
 	protected void removeTabletopServiceListener(TabletopServiceListener listener) {
 		if (this.getListeners().contains(listener)) {
 			this.getListeners().remove(listener);
 		}
-	}
-	
-	protected void fileFinished(File file){
-		for(TabletopServiceListener listener : this.getListeners()){
-			listener.fileFinished(file);
-		}
-	}
-
-	@Override
-	public int getStatus(String name) throws BusException {
-		return this.getClientManager().getStatus(name);
 	}
 
 	@Override

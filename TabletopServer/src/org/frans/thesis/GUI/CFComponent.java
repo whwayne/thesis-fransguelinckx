@@ -10,16 +10,16 @@ public abstract class CFComponent {
 
 	protected MTRectangle component;
 
-	protected float getDistanceto(CFComponent image) {
+	protected float getDistanceto(CFComponent component) {
 		float result = 0;
 		float x, y;
 		x = Math.abs(this.getMTComponent()
 				.getPosition(TransformSpace.RELATIVE_TO_PARENT).getX()
-				- image.getMTComponent()
+				- component.getMTComponent()
 						.getPosition(TransformSpace.RELATIVE_TO_PARENT).getX());
 		y = Math.abs(this.getMTComponent()
 				.getPosition(TransformSpace.RELATIVE_TO_PARENT).getY()
-				- image.getMTComponent()
+				- component.getMTComponent()
 						.getPosition(TransformSpace.RELATIVE_TO_PARENT).getY());
 		result = (float) Math.sqrt((x * x) + (y * y));
 		return result;

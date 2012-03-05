@@ -11,18 +11,44 @@ public class CFTabletopClient {
 	public static final int IDLE = 0;
 	public static final int REQUESTING_PHOTOS = 1;
 
-	private final String workingDirectory = System.getProperty("user.dir");
-	private String name;
 	private File file;
-	private FileOutputStream out;
 	private boolean isReceivingFile = false;
 	private CFTabletopClientManager manager;
+	private String name;
+	private FileOutputStream out;
 	private int status;
+	private final String workingDirectory = System.getProperty("user.dir");
 
 	public CFTabletopClient(String name, CFTabletopClientManager manager) {
 		this.name = name;
 		this.manager = manager;
 		this.status = IDLE;
+	}
+
+	private void appendBuffer(byte[] buffer) throws IOException {
+		this.getOutputStream().write(buffer);
+	}
+
+	private void finishFile() throws IOException {
+		this.getOutputStream().flush();
+		this.getOutputStream().close();
+		this.getManager().fileFinished(this.getFile());
+	}
+
+	private File getFile() {
+		return this.file;
+	}
+
+	private CFTabletopClientManager getManager() {
+		return this.manager;
+	}
+
+	private FileOutputStream getOutputStream() {
+		return this.out;
+	}
+
+	protected int getStatus() {
+		return this.status;
 	}
 
 	protected void receivePieceOfFile(byte[] buffer, boolean lastPiece) {
@@ -48,40 +74,14 @@ public class CFTabletopClient {
 		}
 	}
 
-	private void finishFile() throws IOException {
-		this.getOutputStream().flush();
-		this.getOutputStream().close();
-		this.getManager().fileFinished(this.getFile());
-	}
-
-	private File getFile() {
-		return this.file;
+	public void setStatus(int status) {
+		this.status = status;
 	}
 
 	private void startNewFile() throws FileNotFoundException {
 		this.file = new File(this.workingDirectory
 				+ Calendar.getInstance().getTimeInMillis() + ".jpg");
 		this.out = new FileOutputStream(file);
-	}
-
-	private FileOutputStream getOutputStream() {
-		return this.out;
-	}
-
-	private void appendBuffer(byte[] buffer) throws IOException {
-		this.getOutputStream().write(buffer);
-	}
-
-	private CFTabletopClientManager getManager() {
-		return this.manager;
-	}
-
-	protected int getStatus() {
-		return this.status;
-	}
-
-	public void setStatus(int status) {
-		this.status = status;
 	}
 
 }

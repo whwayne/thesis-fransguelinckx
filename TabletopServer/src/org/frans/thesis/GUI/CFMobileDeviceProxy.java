@@ -23,16 +23,16 @@ import processing.core.PImage;
 
 public class CFMobileDeviceProxy extends CFComponent {
 
-	private CFTabletopClient tabletopClient;
 	private String imagePath = "org" + MTApplication.separator + "frans"
 			+ MTApplication.separator + "thesis" + MTApplication.separator
 			+ "GUI" + MTApplication.separator + "data"
 			+ MTApplication.separator + "android.png";
 	private CFComponentMenu menu;
 	private MTApplication mtApplication;
-
 	private String name;
+
 	private CFScene scene;
+	private CFTabletopClient tabletopClient;
 
 	public CFMobileDeviceProxy(MTApplication mtApplication, String name,
 			CFScene scene, CFTabletopClient tabletopClient) {
@@ -88,10 +88,6 @@ public class CFMobileDeviceProxy extends CFComponent {
 		System.out.println("Download pdf");
 	}
 
-	private CFTabletopClient getTabletopClient() {
-		return this.tabletopClient;
-	}
-
 	private void downloadPhotos() {
 		this.getTabletopClient().setStatus(CFTabletopClient.REQUESTING_PHOTOS);
 	}
@@ -111,6 +107,10 @@ public class CFMobileDeviceProxy extends CFComponent {
 
 	private CFScene getScene() {
 		return this.scene;
+	}
+
+	private CFTabletopClient getTabletopClient() {
+		return this.tabletopClient;
 	}
 
 	@Override
