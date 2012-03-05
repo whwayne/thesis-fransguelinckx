@@ -6,7 +6,7 @@ import org.mt4j.MTApplication;
 import org.mt4j.util.math.Vector3D;
 
 public class CFComponentMenu {
-	private CFComponent component;
+	private CFComponent owner;
 	private ArrayList<CFComponentMenuItem> menuItems;
 
 	private MTApplication mtApplication;
@@ -14,7 +14,7 @@ public class CFComponentMenu {
 	private boolean visible = false;
 
 	public CFComponentMenu(CFComponent component, MTApplication mtApplication) {
-		this.component = component;
+		this.owner = component;
 		this.mtApplication = mtApplication;
 		this.menuItems = new ArrayList<CFComponentMenuItem>();
 	}
@@ -24,13 +24,13 @@ public class CFComponentMenu {
 		CFComponentMenuItem menuItem = new CFComponentMenuItem(fileName,
 				listener, getMtApplication());
 		this.menuItems.add(menuItem);
-		this.getCFComponent().getMTComponent()
+		this.getOwner().getMTComponent()
 				.addChild(menuItem.getMTComponent());
-		this.repositionMenuItems();
+//		this.repositionMenuItems();
 	}
 
-	private CFComponent getCFComponent() {
-		return component;
+	private CFComponent getOwner() {
+		return owner;
 	}
 
 	private ArrayList<CFComponentMenuItem> getMenuItems() {
@@ -45,14 +45,12 @@ public class CFComponentMenu {
 		return this.visible;
 	}
 
-	private void repositionMenuItems() {
-		Vector3D initialPosition = new Vector3D(this.getCFComponent().getPosition());
-		initialPosition.translate(new Vector3D(0, -75, 0));
+	protected void repositionMenuItems() {
 		float degrees = 0;
 		for(CFComponentMenuItem item : this.getMenuItems()){
-			item.setPosition(initialPosition);
-			item.rotate(this.getCFComponent().getMTComponent().getCenterPointGlobal(), degrees);
-			degrees += 30;
+			item.setPosition(new Vector3D(getOwner().getPosition().x, getOwner().getPosition().y-150));
+			item.rotate(this.getOwner().getPosition(), degrees);
+			degrees += 45;
 		}
 	}
 

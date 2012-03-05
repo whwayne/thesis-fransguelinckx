@@ -4,7 +4,6 @@ import org.frans.thesis.service.CFTabletopClient;
 import org.mt4j.MTApplication;
 import org.mt4j.components.TransformSpace;
 import org.mt4j.components.visibleComponents.font.FontManager;
-import org.mt4j.components.visibleComponents.font.IFont;
 import org.mt4j.components.visibleComponents.shapes.MTRectangle;
 import org.mt4j.components.visibleComponents.widgets.MTTextArea;
 import org.mt4j.input.gestureAction.DefaultDragAction;
@@ -49,8 +48,8 @@ public class CFMobileDeviceProxy extends CFComponent {
 
 		setUpGestures(mtApplication);
 
-		this.getMTComponent().setNoStroke(true);
-		this.getMTComponent().setDrawSmooth(true);
+//		this.getMTComponent().setNoStroke(true);
+		this.getMTComponent().setStrokeColor(new MTColor(255, 0, 0));
 		createMenu();
 	}
 
@@ -78,6 +77,7 @@ public class CFMobileDeviceProxy extends CFComponent {
 				downloadPdf();
 			}
 		});
+		this.menu.repositionMenuItems();
 	}
 
 	private void downloadCalendar() {
@@ -98,11 +98,6 @@ public class CFMobileDeviceProxy extends CFComponent {
 
 	private PApplet getMTApplication() {
 		return this.mtApplication;
-	}
-
-	@Override
-	public MTRectangle getMTComponent() {
-		return this.component;
 	}
 
 	private CFScene getScene() {
@@ -129,7 +124,7 @@ public class CFMobileDeviceProxy extends CFComponent {
 		textField.setPickable(false);
 
 		PImage pImage = getMTApplication().loadImage(imagePath);
-		MTRectangle mtImage = new MTRectangle(pImage, this.mtApplication);
+		MTRectangle mtImage = new MTRectangle(getMTApplication(), pImage);
 		mtImage.setNoStroke(true);
 		mtImage.setPickable(false);
 
@@ -137,14 +132,14 @@ public class CFMobileDeviceProxy extends CFComponent {
 		height += mtImage.getHeightXY(TransformSpace.GLOBAL);
 		float width = Math.max(textField.getWidthXY(TransformSpace.GLOBAL),
 				mtImage.getWidthXY(TransformSpace.GLOBAL));
-		this.component = new MTRectangle(100, 100, mtApplication);
+		this.component = new MTRectangle(getMTApplication(), width, height);
 
 		this.component.addChild(textField);
 		this.component.addChild(mtImage);
 		mtImage.translate(new Vector3D(0, textField
 				.getHeightXY(TransformSpace.GLOBAL), 0));
 		this.component.setNoFill(true);
-		this.component.setNoStroke(true);
+//		this.component.setNoStroke(true);
 	}
 
 	private void setUpGestures(MTApplication mtApplication) {

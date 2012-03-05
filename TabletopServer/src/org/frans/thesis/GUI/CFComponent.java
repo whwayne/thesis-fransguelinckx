@@ -6,7 +6,7 @@ import org.mt4j.util.math.Vector3D;
 
 public abstract class CFComponent {
 
-	private static final float STANDARD_MEASURE = 50;
+	private static final float STANDARD_MEASURE = 150;
 
 	protected MTRectangle component;
 
@@ -27,19 +27,21 @@ public abstract class CFComponent {
 
 	protected float getHeight() {
 		return this.getMTComponent().getHeightXY(
-				TransformSpace.RELATIVE_TO_PARENT);
+				TransformSpace.GLOBAL);
 	}
 
-	protected abstract MTRectangle getMTComponent();
+	protected MTRectangle getMTComponent(){
+		return this.component;
+	}
 
 	protected Vector3D getPosition() {
 		return this.getMTComponent().getPosition(
-				TransformSpace.RELATIVE_TO_PARENT);
+				TransformSpace.GLOBAL);
 	}
 
 	protected float getWidth() {
 		return this.getMTComponent().getWidthXY(
-				TransformSpace.RELATIVE_TO_PARENT);
+				TransformSpace.GLOBAL);
 	}
 
 	protected abstract boolean isStackable();
@@ -48,8 +50,9 @@ public abstract class CFComponent {
 		this.getMTComponent().setPositionGlobal(position);
 	}
 	
-	protected void rotate(Vector3D vector, float degrees){
-		this.getMTComponent().rotateZ(vector,degrees, TransformSpace.GLOBAL);
+	protected void rotate(Vector3D rotationPoint, float degrees){
+		Vector3D point = new Vector3D(rotationPoint.x + this.getWidth()/2, rotationPoint.y + this.getHeight()/2);
+		this.getMTComponent().rotateZ(point, degrees);
 	}
 
 	protected void rotateRandomlyForStack() {
@@ -67,8 +70,8 @@ public abstract class CFComponent {
 			this.getMTComponent().scale(scalingWidthFactor, scalingWidthFactor,
 					1, new Vector3D(0, 0, 0));
 		} else {
-			this.getMTComponent().scale(scalingHeightFactor,
-					scalingHeightFactor, 1, new Vector3D(0, 0, 0));
+			this.getMTComponent().scaleGlobal(scalingHeightFactor,
+					scalingHeightFactor, 1, this.getMTComponent().getPosition(TransformSpace.GLOBAL));
 		}
 	}
 }
