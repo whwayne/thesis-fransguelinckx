@@ -33,6 +33,15 @@ public class CFScene extends AbstractScene implements TabletopServiceListener {
 		}
 	}
 
+	@Override
+	public void addMobileDevice(String name, CFTabletopClient tabletopClient) {
+		if (!this.getCfMobileDeviceProxies().keySet().contains(name)) {
+			CFMobileDeviceProxy proxy = new CFMobileDeviceProxy(getMTApplication(), name, this, tabletopClient);
+			this.getCfMobileDeviceProxies().put(name, proxy);
+			this.getCanvas().addChild(proxy.getMTComponent());
+		}
+	}
+
 	protected void addToStack(CFComponent component1) {
 		ArrayList<CFComponent> nearCFComponents = this
 				.getNearCFComponents(component1);
@@ -44,6 +53,12 @@ public class CFScene extends AbstractScene implements TabletopServiceListener {
 				component2.reposition(position);
 			}
 		}
+	}
+
+	@Override
+	public void fileFinished(File file) {
+		CFImage image = new CFImage(getMTApplication(), file.getPath(), this);
+		this.addCFImage(image);
 	}
 
 	private ArrayList<CFComponent> getCfComponents() {
@@ -80,19 +95,6 @@ public class CFScene extends AbstractScene implements TabletopServiceListener {
 	}
 
 	@Override
-	public void shutDown() {
-	}
-
-	@Override
-	public void addMobileDevice(String name, CFTabletopClient tabletopClient) {
-		if (!this.getCfMobileDeviceProxies().keySet().contains(name)) {
-			CFMobileDeviceProxy proxy = new CFMobileDeviceProxy(getMTApplication(), name, this, tabletopClient);
-			this.getCfMobileDeviceProxies().put(name, proxy);
-			this.getCanvas().addChild(proxy.getMTComponent());
-		}
-	}
-
-	@Override
 	public void removeMobileDevice(String name) {
 		if(this.getCfMobileDeviceProxies().containsKey(name)){
 			CFMobileDeviceProxy proxy = this.getCfMobileDeviceProxies().get(name);
@@ -102,8 +104,6 @@ public class CFScene extends AbstractScene implements TabletopServiceListener {
 	}
 
 	@Override
-	public void fileFinished(File file) {
-		CFImage image = new CFImage(getMTApplication(), file.getPath(), this);
-		this.addCFImage(image);
+	public void shutDown() {
 	}
 }

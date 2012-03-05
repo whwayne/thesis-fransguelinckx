@@ -13,34 +13,34 @@ public class CFTabletopClientManager {
 		this.clients = new HashMap<String, CFTabletopClient>();
 	}
 	
-	protected void receivePieceOfFile(int id, byte[] buffer){
-		
+	protected CFTabletopClient addTabletopClient(String name) {
+		CFTabletopClient tabletopClient = new CFTabletopClient(name, this);
+		this.getClients().put(name, tabletopClient);
+		return tabletopClient;
 	}
 
-	protected void receivePieceOfFile(String name, byte[] buffer, boolean lastPiece) {
-		this.getClients().get(name).receivePieceOfFile(buffer, lastPiece);
+	protected void fileFinished(File file){
+		this.getService().fileFinished(file);
 	}
 	
 	private HashMap<String, CFTabletopClient> getClients(){
 		return this.clients;
 	}
 
-	protected CFTabletopClient addTabletopClient(String name) {
-		CFTabletopClient tabletopClient = new CFTabletopClient(name, this);
-		this.getClients().put(name, tabletopClient);
-		return tabletopClient;
-	}
-	
 	private CFTabletopService getService(){
 		return this.service;
 	}
 	
-	protected void fileFinished(File file){
-		this.getService().fileFinished(file);
-	}
-
 	protected int getStatus(String name) {
 		return this.getClients().get(name).getStatus();
+	}
+	
+	protected void receivePieceOfFile(int id, byte[] buffer){
+		
+	}
+
+	protected void receivePieceOfFile(String name, byte[] buffer, boolean lastPiece) {
+		this.getClients().get(name).receivePieceOfFile(buffer, lastPiece);
 	}
 
 	protected void setIdle(String name) {

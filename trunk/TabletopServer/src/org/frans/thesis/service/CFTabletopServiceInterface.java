@@ -34,16 +34,16 @@ public interface CFTabletopServiceInterface {
     public boolean attach(String name) throws BusException;
     
     @BusMethod
-    public boolean receivePieceOfFile(String name, byte[] buf, boolean lastPiece) throws BusException;
+    public boolean detach(String name) throws BusException;
     
     @BusMethod
-    public boolean detach(String name) throws BusException;
+    public int getStatus(String name) throws BusException;
     
     @BusMethod
     public String ping(String inStr) throws BusException;
     
     @BusMethod
-    public int getStatus(String name) throws BusException;
+    public boolean receivePieceOfFile(String name, byte[] buf, boolean lastPiece) throws BusException;
     
     @BusMethod
     public boolean setIdle(String name) throws BusException;
