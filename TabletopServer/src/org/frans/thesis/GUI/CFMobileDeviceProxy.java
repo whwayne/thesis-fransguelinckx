@@ -48,7 +48,7 @@ public class CFMobileDeviceProxy extends CFComponent {
 
 		setUpGestures(mtApplication);
 
-//		this.getMTComponent().setNoStroke(true);
+		this.getMTComponent().setNoStroke(true);
 		this.getMTComponent().setStrokeColor(new MTColor(255, 0, 0));
 		createMenu();
 	}

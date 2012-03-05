@@ -36,7 +36,7 @@ public class CFImage extends CFComponent implements IGestureEventListener {
 		this.mtApplication = mtApplication;
 		this.scene = scene;
 		PImage pImage = getMTApplication().loadImage(imageName);
-		this.component = new MTRectangle(pImage, this.mtApplication);
+		this.component = new MTRectangle(this.mtApplication, pImage);
 		this.scaleImageToStackSize();
 
 		this.getMTComponent().unregisterAllInputProcessors();
@@ -83,6 +83,7 @@ public class CFImage extends CFComponent implements IGestureEventListener {
 
 		this.getMTComponent().setNoStroke(true);
 		this.getMTComponent().setDrawSmooth(true);
+		this.component.setPositionGlobal(new Vector3D(mtApplication.getWidth()/2, mtApplication.getHeight()/2));
 	}
 
 	private CFScene getCFScene() {
