@@ -34,6 +34,7 @@ public class CFScene extends AbstractScene implements TabletopServiceListener {
 		if (!this.getCfMobileDeviceProxies().keySet().contains(name)) {
 			CFMobileDeviceProxy proxy = new CFMobileDeviceProxy(getMTApplication(), name, this, tabletopClient);
 			this.getCfMobileDeviceProxies().put(name, proxy);
+			proxy.getMTComponent().setPositionGlobal(new Vector3D(this.getMTApplication().getWidth()/2, this.getMTApplication().getHeight()/2));
 			this.getCanvas().addChild(proxy.getMTComponent());
 		}
 	}
