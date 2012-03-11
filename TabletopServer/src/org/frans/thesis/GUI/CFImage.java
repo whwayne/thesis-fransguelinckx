@@ -2,9 +2,6 @@ package org.frans.thesis.GUI;
 
 import org.mt4j.MTApplication;
 import org.mt4j.components.visibleComponents.shapes.MTRectangle;
-import org.mt4j.components.visibleComponents.shapes.MTRectangle.PositionAnchor;
-import org.mt4j.components.visibleComponents.widgets.MTImage;
-import org.mt4j.components.visibleComponents.widgets.MTTextArea;
 import org.mt4j.input.gestureAction.DefaultRotateAction;
 import org.mt4j.input.gestureAction.DefaultScaleAction;
 import org.mt4j.input.gestureAction.TapAndHoldVisualizer;
@@ -18,7 +15,6 @@ import org.mt4j.input.inputProcessors.componentProcessors.tapAndHoldProcessor.Ta
 import org.mt4j.input.inputProcessors.componentProcessors.tapAndHoldProcessor.TapAndHoldProcessor;
 import org.mt4j.util.math.Vector3D;
 
-import processing.core.PApplet;
 import processing.core.PImage;
 
 public class CFImage extends CFComponent implements IGestureEventListener {
@@ -27,9 +23,7 @@ public class CFImage extends CFComponent implements IGestureEventListener {
 			+ MTApplication.separator + "thesis" + MTApplication.separator
 			+ "GUI" + MTApplication.separator + "data"
 			+ MTApplication.separator;
-
 	private MTApplication mtApplication;
-
 	private CFScene scene;
 
 	public CFImage(MTApplication mtApplication, String imageName, CFScene scene) {
@@ -71,7 +65,7 @@ public class CFImage extends CFComponent implements IGestureEventListener {
 				case TapAndHoldEvent.GESTURE_ENDED:
 					//TODO
 					if(th.isHoldComplete()){
-						System.out.println("tap and hold");
+						new CFPhotoAlbum(getMTApplication(), getCFImage(), getCFScene());
 					}
 					break;
 				default:
@@ -85,16 +79,20 @@ public class CFImage extends CFComponent implements IGestureEventListener {
 		this.getMTComponent().setDrawSmooth(true);
 		this.component.setPositionGlobal(new Vector3D(mtApplication.getWidth()/2, mtApplication.getHeight()/2));
 	}
+	
+	private CFImage getCFImage(){
+		return this;
+	}
 
 	private CFScene getCFScene() {
 		return this.scene;
 	}
 
-	protected MTImage getImage() {
-		return (MTImage) this.component;
+	protected MTRectangle getImage() {
+		return this.component;
 	}
 
-	private PApplet getMTApplication() {
+	private MTApplication getMTApplication() {
 		return this.mtApplication;
 	}
 
