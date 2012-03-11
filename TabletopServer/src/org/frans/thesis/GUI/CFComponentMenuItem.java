@@ -24,10 +24,10 @@ public class CFComponentMenuItem extends CFComponent {
 			CFComponentMenuItemListener listener, MTApplication mtApplication) {
 		this.listener = listener;
 		PImage pImage = mtApplication.loadImage(imagePath + fileName);
-		image = new MTRectangle(pImage, mtApplication);
+		image = new MTRectangle(mtApplication, pImage);
 		image.setWidthLocal(75);
 		image.setHeightLocal(75);
-		image.setNoStroke(true);
+//		image.setNoStroke(true);
 		image.setVisible(false);
 
 		this.getMTComponent().unregisterAllInputProcessors();

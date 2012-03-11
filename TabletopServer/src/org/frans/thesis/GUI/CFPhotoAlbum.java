@@ -7,21 +7,16 @@ import org.mt4j.components.TransformSpace;
 import org.mt4j.components.visibleComponents.shapes.MTRectangle;
 import org.mt4j.input.gestureAction.DefaultDragAction;
 import org.mt4j.input.gestureAction.DefaultRotateAction;
-import org.mt4j.input.inputProcessors.IGestureEventListener;
-import org.mt4j.input.inputProcessors.MTGestureEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.dragProcessor.DragProcessor;
-import org.mt4j.input.inputProcessors.componentProcessors.flickProcessor.FlickEvent;
-import org.mt4j.input.inputProcessors.componentProcessors.flickProcessor.FlickProcessor;
-import org.mt4j.input.inputProcessors.componentProcessors.panProcessor.PanEvent;
-import org.mt4j.input.inputProcessors.componentProcessors.panProcessor.PanProcessorTwoFingers;
-import org.mt4j.input.inputProcessors.componentProcessors.panProcessor.PanTwoFingerEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.rotateProcessor.RotateProcessor;
 import org.mt4j.util.math.Vector3D;
 
-public class CFPhotoAlbum {
+public class CFPhotoAlbum extends CFComponent {
 
 	private ArrayList<CFImage> images;
-	private MTRectangle rectangle;
+	private MTApplication mtApplication;
+	private CFComponentMenu menu;
+	// private MTRectangle rectangle;
 	private final int DIMENSION_X = 500;
 	private final int DIMENSION_Y = 350;
 	private int pageNumber = 0;
@@ -32,21 +27,18 @@ public class CFPhotoAlbum {
 
 	public CFPhotoAlbum(MTApplication application, CFImage initialImage,
 			CFScene scene) {
-		this.rectangle = new MTRectangle(application, DIMENSION_X, DIMENSION_Y);
-		this.rectangle.setNoFill(true);
+		this.mtApplication = application;
+		this.component = new MTRectangle(application, DIMENSION_X, DIMENSION_Y);
+		this.component.setNoFill(true);
 		this.images = new ArrayList<CFImage>();
 		this.addImage(initialImage);
 		this.loadImages();
-		scene.getCanvas().addChild(rectangle);
+		scene.getCanvas().addChild(component);
 		setUpGestures(application);
-	}
-
-	private MTRectangle getRectangle() {
-		return this.rectangle;
+		this.createMenu();
 	}
 
 	protected void addImage(CFImage image) {
-		// TODO
 		if (!this.getImages().contains(image)) {
 			this.getImages().add(image);
 			// image.getImage().removeFromParent();
@@ -55,11 +47,10 @@ public class CFPhotoAlbum {
 	}
 
 	protected void removeImage(CFImage image) {
-		// TODO
 		if (this.getImages().contains(image)) {
 			this.getImages().remove(image);
 			image.getImage().removeFromParent();
-			this.getRectangle().getParent().addChild(image.getImage());
+			this.getMTComponent().getParent().addChild(image.getImage());
 			image.getImage().setPickable(true);
 		}
 	}
@@ -69,9 +60,11 @@ public class CFPhotoAlbum {
 	}
 
 	protected void pageUp() {
-		unloadImages();
-		pageNumber++;
-		loadImages();
+		if (this.getImages().size() >= ((this.getPageNumber() + 1) * 2) + 1) {
+			unloadImages();
+			pageNumber++;
+			loadImages();
+		}
 	}
 
 	private void loadImages() {
@@ -84,12 +77,12 @@ public class CFPhotoAlbum {
 			rightImage = this.getImages().get(this.getPageNumber() + 1);
 		}
 		if (leftImage != null) {
-			this.getRectangle().addChild(leftImage.getImage());
+			this.getMTComponent().addChild(leftImage.getImage());
 			leftImage.getImage().setPositionRelativeToParent(leftImagePosition);
 			this.resizeImage(leftImage);
 		}
 		if (rightImage != null) {
-			this.getRectangle().addChild(rightImage.getImage());
+			this.getMTComponent().addChild(rightImage.getImage());
 			rightImage.getImage().setPositionRelativeToParent(
 					rightImagePosition);
 			this.resizeImage(rightImage);
@@ -115,18 +108,19 @@ public class CFPhotoAlbum {
 			rightImage = this.getImages().get(this.getPageNumber() + 1);
 		}
 		if (leftImage != null) {
-			this.getRectangle().removeChild(leftImage.getImage());
+			this.getMTComponent().removeChild(leftImage.getImage());
 		}
 		if (rightImage != null) {
-			this.getRectangle().removeChild(leftImage.getImage());
+			this.getMTComponent().removeChild(leftImage.getImage());
 		}
 	}
 
-	protected void pagedown() {
-		unloadImages();
-		pageNumber--;
-		loadImages();
-		// TODO
+	protected void pageDown() {
+		if (pageNumber > 0) {
+			unloadImages();
+			pageNumber--;
+			loadImages();
+		}
 	}
 
 	protected int getPageNumber() {
@@ -134,27 +128,48 @@ public class CFPhotoAlbum {
 	}
 
 	private void setUpGestures(MTApplication mtApplication) {
-		this.getRectangle().unregisterAllInputProcessors();
-		this.getRectangle().removeAllGestureEventListeners();
+		this.getMTComponent().unregisterAllInputProcessors();
+		this.getMTComponent().removeAllGestureEventListeners();
 
-		this.getRectangle().registerInputProcessor(
+		this.getMTComponent().registerInputProcessor(
 				new DragProcessor(mtApplication));
-		this.getRectangle().addGestureListener(DragProcessor.class,
+		this.getMTComponent().addGestureListener(DragProcessor.class,
 				new DefaultDragAction());
 
-		this.getRectangle().registerInputProcessor(
+		this.getMTComponent().registerInputProcessor(
 				new RotateProcessor(mtApplication));
-		this.getRectangle().addGestureListener(RotateProcessor.class,
+		this.getMTComponent().addGestureListener(RotateProcessor.class,
 				new DefaultRotateAction());
-		
-		this.getRectangle().registerInputProcessor(new PanProcessorTwoFingers(mtApplication));
-		this.getRectangle().addGestureListener(PanProcessorTwoFingers.class, new IGestureEventListener() {
-			@Override
-			public boolean processGestureEvent(MTGestureEvent ge) {
-				PanTwoFingerEvent e = (PanTwoFingerEvent)ge;
-				System.out.println("pan");
-			return false;
-			}
-		});
+	}
+
+	@Override
+	protected boolean isStackable() {
+		return false;
+	}
+
+	private MTApplication getMTApplication() {
+		return this.mtApplication;
+	}
+
+	private void createMenu() {
+		this.menu = new CFComponentMenu(this, mtApplication);
+		this.menu.addMenuItem("left_arrow.png",
+				new CFComponentMenuItemListener() {
+
+					@Override
+					public void processEvent() {
+						pageDown();
+					}
+				});
+		this.menu.addMenuItem("right_arrow.png",
+				new CFComponentMenuItemListener() {
+
+					@Override
+					public void processEvent() {
+						pageUp();
+					}
+				});
+		this.menu.positionMenuItemsLeftAndRight();
+		this.menu.setVisible(true);
 	}
 }
