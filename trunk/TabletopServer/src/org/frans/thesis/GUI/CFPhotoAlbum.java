@@ -16,14 +16,11 @@ public class CFPhotoAlbum extends CFComponent {
 	private ArrayList<CFImage> images;
 	private MTApplication mtApplication;
 	private CFComponentMenu menu;
-	// private MTRectangle rectangle;
-	private final int DIMENSION_X = 500;
-	private final int DIMENSION_Y = 350;
+	private final float DIMENSION_X = 500;
+	private final float DIMENSION_Y = 350;
 	private int pageNumber = 0;
-	private final Vector3D leftImagePosition = new Vector3D(DIMENSION_X / 4,
-			DIMENSION_Y / 2);
-	private final Vector3D rightImagePosition = new Vector3D(
-			3 * DIMENSION_X / 4, DIMENSION_Y / 2);
+	private final Vector3D leftImagePosition = new Vector3D(DIMENSION_X / 4, DIMENSION_Y / 2);
+	private final Vector3D rightImagePosition = new Vector3D((3 * DIMENSION_X) / 4, DIMENSION_Y / 2);
 
 	public CFPhotoAlbum(MTApplication application, CFImage initialImage,
 			CFScene scene) {
@@ -32,8 +29,7 @@ public class CFPhotoAlbum extends CFComponent {
 		this.component.setNoFill(true);
 		this.images = new ArrayList<CFImage>();
 		this.addImage(initialImage);
-		this.loadImages();
-		scene.getCanvas().addChild(component);
+		scene.addCFComponent(this);
 		setUpGestures(application);
 		this.createMenu();
 	}
@@ -41,8 +37,9 @@ public class CFPhotoAlbum extends CFComponent {
 	protected void addImage(CFImage image) {
 		if (!this.getImages().contains(image)) {
 			this.getImages().add(image);
-			// image.getImage().removeFromParent();
+			image.getImage().removeFromParent();
 			image.getImage().setPickable(false);
+			loadImages();
 		}
 	}
 
@@ -52,6 +49,7 @@ public class CFPhotoAlbum extends CFComponent {
 			image.getImage().removeFromParent();
 			this.getMTComponent().getParent().addChild(image.getImage());
 			image.getImage().setPickable(true);
+			loadImages();
 		}
 	}
 
@@ -70,11 +68,11 @@ public class CFPhotoAlbum extends CFComponent {
 	private void loadImages() {
 		CFImage leftImage = null;
 		CFImage rightImage = null;
-		if (this.getImages().size() - 1 >= this.getPageNumber()) {
-			leftImage = this.getImages().get(this.getPageNumber());
+		if (this.getImages().size() - 1 >= this.getPageNumber()*2) {
+			leftImage = this.getImages().get(this.getPageNumber()*2);
 		}
-		if (this.getImages().size() - 1 >= this.getPageNumber() + 1) {
-			rightImage = this.getImages().get(this.getPageNumber() + 1);
+		if (this.getImages().size() - 1 >= (this.getPageNumber()*2) + 1) {
+			rightImage = this.getImages().get((this.getPageNumber()*2) + 1);
 		}
 		if (leftImage != null) {
 			this.getMTComponent().addChild(leftImage.getImage());
@@ -83,8 +81,7 @@ public class CFPhotoAlbum extends CFComponent {
 		}
 		if (rightImage != null) {
 			this.getMTComponent().addChild(rightImage.getImage());
-			rightImage.getImage().setPositionRelativeToParent(
-					rightImagePosition);
+			rightImage.getImage().setPositionRelativeToParent(rightImagePosition);
 			this.resizeImage(rightImage);
 		}
 	}
@@ -101,11 +98,11 @@ public class CFPhotoAlbum extends CFComponent {
 	private void unloadImages() {
 		CFImage leftImage = null;
 		CFImage rightImage = null;
-		if (this.getImages().size() - 1 >= this.getPageNumber()) {
-			leftImage = this.getImages().get(this.getPageNumber());
+		if (this.getImages().size() - 1 >= this.getPageNumber()*2) {
+			leftImage = this.getImages().get(this.getPageNumber()*2);
 		}
-		if (this.getImages().size() - 1 >= this.getPageNumber() + 1) {
-			rightImage = this.getImages().get(this.getPageNumber() + 1);
+		if (this.getImages().size() - 1 >= (this.getPageNumber()*2) + 1) {
+			rightImage = this.getImages().get((this.getPageNumber()*2) + 1);
 		}
 		if (leftImage != null) {
 			this.getMTComponent().removeChild(leftImage.getImage());
@@ -171,5 +168,9 @@ public class CFPhotoAlbum extends CFComponent {
 				});
 		this.menu.positionMenuItemsLeftAndRight();
 		this.menu.setVisible(true);
+	}
+	
+	protected boolean isPhotoAlbum(){
+		return true;
 	}
 }

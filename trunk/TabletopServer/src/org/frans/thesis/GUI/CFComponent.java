@@ -45,6 +45,10 @@ public abstract class CFComponent {
 	}
 
 	protected abstract boolean isStackable();
+	
+	protected boolean isPhotoAlbum(){
+		return false;
+	}
 
 	protected void reposition(Vector3D position) {
 		this.getMTComponent().setPositionGlobal(position);

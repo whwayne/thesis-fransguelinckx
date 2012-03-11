@@ -7,6 +7,7 @@ import java.util.HashMap;
 import org.frans.thesis.service.CFTabletopClient;
 import org.frans.thesis.service.TabletopServiceListener;
 import org.mt4j.MTApplication;
+import org.mt4j.components.visibleComponents.shapes.MTRectangle;
 import org.mt4j.sceneManagement.AbstractScene;
 import org.mt4j.util.math.Vector3D;
 
@@ -22,10 +23,10 @@ public class CFScene extends AbstractScene implements TabletopServiceListener {
 		this.cfMobileDeviceProxies = new HashMap<String, CFMobileDeviceProxy>();
 	}
 
-	protected void addCFImage(CFImage image) {
-		if (!this.getCfComponents().contains(image)) {
-			this.getCanvas().addChild(image.getMTComponent());
-			this.getCfComponents().add(image);
+	protected void addCFComponent(CFComponent component) {
+		if (!this.getCfComponents().contains(component)) {
+			this.getCanvas().addChild(component.getMTComponent());
+			this.getCfComponents().add(component);
 		}
 	}
 
@@ -54,7 +55,7 @@ public class CFScene extends AbstractScene implements TabletopServiceListener {
 	@Override
 	public void fileFinished(File file) {
 		CFImage image = new CFImage(getMTApplication(), file.getPath(), this);
-		this.addCFImage(image);
+		this.addCFComponent(image);
 	}
 
 	private ArrayList<CFComponent> getCfComponents() {

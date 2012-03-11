@@ -104,15 +104,22 @@ public class CFImage extends CFComponent implements IGestureEventListener {
 	@Override
 	public boolean processGestureEvent(MTGestureEvent ge) {
 		DragEvent de = (DragEvent) ge;
-		de.getTargetComponent().translateGlobal(de.getTranslationVect()); // Moves
-																			// the
-																			// component
+		de.getTarget().translateGlobal(de.getTranslationVect());
+		
 		switch (de.getId()) {
 		case MTGestureEvent.GESTURE_ENDED:
 			if (this.getCFScene().isCloseToCFComponent(this)) {
 				if (this.getCFScene().getNearCFComponents(this).get(0)
 						.isStackable()) {
 					this.getCFScene().addToStack(this);
+				}else{
+					for(CFComponent component : this.getCFScene().getNearCFComponents(this)){
+						if(component.isPhotoAlbum()){
+							CFPhotoAlbum album = (CFPhotoAlbum) component;
+							album.addImage(this);
+							break;
+						}
+					}
 				}
 			}
 			break;
