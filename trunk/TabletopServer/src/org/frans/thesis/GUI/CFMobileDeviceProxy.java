@@ -77,7 +77,7 @@ public class CFMobileDeviceProxy extends CFComponent {
 				downloadPdf();
 			}
 		});
-		this.menu.repositionMenuItems();
+		this.menu.repositionMenuItemsInCircle();
 	}
 
 	private void downloadCalendar() {

@@ -3,6 +3,7 @@ package org.frans.thesis.GUI;
 import java.util.ArrayList;
 
 import org.mt4j.MTApplication;
+import org.mt4j.components.TransformSpace;
 import org.mt4j.util.math.Vector3D;
 
 public class CFComponentMenu {
@@ -26,7 +27,6 @@ public class CFComponentMenu {
 		this.menuItems.add(menuItem);
 		this.getOwner().getMTComponent()
 				.addChild(menuItem.getMTComponent());
-//		this.repositionMenuItems();
 	}
 
 	private CFComponent getOwner() {
@@ -44,8 +44,19 @@ public class CFComponentMenu {
 	protected boolean isVisible() {
 		return this.visible;
 	}
+	
+	protected void positionMenuItemsLeftAndRight(){
+		CFComponent owner = this.getOwner();
+		Vector3D leftPosition = owner.getMTComponent().getPosition(TransformSpace.GLOBAL);
+		leftPosition.translate(new Vector3D(-owner.getWidth()/2, 0));
+		Vector3D rightPosition = owner.getMTComponent().getPosition(TransformSpace.GLOBAL);
+		rightPosition.translate(new Vector3D(owner.getWidth()/2, 0));
+		
+		this.getMenuItems().get(0).setPosition(leftPosition);
+		this.getMenuItems().get(1).setPosition(rightPosition);
+	}
 
-	protected void repositionMenuItems() {
+	protected void repositionMenuItemsInCircle() {
 		float degrees = 0;
 		for(CFComponentMenuItem item : this.getMenuItems()){
 			item.setPosition(new Vector3D(getOwner().getPosition().x, getOwner().getPosition().y-120));
