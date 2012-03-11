@@ -74,4 +74,8 @@ public abstract class CFComponent {
 					scalingHeightFactor, 1, this.getMTComponent().getPosition(TransformSpace.GLOBAL));
 		}
 	}
+	
+	protected void scaleImage(float factor) {
+		this.getMTComponent().scale(factor, factor, 1, this.getMTComponent().getPosition(TransformSpace.GLOBAL));
+	}
 }
