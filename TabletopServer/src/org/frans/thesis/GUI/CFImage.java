@@ -58,12 +58,7 @@ public class CFImage extends CFComponent implements IGestureEventListener {
 			public boolean processGestureEvent(MTGestureEvent ge) {
 				TapAndHoldEvent th = (TapAndHoldEvent) ge;
 				switch (th.getId()) {
-				case TapAndHoldEvent.GESTURE_STARTED:
-					break;
-				case TapAndHoldEvent.GESTURE_UPDATED:
-					break;
 				case TapAndHoldEvent.GESTURE_ENDED:
-					//TODO
 					if(th.isHoldComplete()){
 						new CFPhotoAlbum(getMTApplication(), getCFImage(), getCFScene());
 					}
