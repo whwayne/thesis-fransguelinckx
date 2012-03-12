@@ -19,8 +19,8 @@ public class CFTabletopClientManager {
 		return tabletopClient;
 	}
 
-	protected void fileFinished(File file){
-		this.getService().fileFinished(file);
+	protected void fileFinished(File file, String name){
+		this.getService().fileFinished(file, name);
 	}
 	
 	private HashMap<String, CFTabletopClient> getClients(){

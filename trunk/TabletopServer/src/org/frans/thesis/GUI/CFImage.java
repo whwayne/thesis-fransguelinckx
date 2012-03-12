@@ -13,6 +13,7 @@ import org.mt4j.input.inputProcessors.componentProcessors.rotateProcessor.Rotate
 import org.mt4j.input.inputProcessors.componentProcessors.scaleProcessor.ScaleProcessor;
 import org.mt4j.input.inputProcessors.componentProcessors.tapAndHoldProcessor.TapAndHoldEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.tapAndHoldProcessor.TapAndHoldProcessor;
+import org.mt4j.util.MTColor;
 
 import processing.core.PImage;
 
@@ -24,14 +25,23 @@ public class CFImage extends CFComponent implements IGestureEventListener {
 //			+ MTApplication.separator;
 	private MTApplication mtApplication;
 	private CFScene scene;
+	private MTColor color;
 
-	public CFImage(MTApplication mtApplication, String imageName, CFScene scene) {
+	public CFImage(MTApplication mtApplication, String imageName, CFScene scene, MTColor color) {
+		this.color = color;
 		this.mtApplication = mtApplication;
 		this.scene = scene;
 		PImage pImage = getMTApplication().loadImage(imageName);
 		this.component = new MTRectangle(this.mtApplication, pImage);
 		this.scaleImageToStackSize();
 
+		setUpGestures(mtApplication);
+
+		this.getMTComponent().setStrokeColor(this.getColor());
+		this.getCFScene().addCFComponent(getCFImage());
+	}
+
+	private void setUpGestures(MTApplication mtApplication) {
 		this.getMTComponent().unregisterAllInputProcessors();
 		this.getMTComponent().removeAllGestureEventListeners();
 
@@ -68,9 +78,10 @@ public class CFImage extends CFComponent implements IGestureEventListener {
 				return false;
 			}
 		});
-
-		this.getMTComponent().setNoStroke(true);
-		this.getMTComponent().setDrawSmooth(true);
+	}
+	
+	private MTColor getColor(){
+		return this.color;
 	}
 	
 	private CFImage getCFImage(){

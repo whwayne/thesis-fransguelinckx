@@ -14,13 +14,13 @@ public class CFTabletopClient {
 	private File file;
 	private boolean isReceivingFile = false;
 	private CFTabletopClientManager manager;
-//	private String name;
+	private String name;
 	private FileOutputStream out;
 	private int status;
 	private final String workingDirectory = System.getProperty("user.dir");
 
 	public CFTabletopClient(String name, CFTabletopClientManager manager) {
-//		this.name = name;
+		this.name = name;
 		this.manager = manager;
 		this.status = IDLE;
 	}
@@ -32,7 +32,11 @@ public class CFTabletopClient {
 	private void finishFile() throws IOException {
 		this.getOutputStream().flush();
 		this.getOutputStream().close();
-		this.getManager().fileFinished(this.getFile());
+		this.getManager().fileFinished(this.getFile(), this.getName());
+	}
+	
+	private String getName(){
+		return this.name;
 	}
 
 	private File getFile() {

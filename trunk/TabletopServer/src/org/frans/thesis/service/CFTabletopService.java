@@ -16,7 +16,7 @@
 package org.frans.thesis.service;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.Vector;
 
 import org.alljoyn.bus.BusAttachment;
 import org.alljoyn.bus.BusException;
@@ -42,17 +42,18 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 	
 	private static final short CONTACT_PORT = 42;
 	private static boolean sessionEstablished = false;
-	// private static int sessionId;
+	
 	static {
 		System.loadLibrary("alljoyn_java");
 	}
+	
 	private CFTabletopClientManager clientManager;
 
-	private ArrayList<TabletopServiceListener> listeners;
+	private Vector<TabletopServiceListener> listeners;
 
 	public CFTabletopService() {
 		this.clientManager = new CFTabletopClientManager(this);
-		this.listeners = new ArrayList<TabletopServiceListener>();
+		this.listeners = new Vector<TabletopServiceListener>();
 	}
 
 	public void addTabletopServiceListener(TabletopServiceListener listener) {
@@ -178,16 +179,16 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 		return true;
 	}
 
-	protected void fileFinished(File file){
+	protected void fileFinished(File file, String name){
 		for(TabletopServiceListener listener : this.getListeners()){
-			listener.fileFinished(file);
+			listener.fileFinished(file, name);
 		}
 	}
 	private CFTabletopClientManager getClientManager(){
 		return this.clientManager;
 	}
 	
-	private ArrayList<TabletopServiceListener> getListeners() {
+	private synchronized Vector<TabletopServiceListener> getListeners() {
 		return listeners;
 	}
 	
