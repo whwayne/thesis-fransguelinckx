@@ -19,8 +19,8 @@ public class CFPhotoAlbum extends CFComponent {
 	private final float DIMENSION_X = 500;
 	private final float DIMENSION_Y = 350;
 	private int pageNumber = 0;
-	private final Vector3D leftImagePosition = new Vector3D(DIMENSION_X / 4, DIMENSION_Y / 2);
-	private final Vector3D rightImagePosition = new Vector3D((3 * DIMENSION_X) / 4, DIMENSION_Y / 2);
+	private final Vector3D leftImagePosition;
+	private final Vector3D rightImagePosition;
 
 	public CFPhotoAlbum(MTApplication application, CFImage initialImage,
 			CFScene scene) {
@@ -28,10 +28,12 @@ public class CFPhotoAlbum extends CFComponent {
 		this.component = new MTRectangle(application, DIMENSION_X, DIMENSION_Y);
 		this.component.setNoFill(true);
 		this.images = new ArrayList<CFImage>();
-		this.addImage(initialImage);
 		scene.addCFComponent(this);
 		setUpGestures(application);
 		this.createMenu();
+		leftImagePosition = new Vector3D(DIMENSION_X / 4, DIMENSION_Y / 2);
+		rightImagePosition = new Vector3D((3 * DIMENSION_X) / 4, DIMENSION_Y / 2);
+		this.addImage(initialImage);
 	}
 
 	protected void addImage(CFImage image) {
@@ -76,13 +78,13 @@ public class CFPhotoAlbum extends CFComponent {
 		}
 		if (leftImage != null) {
 			this.getMTComponent().addChild(leftImage.getImage());
-			leftImage.getImage().setPositionRelativeToParent(leftImagePosition);
 			this.resizeImage(leftImage);
+			leftImage.getImage().setPositionRelativeToParent(leftImagePosition);
 		}
 		if (rightImage != null) {
 			this.getMTComponent().addChild(rightImage.getImage());
-			rightImage.getImage().setPositionRelativeToParent(rightImagePosition);
 			this.resizeImage(rightImage);
+			rightImage.getImage().setPositionRelativeToParent(rightImagePosition);
 		}
 	}
 
@@ -142,10 +144,6 @@ public class CFPhotoAlbum extends CFComponent {
 	@Override
 	protected boolean isStackable() {
 		return false;
-	}
-
-	private MTApplication getMTApplication() {
-		return this.mtApplication;
 	}
 
 	private void createMenu() {
