@@ -30,12 +30,10 @@ public class CFMobileDeviceProxy extends CFComponent {
 	private MTApplication mtApplication;
 	private String name;
 
-	private CFScene scene;
 	private CFTabletopClient tabletopClient;
 
 	public CFMobileDeviceProxy(MTApplication mtApplication, String name,
 			CFScene scene, CFTabletopClient tabletopClient) {
-		this.scene = scene;
 		this.mtApplication = mtApplication;
 		this.name = name;
 		this.tabletopClient = tabletopClient;
@@ -98,10 +96,6 @@ public class CFMobileDeviceProxy extends CFComponent {
 
 	private PApplet getMTApplication() {
 		return this.mtApplication;
-	}
-
-	private CFScene getScene() {
-		return this.scene;
 	}
 
 	private CFTabletopClient getTabletopClient() {
