@@ -8,6 +8,7 @@ import org.frans.thesis.service.CFTabletopClient;
 import org.frans.thesis.service.TabletopServiceListener;
 import org.mt4j.MTApplication;
 import org.mt4j.sceneManagement.AbstractScene;
+import org.mt4j.util.MTColor;
 import org.mt4j.util.math.Vector3D;
 
 public class CFScene extends AbstractScene implements TabletopServiceListener {
@@ -33,7 +34,9 @@ public class CFScene extends AbstractScene implements TabletopServiceListener {
 	@Override
 	public void addMobileDevice(String name, CFTabletopClient tabletopClient) {
 		if (!this.getCfMobileDeviceProxies().keySet().contains(name)) {
-			CFMobileDeviceProxy proxy = new CFMobileDeviceProxy(getMTApplication(), name, this, tabletopClient);
+			MTColor color = MTColor.randomColor();
+			color.setAlpha(MTColor.ALPHA_HALF_TRANSPARENCY);
+			CFMobileDeviceProxy proxy = new CFMobileDeviceProxy(getMTApplication(), name, this, tabletopClient, color);
 			this.getCfMobileDeviceProxies().put(name, proxy);
 			proxy.getMTComponent().setPositionGlobal(new Vector3D(this.getMTApplication().getWidth()/2, this.getMTApplication().getHeight()/2));
 			this.getCanvas().addChild(proxy.getMTComponent());
@@ -53,9 +56,9 @@ public class CFScene extends AbstractScene implements TabletopServiceListener {
 	}
 
 	@Override
-	public void fileFinished(File file) {
-		CFImage image = new CFImage(getMTApplication(), file.getPath(), this);
-		this.addCFComponent(image);
+	public void fileFinished(File file, String name) {
+		MTColor color = this.getCfMobileDeviceProxies().get(name).getColor();
+		new CFImage(getMTApplication(), file.getPath(), this, color);
 	}
 
 	private ArrayList<CFComponent> getCfComponents() {

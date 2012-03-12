@@ -17,10 +17,9 @@ import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapProces
 import org.mt4j.util.MTColor;
 import org.mt4j.util.math.Vector3D;
 
-import processing.core.PApplet;
 import processing.core.PImage;
 
-public class CFMobileDeviceProxy extends CFComponent {
+public class CFMobileDeviceProxy extends CFComponent{
 
 	private String imagePath = "org" + MTApplication.separator + "frans"
 			+ MTApplication.separator + "thesis" + MTApplication.separator
@@ -29,26 +28,33 @@ public class CFMobileDeviceProxy extends CFComponent {
 	private CFComponentMenu menu;
 	private MTApplication mtApplication;
 	private String name;
-
+	private CFScene scene;
+	private MTColor color;
 	private CFTabletopClient tabletopClient;
 
 	public CFMobileDeviceProxy(MTApplication mtApplication, String name,
-			CFScene scene, CFTabletopClient tabletopClient) {
+			CFScene scene, CFTabletopClient tabletopClient, MTColor color) {
+		this.color = color;
 		this.mtApplication = mtApplication;
 		this.name = name;
+		this.scene = scene;
 		this.tabletopClient = tabletopClient;
-		// IFont fontArial = FontManager.getInstance().createFont(mtApplication,
-		// FontManager.DEFAULT_FONT, 40, // Font size
-		// white, // Font fill color
-		// white); // Font outline color
 		setUpComponent(mtApplication);
 		this.scaleImageToStackSize();
 
 		setUpGestures(mtApplication);
 
-		this.getMTComponent().setNoStroke(true);
-		this.getMTComponent().setStrokeColor(new MTColor(255, 0, 0));
+//		this.getMTComponent().setNoStroke(true);
+		this.getMTComponent().setStrokeColor(this.getColor());
 		createMenu();
+	}
+	
+	protected MTColor getColor(){
+		return this.color;
+	}
+	
+	private CFScene getScene(){
+		return this.scene;
 	}
 
 	private void createMenu() {
@@ -94,7 +100,7 @@ public class CFMobileDeviceProxy extends CFComponent {
 		return this.menu;
 	}
 
-	private PApplet getMTApplication() {
+	private MTApplication getMTApplication() {
 		return this.mtApplication;
 	}
 
@@ -128,12 +134,11 @@ public class CFMobileDeviceProxy extends CFComponent {
 				mtImage.getWidthXY(TransformSpace.GLOBAL));
 		this.component = new MTRectangle(getMTApplication(), width, height);
 
-		this.component.addChild(textField);
-		this.component.addChild(mtImage);
+		this.getMTComponent().addChild(textField);
+		this.getMTComponent().addChild(mtImage);
 		mtImage.translate(new Vector3D(0, textField
 				.getHeightXY(TransformSpace.GLOBAL), 0));
-		this.component.setNoFill(true);
-//		this.component.setNoStroke(true);
+		this.getMTComponent().setFillColor(getColor());
 	}
 
 	private void setUpGestures(MTApplication mtApplication) {
@@ -172,5 +177,9 @@ public class CFMobileDeviceProxy extends CFComponent {
 		} else {
 			this.getMenu().setVisible(true);
 		}
+	}
+	
+	protected String getName(){
+		return this.name;
 	}
 }
