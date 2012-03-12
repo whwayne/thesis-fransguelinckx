@@ -13,16 +13,15 @@ import org.mt4j.input.inputProcessors.componentProcessors.rotateProcessor.Rotate
 import org.mt4j.input.inputProcessors.componentProcessors.scaleProcessor.ScaleProcessor;
 import org.mt4j.input.inputProcessors.componentProcessors.tapAndHoldProcessor.TapAndHoldEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.tapAndHoldProcessor.TapAndHoldProcessor;
-import org.mt4j.util.math.Vector3D;
 
 import processing.core.PImage;
 
 public class CFImage extends CFComponent implements IGestureEventListener {
 
-	private static String imagePath = "org" + MTApplication.separator + "frans"
-			+ MTApplication.separator + "thesis" + MTApplication.separator
-			+ "GUI" + MTApplication.separator + "data"
-			+ MTApplication.separator;
+//	private static String imagePath = "org" + MTApplication.separator + "frans"
+//			+ MTApplication.separator + "thesis" + MTApplication.separator
+//			+ "GUI" + MTApplication.separator + "data"
+//			+ MTApplication.separator;
 	private MTApplication mtApplication;
 	private CFScene scene;
 
@@ -72,7 +71,6 @@ public class CFImage extends CFComponent implements IGestureEventListener {
 
 		this.getMTComponent().setNoStroke(true);
 		this.getMTComponent().setDrawSmooth(true);
-		this.component.setPositionGlobal(new Vector3D(mtApplication.getWidth()/2, mtApplication.getHeight()/2));
 	}
 	
 	private CFImage getCFImage(){

@@ -7,7 +7,6 @@ import java.util.HashMap;
 import org.frans.thesis.service.CFTabletopClient;
 import org.frans.thesis.service.TabletopServiceListener;
 import org.mt4j.MTApplication;
-import org.mt4j.components.visibleComponents.shapes.MTRectangle;
 import org.mt4j.sceneManagement.AbstractScene;
 import org.mt4j.util.math.Vector3D;
 
@@ -26,6 +25,7 @@ public class CFScene extends AbstractScene implements TabletopServiceListener {
 	protected void addCFComponent(CFComponent component) {
 		if (!this.getCfComponents().contains(component)) {
 			this.getCanvas().addChild(component.getMTComponent());
+			component.getMTComponent().setPositionGlobal(new Vector3D(this.getMTApplication().getWidth()/2, this.getMTApplication().getHeight()/2));
 			this.getCfComponents().add(component);
 		}
 	}
