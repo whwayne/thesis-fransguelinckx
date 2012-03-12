@@ -110,7 +110,7 @@ public class CFPhotoAlbum extends CFComponent {
 			this.getMTComponent().removeChild(leftImage.getImage());
 		}
 		if (rightImage != null) {
-			this.getMTComponent().removeChild(leftImage.getImage());
+			this.getMTComponent().removeChild(rightImage.getImage());
 		}
 	}
 
