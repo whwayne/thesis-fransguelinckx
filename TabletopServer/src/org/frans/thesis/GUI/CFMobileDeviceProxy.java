@@ -26,35 +26,25 @@ public class CFMobileDeviceProxy extends CFComponent{
 			+ "GUI" + MTApplication.separator + "data"
 			+ MTApplication.separator + "android.png";
 	private CFComponentMenu menu;
-	private MTApplication mtApplication;
 	private String name;
-	private CFScene scene;
 	private MTColor color;
 	private CFTabletopClient tabletopClient;
 
 	public CFMobileDeviceProxy(MTApplication mtApplication, String name,
 			CFScene scene, CFTabletopClient tabletopClient, MTColor color) {
+		super(mtApplication);
 		this.color = color;
-		this.mtApplication = mtApplication;
 		this.name = name;
-		this.scene = scene;
 		this.tabletopClient = tabletopClient;
 		setUpComponent(mtApplication);
 		this.scaleImageToStackSize();
-
 		setUpGestures(mtApplication);
-
-//		this.getMTComponent().setNoStroke(true);
 		this.getMTComponent().setStrokeColor(this.getColor());
 		createMenu();
 	}
 	
 	protected MTColor getColor(){
 		return this.color;
-	}
-	
-	private CFScene getScene(){
-		return this.scene;
 	}
 
 	private void createMenu() {
@@ -100,10 +90,6 @@ public class CFMobileDeviceProxy extends CFComponent{
 		return this.menu;
 	}
 
-	private MTApplication getMTApplication() {
-		return this.mtApplication;
-	}
-
 	private CFTabletopClient getTabletopClient() {
 		return this.tabletopClient;
 	}
@@ -132,7 +118,9 @@ public class CFMobileDeviceProxy extends CFComponent{
 		height += mtImage.getHeightXY(TransformSpace.GLOBAL);
 		float width = Math.max(textField.getWidthXY(TransformSpace.GLOBAL),
 				mtImage.getWidthXY(TransformSpace.GLOBAL));
-		this.component = new MTRectangle(getMTApplication(), width, height);
+//		this.component = new MTRectangle(getMTApplication(), width, height);
+		this.component.setHeightLocal(height);
+		this.component.setWidthLocal(width);
 
 		this.getMTComponent().addChild(textField);
 		this.getMTComponent().addChild(mtImage);
@@ -142,11 +130,11 @@ public class CFMobileDeviceProxy extends CFComponent{
 	}
 
 	private void setUpGestures(MTApplication mtApplication) {
-		this.getMTComponent().unregisterAllInputProcessors();
-		this.getMTComponent().removeAllGestureEventListeners();
+//		this.getMTComponent().unregisterAllInputProcessors();
+//		this.getMTComponent().removeAllGestureEventListeners();
 
-		this.getMTComponent().registerInputProcessor(
-				new DragProcessor(mtApplication));
+//		this.getMTComponent().registerInputProcessor(
+//				new DragProcessor(mtApplication));
 		this.getMTComponent().addGestureListener(DragProcessor.class,
 				new DefaultDragAction());
 

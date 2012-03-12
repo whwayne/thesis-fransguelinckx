@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import org.mt4j.MTApplication;
 import org.mt4j.components.TransformSpace;
-import org.mt4j.components.visibleComponents.shapes.MTRectangle;
 import org.mt4j.input.gestureAction.DefaultDragAction;
 import org.mt4j.input.gestureAction.DefaultRotateAction;
 import org.mt4j.input.inputProcessors.componentProcessors.dragProcessor.DragProcessor;
@@ -24,8 +23,11 @@ public class CFPhotoAlbum extends CFComponent {
 
 	public CFPhotoAlbum(MTApplication application, CFImage initialImage,
 			CFScene scene) {
+		super(application);
 		this.mtApplication = application;
-		this.component = new MTRectangle(application, DIMENSION_X, DIMENSION_Y);
+//		this.component = new MTRectangle(application, DIMENSION_X, DIMENSION_Y);
+		this.component.setHeightLocal(DIMENSION_Y);
+		this.component.setWidthLocal(DIMENSION_X);
 		this.component.setNoFill(true);
 		this.images = new ArrayList<CFImage>();
 		scene.addCFComponent(this);
@@ -127,11 +129,11 @@ public class CFPhotoAlbum extends CFComponent {
 	}
 
 	private void setUpGestures(MTApplication mtApplication) {
-		this.getMTComponent().unregisterAllInputProcessors();
-		this.getMTComponent().removeAllGestureEventListeners();
+//		this.getMTComponent().unregisterAllInputProcessors();
+//		this.getMTComponent().removeAllGestureEventListeners();
 
-		this.getMTComponent().registerInputProcessor(
-				new DragProcessor(mtApplication));
+//		this.getMTComponent().registerInputProcessor(
+//				new DragProcessor(mtApplication));
 		this.getMTComponent().addGestureListener(DragProcessor.class,
 				new DefaultDragAction());
 

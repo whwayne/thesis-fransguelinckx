@@ -18,21 +18,17 @@ import org.mt4j.util.MTColor;
 import processing.core.PImage;
 
 public class CFImage extends CFComponent implements IGestureEventListener {
-
-//	private static String imagePath = "org" + MTApplication.separator + "frans"
-//			+ MTApplication.separator + "thesis" + MTApplication.separator
-//			+ "GUI" + MTApplication.separator + "data"
-//			+ MTApplication.separator;
-	private MTApplication mtApplication;
+	
 	private CFScene scene;
 	private MTColor color;
 
 	public CFImage(MTApplication mtApplication, String imageName, CFScene scene, MTColor color) {
+		super(mtApplication);
 		this.color = color;
-		this.mtApplication = mtApplication;
 		this.scene = scene;
 		PImage pImage = getMTApplication().loadImage(imageName);
-		this.component = new MTRectangle(this.mtApplication, pImage);
+//		this.component = new MTRectangle(this.mtApplication, pImage);
+		this.component.setTexture(pImage);
 		this.scaleImageToStackSize();
 
 		setUpGestures(mtApplication);
@@ -94,10 +90,6 @@ public class CFImage extends CFComponent implements IGestureEventListener {
 
 	protected MTRectangle getImage() {
 		return this.component;
-	}
-
-	private MTApplication getMTApplication() {
-		return this.mtApplication;
 	}
 
 	@Override

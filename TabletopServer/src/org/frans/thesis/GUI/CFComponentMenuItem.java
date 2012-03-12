@@ -1,7 +1,6 @@
 package org.frans.thesis.GUI;
 
 import org.mt4j.MTApplication;
-import org.mt4j.components.visibleComponents.shapes.MTRectangle;
 import org.mt4j.input.inputProcessors.IGestureEventListener;
 import org.mt4j.input.inputProcessors.MTGestureEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapEvent;
@@ -16,28 +15,25 @@ public class CFComponentMenuItem extends CFComponent {
 			+ MTApplication.separator + "thesis" + MTApplication.separator
 			+ "GUI" + MTApplication.separator + "data"
 			+ MTApplication.separator;
-	private MTRectangle image;
-
 	private CFComponentMenuItemListener listener;
-
+	
 	public CFComponentMenuItem(String fileName,
 			CFComponentMenuItemListener listener, MTApplication mtApplication) {
+		super(mtApplication);
 		this.listener = listener;
 		PImage pImage = mtApplication.loadImage(imagePath + fileName);
-		image = new MTRectangle(mtApplication, pImage);
-		image.setWidthLocal(75);
-		image.setHeightLocal(75);
-//		image.setNoStroke(true);
-		image.setVisible(false);
+//		this.component = new MTRectangle(mtApplication, pImage);
+		this.component.setTexture(pImage);
+		this.component.setWidthLocal(75);
+		this.component.setHeightLocal(75);
+		this.component.setVisible(false);
 
-		this.getMTComponent().unregisterAllInputProcessors();
-		this.getMTComponent().removeAllGestureEventListeners();
-
+//		this.getMTComponent().unregisterAllInputProcessors();
+//		this.getMTComponent().removeAllGestureEventListeners();
 		this.getMTComponent().registerInputProcessor(
 				new TapProcessor(mtApplication));
 		this.getMTComponent().addGestureListener(TapProcessor.class,
 				new IGestureEventListener() {
-
 					@Override
 					public boolean processGestureEvent(MTGestureEvent ge) {
 						TapEvent te = (TapEvent) ge;
@@ -47,15 +43,6 @@ public class CFComponentMenuItem extends CFComponent {
 						return false;
 					}
 				});
-	}
-
-	private MTRectangle getImage() {
-		return image;
-	}
-
-	@Override
-	protected MTRectangle getMTComponent() {
-		return this.image;
 	}
 
 	@Override
@@ -68,6 +55,6 @@ public class CFComponentMenuItem extends CFComponent {
 	}
 
 	public void setVisible(boolean visible) {
-		this.getImage().setVisible(visible);
+		this.getMTComponent().setVisible(visible);
 	}
 }
