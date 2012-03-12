@@ -320,6 +320,9 @@ public class Client extends Activity {
 										"MyBusListener.sessionLost(%d)",
 										sessionId));
 								mHandler.sendEmptyMessage(MESSAGE_START_PROGRESS_DIALOG);
+								Message msg = obtainMessage(CONNECT);
+								sendMessage(msg);
+								
 							}
 						});
 				logStatus("BusAttachment.joinSession() - sessionId: "
@@ -389,7 +392,7 @@ public class Client extends Activity {
 						Message message = obtainMessage(SEND_PHOTOS);
 						sendMessage(message);
 					} else {
-						logInfo("Client idle");
+//						logInfo("Client idle");
 					}
 					try {
 						Thread.sleep(2500);
