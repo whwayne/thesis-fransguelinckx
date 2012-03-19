@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package org.frans.thesis.service;
+package org.frans.thesis.GUI;
 
 import org.alljoyn.bus.BusException;
 import org.alljoyn.bus.annotation.BusInterface;
@@ -34,7 +34,7 @@ public interface CFTabletopServiceInterface {
     public boolean attach(String name) throws BusException;
     
     @BusMethod
-    public boolean receivePieceOfFile(String path, String clientName, byte[] buf, boolean lastPiece) throws BusException;
+    public boolean receivePieceOfFile(String name, byte[] buf, boolean lastPiece) throws BusException;
     
     @BusMethod
     public boolean detach(String name) throws BusException;

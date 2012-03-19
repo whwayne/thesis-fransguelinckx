@@ -15,7 +15,6 @@
  */
 package org.frans.thesis.service;
 
-import java.io.File;
 import java.util.Vector;
 
 import org.alljoyn.bus.BusAttachment;
@@ -26,7 +25,6 @@ import org.alljoyn.bus.Mutable;
 import org.alljoyn.bus.SessionOpts;
 import org.alljoyn.bus.SessionPortListener;
 import org.alljoyn.bus.Status;
-import org.alljoyn.bus.annotation.BusMethod;
 
 public class CFTabletopService implements CFTabletopServiceInterface, BusObject {
 
@@ -205,9 +203,8 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 	}
 	
 	@Override
-	public boolean receivePieceOfFile(String path, String clientName, byte[] buffer, boolean lastPiece)
-			throws BusException {
-		this.getClientManager().receivePieceOfFile(path, clientName, buffer, lastPiece);
+    public boolean receivePieceOfFile(String path, String clientName, byte[] buf, boolean lastPiece) throws BusException{
+		this.getClientManager().receivePieceOfFile(path, clientName, buf, lastPiece);
 		return true;
 	}
 
