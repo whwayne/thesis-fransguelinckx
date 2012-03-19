@@ -16,10 +16,12 @@
 
 package org.alljoyn.bus.samples.simpleclient;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +36,10 @@ import org.alljoyn.bus.Status;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -51,7 +57,19 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.android.AsyncFacebookRunner;
+import com.facebook.android.AsyncFacebookRunner.RequestListener;
+import com.facebook.android.DialogError;
+import com.facebook.android.Facebook;
+import com.facebook.android.Facebook.DialogListener;
+import com.facebook.android.FacebookError;
+
 public class Client extends Activity {
+	
+	private Facebook facebook = new Facebook("292760657458958");
+	String FILENAME = "CFClient_data";
+    private SharedPreferences mPrefs;
+    
 	/* Load the native alljoyn_java library. */
 	static {
 		System.loadLibrary("alljoyn_java");
@@ -111,7 +129,80 @@ public class Client extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
+		String[] permissions = { "offline_access", "publish_stream", "user_photos", "publish_checkins",
+        "photo_upload" };
+		
+		facebook.authorize(this, permissions, new DialogListener() {
+            @Override
+            public void onComplete(Bundle values) {
+            	logInfo("Facebook login complete.");
+            	byte[] data = null;
+        		List<String> files = ReadSDCard();
 
+                Bitmap bi = BitmapFactory.decodeFile(files.get(0));
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bi.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                data = baos.toByteArray();
+
+
+                Bundle params = new Bundle();
+                params.putString(Facebook.TOKEN, facebook.getAccessToken());
+                params.putString("method", "photos.upload");
+                params.putByteArray("picture", data);
+
+                AsyncFacebookRunner mAsyncRunner = new AsyncFacebookRunner(facebook);
+                mAsyncRunner.request(null, params, "POST", new RequestListener() {
+        			
+        			@Override
+        			public void onMalformedURLException(MalformedURLException e, Object state) {
+        				// TODO Auto-generated method stub
+        				e.printStackTrace();
+        			}
+        			
+        			@Override
+        			public void onIOException(IOException e, Object state) {
+        				// TODO Auto-generated method stub
+        				e.printStackTrace();
+        			}
+        			
+        			@Override
+        			public void onFileNotFoundException(FileNotFoundException e, Object state) {
+        				// TODO Auto-generated method stub
+        				e.printStackTrace();
+        			}
+        			
+        			@Override
+        			public void onFacebookError(FacebookError e, Object state) {
+        				// TODO Auto-generated method stub
+        				e.printStackTrace();
+        			}
+        			
+        			@Override
+        			public void onComplete(String response, Object state) {
+        				// TODO Auto-generated method stub
+        				logInfo(response);
+        			}
+        		}, null);
+            }
+
+            @Override
+            public void onFacebookError(FacebookError error) {
+            	logInfo(error.getMessage());
+            }
+
+            @Override
+            public void onError(DialogError e) {
+            	logInfo(e.getMessage());}
+
+            @Override
+            public void onCancel() {
+            	logInfo("Cancelled");}
+        });
+		
+		
+
+
+        
 		mListViewArrayAdapter = new ArrayAdapter<String>(this, R.layout.message);
 		mListView = (ListView) findViewById(R.id.ListView);
 		mListView.setAdapter(mListViewArrayAdapter);
@@ -406,8 +497,8 @@ public class Client extends Activity {
 
 			case SEND_PHOTOS: {
 				if (mSimpleInterface != null) {
-					sendUiMessage(MESSAGE_PING, msg.obj);
-					sendUiMessage(MESSAGE_PING_REPLY, "reply");
+//					sendUiMessage(MESSAGE_PING, msg.obj);
+//					sendUiMessage(MESSAGE_PING_REPLY, "reply");
 					List<String> files = ReadSDCard();
 					FileInputStream in;
 					try {
@@ -546,4 +637,11 @@ public class Client extends Activity {
 
 		return tFileList;
 	}
+	
+	@Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        facebook.authorizeCallback(requestCode, resultCode, data);
+    }
 }
