@@ -419,11 +419,11 @@ public class Client extends Activity {
 					} catch (BusException e) {
 						e.printStackTrace();
 					}
-					if (status == 0) {
+					if (status == 1) {
 						idle = false;
 						Message message = obtainMessage(SEND_PHOTOS);
 						sendMessage(message);
-					} else if(status == 1){
+					} else if(status == 2){
 						Message message = obtainMessage(PUBLISH_ON_FACEBOOK);
 						sendMessage(message);
 					}else {
@@ -453,10 +453,10 @@ public class Client extends Activity {
 							while ((len = in.read(buf)) > 0) {
 								logInfo("" + len);
 								if (len != 255) {
-									mSimpleInterface.receivePieceOfFile(
+									mSimpleInterface.receivePieceOfFile(file, 
 											deviceName, buf, true);
 								} else {
-									mSimpleInterface.receivePieceOfFile(
+									mSimpleInterface.receivePieceOfFile(file, 
 											deviceName, buf, false);
 								}
 								buf = new byte[255];
@@ -486,40 +486,6 @@ public class Client extends Activity {
 			 * interface.
 			 */
 			case PING: {
-				if (mSimpleInterface != null) {
-					sendUiMessage(MESSAGE_PING, msg.obj);
-					sendUiMessage(MESSAGE_PING_REPLY, "reply");
-					List<String> files = ReadSDCard();
-					for (String path : files) {
-						logInfo(path);
-					}
-					FileInputStream in;
-					try {
-						in = new FileInputStream(files.get(0));
-
-						byte[] buf = new byte[255];
-						int len;
-						while ((len = in.read(buf)) > 0) {
-							logInfo("" + len);
-							if (len != 255) {
-								mSimpleInterface.receivePieceOfFile(deviceName,
-										buf, true);
-							} else {
-								mSimpleInterface.receivePieceOfFile(deviceName,
-										buf, false);
-							}
-							buf = new byte[255];
-						}
-						in.close();
-					} catch (FileNotFoundException e) {
-						e.printStackTrace();
-					} catch (IOException e) {
-						e.printStackTrace();
-					} catch (BusException e) {
-						e.printStackTrace();
-					}
-
-				}
 				break;
 			}
 			case PUBLISH_ON_FACEBOOK: {
