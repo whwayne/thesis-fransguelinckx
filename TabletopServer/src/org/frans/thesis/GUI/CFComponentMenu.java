@@ -23,7 +23,7 @@ public class CFComponentMenu {
 	protected void addMenuItem(String fileName,
 			CFComponentMenuItemListener listener) {
 		CFComponentMenuItem menuItem = new CFComponentMenuItem(fileName,
-				listener, getMtApplication());
+				listener, getMtApplication(), this.getOwner().getCFScene());
 		this.menuItems.add(menuItem);
 		this.getOwner().getMTComponent()
 				.addChild(menuItem.getMTComponent());

@@ -6,11 +6,14 @@ import org.mt4j.MTApplication;
 import org.mt4j.components.TransformSpace;
 import org.mt4j.input.gestureAction.DefaultDragAction;
 import org.mt4j.input.gestureAction.DefaultRotateAction;
+import org.mt4j.input.inputProcessors.IGestureEventListener;
+import org.mt4j.input.inputProcessors.MTGestureEvent;
+import org.mt4j.input.inputProcessors.componentProcessors.dragProcessor.DragEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.dragProcessor.DragProcessor;
 import org.mt4j.input.inputProcessors.componentProcessors.rotateProcessor.RotateProcessor;
 import org.mt4j.util.math.Vector3D;
 
-public class CFPhotoAlbum extends CFComponent {
+public class CFPhotoAlbum extends CFComponent implements IGestureEventListener {
 
 	private ArrayList<CFImage> images;
 	private MTApplication mtApplication;
@@ -23,9 +26,10 @@ public class CFPhotoAlbum extends CFComponent {
 
 	public CFPhotoAlbum(MTApplication application, CFImage initialImage,
 			CFScene scene) {
-		super(application);
+		super(application, scene);
 		this.mtApplication = application;
-//		this.component = new MTRectangle(application, DIMENSION_X, DIMENSION_Y);
+		// this.component = new MTRectangle(application, DIMENSION_X,
+		// DIMENSION_Y);
 		this.component.setHeightLocal(DIMENSION_Y);
 		this.component.setWidthLocal(DIMENSION_X);
 		this.component.setNoFill(true);
@@ -34,7 +38,8 @@ public class CFPhotoAlbum extends CFComponent {
 		setUpGestures(application);
 		this.createMenu();
 		leftImagePosition = new Vector3D(DIMENSION_X / 4, DIMENSION_Y / 2);
-		rightImagePosition = new Vector3D((3 * DIMENSION_X) / 4, DIMENSION_Y / 2);
+		rightImagePosition = new Vector3D((3 * DIMENSION_X) / 4,
+				DIMENSION_Y / 2);
 		this.addImage(initialImage);
 	}
 
@@ -73,23 +78,24 @@ public class CFPhotoAlbum extends CFComponent {
 	private void loadImages() {
 		CFImage leftImage = null;
 		CFImage rightImage = null;
-		if (this.getImages().size() - 1 >= this.getPageNumber()*2) {
-			leftImage = this.getImages().get(this.getPageNumber()*2);
+		if (this.getImages().size() - 1 >= this.getPageNumber() * 2) {
+			leftImage = this.getImages().get(this.getPageNumber() * 2);
 		}
-		if (this.getImages().size() - 1 >= (this.getPageNumber()*2) + 1) {
-			rightImage = this.getImages().get((this.getPageNumber()*2) + 1);
+		if (this.getImages().size() - 1 >= (this.getPageNumber() * 2) + 1) {
+			rightImage = this.getImages().get((this.getPageNumber() * 2) + 1);
 		}
 		if (leftImage != null) {
 			this.getMTComponent().addChild(leftImage.getImage());
 			this.resizeImage(leftImage);
-//			leftImage.rotateTo(this.getAngle());
+			// leftImage.rotateTo(this.getAngle());
 			leftImage.getImage().setPositionRelativeToParent(leftImagePosition);
 		}
 		if (rightImage != null) {
 			this.getMTComponent().addChild(rightImage.getImage());
 			this.resizeImage(rightImage);
-//			rightImage.rotateTo(this.getAngle());
-			rightImage.getImage().setPositionRelativeToParent(rightImagePosition);
+			// rightImage.rotateTo(this.getAngle());
+			rightImage.getImage().setPositionRelativeToParent(
+					rightImagePosition);
 		}
 	}
 
@@ -105,11 +111,11 @@ public class CFPhotoAlbum extends CFComponent {
 	private void unloadImages() {
 		CFImage leftImage = null;
 		CFImage rightImage = null;
-		if (this.getImages().size() - 1 >= this.getPageNumber()*2) {
-			leftImage = this.getImages().get(this.getPageNumber()*2);
+		if (this.getImages().size() - 1 >= this.getPageNumber() * 2) {
+			leftImage = this.getImages().get(this.getPageNumber() * 2);
 		}
-		if (this.getImages().size() - 1 >= (this.getPageNumber()*2) + 1) {
-			rightImage = this.getImages().get((this.getPageNumber()*2) + 1);
+		if (this.getImages().size() - 1 >= (this.getPageNumber() * 2) + 1) {
+			rightImage = this.getImages().get((this.getPageNumber() * 2) + 1);
 		}
 		if (leftImage != null) {
 			this.getMTComponent().removeChild(leftImage.getImage());
@@ -132,13 +138,12 @@ public class CFPhotoAlbum extends CFComponent {
 	}
 
 	private void setUpGestures(MTApplication mtApplication) {
-//		this.getMTComponent().unregisterAllInputProcessors();
-//		this.getMTComponent().removeAllGestureEventListeners();
+		// this.getMTComponent().unregisterAllInputProcessors();
+		// this.getMTComponent().removeAllGestureEventListeners();
 
-//		this.getMTComponent().registerInputProcessor(
-//				new DragProcessor(mtApplication));
-		this.getMTComponent().addGestureListener(DragProcessor.class,
-				new DefaultDragAction());
+		// this.getMTComponent().registerInputProcessor(
+		// new DragProcessor(mtApplication));
+		this.getMTComponent().addGestureListener(DragProcessor.class, this);
 
 		this.getMTComponent().registerInputProcessor(
 				new RotateProcessor(mtApplication));
@@ -172,8 +177,34 @@ public class CFPhotoAlbum extends CFComponent {
 		this.menu.positionMenuItemsLeftAndRight();
 		this.menu.setVisible(true);
 	}
-	
-	protected boolean isPhotoAlbum(){
+
+	protected boolean isPhotoAlbum() {
 		return true;
+	}
+
+	@Override
+	public boolean processGestureEvent(MTGestureEvent ge) {
+		DragEvent de = (DragEvent) ge;
+		de.getTarget().translateGlobal(de.getTranslationVect());
+
+		switch (de.getId()) {
+		case MTGestureEvent.GESTURE_ENDED:
+			if (this.getCFScene().isCloseToCFComponent(this)) {
+				for (CFComponent component : this.getCFScene()
+						.getNearCFComponents(this)) {
+					if (component.isMobileProxy()) {
+						CFMobileDeviceProxy proxy = (CFMobileDeviceProxy) component;
+						for (CFImage image : this.getImages()) {
+							proxy.publishImageOnFacebook(image.getFile());
+						}
+						this.getMTComponent().removeFromParent();
+					}
+				}
+			}
+			break;
+		default:
+			break;
+		}
+		return false;
 	}
 }

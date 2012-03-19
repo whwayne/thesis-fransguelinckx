@@ -39,7 +39,7 @@ public class CFMobileDeviceProxy extends CFComponent{
 
 	public CFMobileDeviceProxy(MTApplication mtApplication, String clientName,
 			CFScene scene, CFTabletopClientManager tabletopClientManager, MTColor color) {
-		super(mtApplication);
+		super(mtApplication, scene);
 		this.color = color;
 		this.clientName = clientName;
 		this.tabletopClientManager = tabletopClientManager;
