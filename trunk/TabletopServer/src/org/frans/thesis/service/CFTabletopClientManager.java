@@ -39,8 +39,8 @@ public class CFTabletopClientManager {
 		
 	}
 
-	protected void receivePieceOfFile(String name, byte[] buffer, boolean lastPiece) {
-		this.getClients().get(name).receivePieceOfFile(buffer, lastPiece);
+	protected void receivePieceOfFile(String fileName, String clientName, byte[] buffer, boolean lastPiece) {
+		this.getClients().get(clientName).receivePieceOfFile(fileName, buffer, lastPiece);
 	}
 
 	protected void setIdle(String name) {

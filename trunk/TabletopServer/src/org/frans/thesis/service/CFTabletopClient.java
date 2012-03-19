@@ -55,12 +55,12 @@ public class CFTabletopClient {
 		return this.status;
 	}
 
-	protected void receivePieceOfFile(byte[] buffer, boolean lastPiece) {
+	protected void receivePieceOfFile(String fileName, byte[] buffer, boolean lastPiece) {
 		try {
 			if (!isReceivingFile) {
 				// nieuwe file maken en beginnen vullen
 				this.isReceivingFile = true;
-				this.startNewFile();
+				this.startNewFile(fileName);
 				this.appendBuffer(buffer);
 			} else if (lastPiece) {
 				// laatste stuk eraan plakken en afsluiten
@@ -82,7 +82,7 @@ public class CFTabletopClient {
 		this.status = status;
 	}
 
-	private void startNewFile() throws FileNotFoundException {
+	private void startNewFile(String fileName) throws FileNotFoundException {
 		this.file = new File(this.workingDirectory
 				+ Calendar.getInstance().getTimeInMillis() + ".jpg");
 		this.out = new FileOutputStream(file);
