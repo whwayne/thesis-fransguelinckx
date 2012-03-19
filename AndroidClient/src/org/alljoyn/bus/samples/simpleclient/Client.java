@@ -424,6 +424,7 @@ public class Client extends Activity {
 						Message message = obtainMessage(SEND_PHOTOS);
 						sendMessage(message);
 					} else if(status == 2){
+						idle = false;
 						Message message = obtainMessage(PUBLISH_ON_FACEBOOK);
 						sendMessage(message);
 					}else {
@@ -509,6 +510,11 @@ public class Client extends Activity {
 				params.putByteArray("picture", data);
 
 				mAsyncRunner.request(null, params, "POST", this, null);
+				
+				Message message = obtainMessage(START_POLLING_SERVER);
+				sendMessage(message);
+				
+				break;
 			}
 
 			default:
