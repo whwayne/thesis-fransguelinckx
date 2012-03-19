@@ -77,6 +77,12 @@ public class CFScene extends AbstractScene implements CFTabletopServiceListener 
 				result.add(component2);
 			}
 		}
+		for (CFComponent component2 : this.getCfMobileDeviceProxies().values()) {
+			if (!component2.equals(component1)
+					&& component1.getDistanceto(component2) < this.CRITICAL_STACK_DISTANCE) {
+				result.add(component2);
+			}
+		}
 		return result;
 	}
 
@@ -88,6 +94,12 @@ public class CFScene extends AbstractScene implements CFTabletopServiceListener 
 		for (CFComponent image2 : this.getCfComponents()) {
 			if (!image2.equals(image1)
 					&& image1.getDistanceto(image2) < this.CRITICAL_STACK_DISTANCE) {
+				return true;
+			}
+		}
+		for(CFComponent component : this.getCfMobileDeviceProxies().values()){
+			if (!component.equals(image1)
+					&& image1.getDistanceto(component) < this.CRITICAL_STACK_DISTANCE) {
 				return true;
 			}
 		}

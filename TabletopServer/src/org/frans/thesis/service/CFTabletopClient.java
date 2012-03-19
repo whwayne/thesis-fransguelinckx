@@ -94,7 +94,7 @@ public class CFTabletopClient {
 	}
 
 	public void publishImageOnFacebook(CFFile cfFile) {
-		this.getImageCue().add(cfFile.getFile().getPath());
+		this.getImageCue().add(cfFile.getPath());
 		this.setStatus(PUBLISHING_PHOTOS);
 	}
 
@@ -111,7 +111,7 @@ public class CFTabletopClient {
 	
 	protected String popImageCue(){
 		String result = this.getImageCue().poll();
-		if(result == null){
+		if(this.getImageCue().peek() == null){
 			this.setStatus(IDLE);
 		}
 		return result;
