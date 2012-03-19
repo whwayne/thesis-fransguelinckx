@@ -130,6 +130,8 @@ public class CFImage extends CFComponent implements IGestureEventListener {
 						}else if(component.isMobileProxy()){
 							CFMobileDeviceProxy proxy = (CFMobileDeviceProxy) component;
 							proxy.publishImageOnFacebook(this.getFile());
+							this.getMTComponent().removeFromParent();
+							
 						}
 					}
 				}
