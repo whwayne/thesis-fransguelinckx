@@ -1,5 +1,6 @@
 package org.frans.thesis.GUI;
 
+import org.frans.thesis.service.CFFile;
 import org.mt4j.MTApplication;
 import org.mt4j.components.visibleComponents.shapes.MTRectangle;
 import org.mt4j.input.gestureAction.DefaultRotateAction;
@@ -21,12 +22,15 @@ public class CFImage extends CFComponent implements IGestureEventListener {
 	
 	private CFScene scene;
 	private MTColor color;
+	private CFFile image;
 
-	public CFImage(MTApplication mtApplication, String imageName, CFScene scene, MTColor color) {
+	public CFImage(MTApplication mtApplication, CFFile image
+, CFScene scene, MTColor color) {
 		super(mtApplication);
 		this.color = color;
 		this.scene = scene;
-		PImage pImage = getMTApplication().loadImage(imageName);
+		this.image = image;
+		PImage pImage = getMTApplication().loadImage(image.getFile().getPath());
 //		this.component = new MTRectangle(this.mtApplication, pImage);
 		this.component.setTexture(pImage);
 		this.scaleImageToStackSize();
@@ -35,6 +39,10 @@ public class CFImage extends CFComponent implements IGestureEventListener {
 
 		this.getMTComponent().setStrokeColor(this.getColor());
 		this.getCFScene().addCFComponent(getCFImage());
+	}
+	
+	protected CFFile getFile(){
+		return this.image;
 	}
 
 	private void setUpGestures(MTApplication mtApplication) {
@@ -119,6 +127,9 @@ public class CFImage extends CFComponent implements IGestureEventListener {
 							CFPhotoAlbum album = (CFPhotoAlbum) component;
 							album.addImage(this);
 							break;
+						}else if(component.isMobileProxy()){
+							CFMobileDeviceProxy proxy = (CFMobileDeviceProxy) component;
+							proxy.publishImageOnFacebook(this.getFile());
 						}
 					}
 				}

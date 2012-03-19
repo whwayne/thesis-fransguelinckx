@@ -134,6 +134,10 @@ public abstract class CFComponent {
 		return false;
 	}
 
+	protected boolean isMobileProxy() {
+		return false;
+	}
+
 	protected void reposition(Vector3D position) {
 		this.getMTComponent().setPositionGlobal(position);
 	}
