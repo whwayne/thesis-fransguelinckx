@@ -20,8 +20,10 @@ public abstract class CFComponent {
 	protected MTRectangle component;
 	protected MTApplication mtApplication;
 	private int angle = 0;
+	private CFScene scene;
 
-	public CFComponent(MTApplication mtApplication) {
+	public CFComponent(MTApplication mtApplication, CFScene scene) {
+		this.scene = scene;
 		this.mtApplication = mtApplication;
 		this.component = new MTRectangle(mtApplication, 10, 10);
 
@@ -185,5 +187,9 @@ public abstract class CFComponent {
 	
 	protected int getAngle(){
 		return this.angle;
+	}
+
+	protected CFScene getCFScene() {
+		return this.scene;
 	}
 }

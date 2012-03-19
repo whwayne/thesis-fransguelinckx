@@ -20,15 +20,13 @@ import processing.core.PImage;
 
 public class CFImage extends CFComponent implements IGestureEventListener {
 	
-	private CFScene scene;
 	private MTColor color;
 	private CFFile image;
 
 	public CFImage(MTApplication mtApplication, CFFile image
 , CFScene scene, MTColor color) {
-		super(mtApplication);
+		super(mtApplication, scene);
 		this.color = color;
-		this.scene = scene;
 		this.image = image;
 		PImage pImage = getMTApplication().loadImage(image.getFile().getPath());
 //		this.component = new MTRectangle(this.mtApplication, pImage);
@@ -90,10 +88,6 @@ public class CFImage extends CFComponent implements IGestureEventListener {
 	
 	private CFImage getCFImage(){
 		return this;
-	}
-
-	private CFScene getCFScene() {
-		return this.scene;
 	}
 
 	protected MTRectangle getImage() {

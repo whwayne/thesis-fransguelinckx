@@ -18,8 +18,8 @@ public class CFComponentMenuItem extends CFComponent {
 	private CFComponentMenuItemListener listener;
 	
 	public CFComponentMenuItem(String fileName,
-			CFComponentMenuItemListener listener, MTApplication mtApplication) {
-		super(mtApplication);
+			CFComponentMenuItemListener listener, MTApplication mtApplication, CFScene scene) {
+		super(mtApplication, scene);
 		this.listener = listener;
 		PImage pImage = mtApplication.loadImage(imagePath + fileName);
 //		this.component = new MTRectangle(mtApplication, pImage);
