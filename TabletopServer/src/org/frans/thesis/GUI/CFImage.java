@@ -38,11 +38,11 @@ public class CFImage extends CFComponent implements IGestureEventListener {
 	}
 
 	private void setUpGestures(MTApplication mtApplication) {
-		this.getMTComponent().unregisterAllInputProcessors();
-		this.getMTComponent().removeAllGestureEventListeners();
+//		this.getMTComponent().unregisterAllInputProcessors();
+//		this.getMTComponent().removeAllGestureEventListeners();
 
-		this.getMTComponent().registerInputProcessor(
-				new DragProcessor(mtApplication));
+//		this.getMTComponent().registerInputProcessor(
+//				new DragProcessor(mtApplication));
 		this.getMTComponent().addGestureListener(DragProcessor.class, this);
 
 		this.getMTComponent().registerInputProcessor(

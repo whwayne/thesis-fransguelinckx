@@ -178,4 +178,8 @@ public abstract class CFComponent {
 		this.getMTComponent().scale(factor, factor, 1,
 				this.getMTComponent().getPosition(TransformSpace.GLOBAL));
 	}
+	
+	protected int getAngle(){
+		return this.angle;
+	}
 }
