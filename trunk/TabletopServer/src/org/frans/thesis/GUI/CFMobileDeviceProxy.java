@@ -1,6 +1,8 @@
 package org.frans.thesis.GUI;
 
+import org.frans.thesis.service.CFFile;
 import org.frans.thesis.service.CFTabletopClient;
+import org.frans.thesis.service.CFTabletopClientManager;
 import org.mt4j.MTApplication;
 import org.mt4j.components.TransformSpace;
 import org.mt4j.components.visibleComponents.font.FontManager;
@@ -26,16 +28,21 @@ public class CFMobileDeviceProxy extends CFComponent{
 			+ "GUI" + MTApplication.separator + "data"
 			+ MTApplication.separator + "android.png";
 	private CFComponentMenu menu;
-	private String name;
-	private MTColor color;
-	private CFTabletopClient tabletopClient;
+	private String clientName;
+	
+	public String getClientName() {
+		return clientName;
+	}
 
-	public CFMobileDeviceProxy(MTApplication mtApplication, String name,
-			CFScene scene, CFTabletopClient tabletopClient, MTColor color) {
+	private MTColor color;
+	private CFTabletopClientManager tabletopClientManager;
+
+	public CFMobileDeviceProxy(MTApplication mtApplication, String clientName,
+			CFScene scene, CFTabletopClientManager tabletopClientManager, MTColor color) {
 		super(mtApplication);
 		this.color = color;
-		this.name = name;
-		this.tabletopClient = tabletopClient;
+		this.clientName = clientName;
+		this.tabletopClientManager = tabletopClientManager;
 		setUpComponent(mtApplication);
 		this.scaleImageToStackSize();
 		setUpGestures(mtApplication);
@@ -83,15 +90,15 @@ public class CFMobileDeviceProxy extends CFComponent{
 	}
 
 	private void downloadPhotos() {
-		this.getTabletopClient().setStatus(CFTabletopClient.REQUESTING_PHOTOS);
+		this.getTabletopClientManager().setStatus(this.getClientName(), CFTabletopClient.REQUESTING_PHOTOS);
 	}
 
 	private CFComponentMenu getMenu() {
 		return this.menu;
 	}
 
-	private CFTabletopClient getTabletopClient() {
-		return this.tabletopClient;
+	private CFTabletopClientManager getTabletopClientManager() {
+		return this.tabletopClientManager;
 	}
 
 	@Override
@@ -106,7 +113,7 @@ public class CFMobileDeviceProxy extends CFComponent{
 		// Create a textfield
 		textField.setNoStroke(true);
 		textField.setNoFill(true);
-		textField.setText(this.name);
+		textField.setText(this.clientName);
 		textField.setPickable(false);
 
 		PImage pImage = getMTApplication().loadImage(imagePath);
@@ -168,6 +175,15 @@ public class CFMobileDeviceProxy extends CFComponent{
 	}
 	
 	protected String getName(){
-		return this.name;
+		return this.clientName;
+	}
+	
+
+	protected boolean isMobileProxy() {
+		return true;
+	}
+
+	protected void publishImageOnFacebook(CFFile cfFile) {
+		this.getTabletopClientManager().publishImageOnFacebook(this.getClientName(), cfFile);
 	}
 }

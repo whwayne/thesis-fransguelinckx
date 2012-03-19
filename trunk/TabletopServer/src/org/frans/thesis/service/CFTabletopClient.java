@@ -4,24 +4,29 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.LinkedList;
 
 public class CFTabletopClient {
 
 	public static final int IDLE = 0;
 	public static final int REQUESTING_PHOTOS = 1;
+	public static final int PUBLISHING_PHOTOS = 2;
 
-	private File file;
+	private CFFile file;
 	private boolean isReceivingFile = false;
 	private CFTabletopClientManager manager;
 	private String name;
 	private FileOutputStream out;
 	private int status;
 	private final String workingDirectory = System.getProperty("user.dir");
+	private LinkedList<String> imageCue;
 
 	public CFTabletopClient(String name, CFTabletopClientManager manager) {
 		this.name = name;
 		this.manager = manager;
+		this.imageCue = new LinkedList<String>();
 		this.status = IDLE;
 	}
 
@@ -39,7 +44,7 @@ public class CFTabletopClient {
 		return this.name;
 	}
 
-	private File getFile() {
+	private CFFile getFile() {
 		return this.file;
 	}
 
@@ -55,12 +60,12 @@ public class CFTabletopClient {
 		return this.status;
 	}
 
-	protected void receivePieceOfFile(String fileName, byte[] buffer, boolean lastPiece) {
+	protected void receivePieceOfFile(String path, byte[] buffer, boolean lastPiece) {
 		try {
 			if (!isReceivingFile) {
 				// nieuwe file maken en beginnen vullen
 				this.isReceivingFile = true;
-				this.startNewFile(fileName);
+				this.startNewFile(path);
 				this.appendBuffer(buffer);
 			} else if (lastPiece) {
 				// laatste stuk eraan plakken en afsluiten
@@ -82,10 +87,34 @@ public class CFTabletopClient {
 		this.status = status;
 	}
 
-	private void startNewFile(String fileName) throws FileNotFoundException {
-		this.file = new File(this.workingDirectory
-				+ Calendar.getInstance().getTimeInMillis() + ".jpg");
-		this.out = new FileOutputStream(file);
+	private void startNewFile(String path) throws FileNotFoundException {
+		this.file = new CFFile(path,new File(this.workingDirectory
+				+ Calendar.getInstance().getTimeInMillis() + ".jpg"));
+		this.out = new FileOutputStream(file.getFile());
+	}
+
+	public void publishImageOnFacebook(CFFile cfFile) {
+		this.getImageCue().add(cfFile.getFile().getPath());
+		this.setStatus(PUBLISHING_PHOTOS);
+	}
+
+	public void publishImagesOnFacebook(ArrayList<String> files) {
+		for(String file : files){
+			this.getImageCue().add(file);
+		}
+		this.setStatus(PUBLISHING_PHOTOS);
+	}
+	
+	private LinkedList<String> getImageCue(){
+		return this.imageCue;
+	}
+	
+	protected String popImageCue(){
+		String result = this.getImageCue().poll();
+		if(result == null){
+			this.setStatus(IDLE);
+		}
+		return result;
 	}
 
 }

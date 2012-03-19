@@ -1,17 +1,17 @@
 package org.frans.thesis.GUI;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.frans.thesis.service.CFTabletopClient;
-import org.frans.thesis.service.TabletopServiceListener;
+import org.frans.thesis.service.CFFile;
+import org.frans.thesis.service.CFTabletopClientManager;
+import org.frans.thesis.service.CFTabletopServiceListener;
 import org.mt4j.MTApplication;
 import org.mt4j.sceneManagement.AbstractScene;
 import org.mt4j.util.MTColor;
 import org.mt4j.util.math.Vector3D;
 
-public class CFScene extends AbstractScene implements TabletopServiceListener {
+public class CFScene extends AbstractScene implements CFTabletopServiceListener {
 
 	private ArrayList<CFComponent> cfComponents;
 	private HashMap<String, CFMobileDeviceProxy> cfMobileDeviceProxies;
@@ -32,12 +32,12 @@ public class CFScene extends AbstractScene implements TabletopServiceListener {
 	}
 
 	@Override
-	public void addMobileDevice(String name, CFTabletopClient tabletopClient) {
-		if (!this.getCfMobileDeviceProxies().keySet().contains(name)) {
+	public void addMobileDevice(String clientName, CFTabletopClientManager tabletopClientManager) {
+		if (!this.getCfMobileDeviceProxies().keySet().contains(clientName)) {
 			MTColor color = MTColor.randomColor();
 			color.setAlpha(MTColor.ALPHA_HALF_TRANSPARENCY);
-			CFMobileDeviceProxy proxy = new CFMobileDeviceProxy(getMTApplication(), name, this, tabletopClient, color);
-			this.getCfMobileDeviceProxies().put(name, proxy);
+			CFMobileDeviceProxy proxy = new CFMobileDeviceProxy(getMTApplication(), clientName, this, tabletopClientManager, color);
+			this.getCfMobileDeviceProxies().put(clientName, proxy);
 			proxy.getMTComponent().setPositionGlobal(new Vector3D(this.getMTApplication().getWidth()/2, this.getMTApplication().getHeight()/2));
 			this.getCanvas().addChild(proxy.getMTComponent());
 		}
@@ -56,9 +56,9 @@ public class CFScene extends AbstractScene implements TabletopServiceListener {
 	}
 
 	@Override
-	public void fileFinished(File file, String name) {
+	public void fileFinished(CFFile file, String name) {
 		MTColor color = this.getCfMobileDeviceProxies().get(name).getColor();
-		new CFImage(getMTApplication(), file.getPath(), this, color);
+		new CFImage(getMTApplication(), file, this, color);
 	}
 
 	private ArrayList<CFComponent> getCfComponents() {

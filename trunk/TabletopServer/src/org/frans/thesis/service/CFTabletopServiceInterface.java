@@ -47,4 +47,7 @@ public interface CFTabletopServiceInterface {
     
     @BusMethod
     public boolean setIdle(String name) throws BusException;
+
+    @BusMethod
+	public String getFileToPublish(String clientName);
 }

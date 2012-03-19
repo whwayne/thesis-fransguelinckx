@@ -1,6 +1,5 @@
 package org.frans.thesis.service;
 
-import java.io.File;
 import java.util.HashMap;
 
 public class CFTabletopClientManager {
@@ -19,7 +18,7 @@ public class CFTabletopClientManager {
 		return tabletopClient;
 	}
 
-	protected void fileFinished(File file, String name){
+	protected void fileFinished(CFFile file, String name){
 		this.getService().fileFinished(file, name);
 	}
 	
@@ -31,20 +30,28 @@ public class CFTabletopClientManager {
 		return this.service;
 	}
 	
-	protected int getStatus(String name) {
-		return this.getClients().get(name).getStatus();
-	}
-	
-	protected void receivePieceOfFile(int id, byte[] buffer){
-		
+	protected int getStatus(String clientName) {
+		return this.getClients().get(clientName).getStatus();
 	}
 
-	protected void receivePieceOfFile(String fileName, String clientName, byte[] buffer, boolean lastPiece) {
-		this.getClients().get(clientName).receivePieceOfFile(fileName, buffer, lastPiece);
+	protected void receivePieceOfFile(String path, String clientName, byte[] buffer, boolean lastPiece) {
+		this.getClients().get(clientName).receivePieceOfFile(path, buffer, lastPiece);
 	}
 
 	protected void setIdle(String name) {
 		this.getClients().get(name).setStatus(CFTabletopClient.IDLE);
+	}
+
+	protected String getFileToPublish(String clientName) {
+		return this.getClients().get(clientName).popImageCue();
+	}
+
+	public void setStatus(String clientName, int status) {
+		this.getClients().get(clientName).setStatus(status);
+	}
+
+	public void publishImageOnFacebook(String clientName, CFFile cfFile) {
+		this.getClients().get(clientName).publishImageOnFacebook(cfFile);
 	}
 
 }

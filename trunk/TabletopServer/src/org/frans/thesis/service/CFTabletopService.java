@@ -26,6 +26,7 @@ import org.alljoyn.bus.Mutable;
 import org.alljoyn.bus.SessionOpts;
 import org.alljoyn.bus.SessionPortListener;
 import org.alljoyn.bus.Status;
+import org.alljoyn.bus.annotation.BusMethod;
 
 public class CFTabletopService implements CFTabletopServiceInterface, BusObject {
 
@@ -49,24 +50,24 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 	
 	private CFTabletopClientManager clientManager;
 
-	private Vector<TabletopServiceListener> listeners;
+	private Vector<CFTabletopServiceListener> listeners;
 
 	public CFTabletopService() {
 		this.clientManager = new CFTabletopClientManager(this);
-		this.listeners = new Vector<TabletopServiceListener>();
+		this.listeners = new Vector<CFTabletopServiceListener>();
 	}
 
-	public void addTabletopServiceListener(TabletopServiceListener listener) {
+	public void addTabletopServiceListener(CFTabletopServiceListener listener) {
 		if (!this.getListeners().contains(listener)) {
 			this.getListeners().add(listener);
 		}
 	}
 
 	@Override
-	public boolean attach(String name) throws BusException {
-		CFTabletopClient tabletopClient = this.getClientManager().addTabletopClient(name);
-		for (TabletopServiceListener listener : this.getListeners()) {
-			listener.addMobileDevice(name, tabletopClient);
+	public boolean attach(String clientName) throws BusException {
+		CFTabletopClient tabletopClient = this.getClientManager().addTabletopClient(clientName);
+		for (CFTabletopServiceListener listener : this.getListeners()) {
+			listener.addMobileDevice(clientName, this.getClientManager());
 		}
 		return true;
 	}
@@ -173,14 +174,14 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 
 	@Override
 	public boolean detach(String name) throws BusException {
-		for (TabletopServiceListener listener : this.getListeners()) {
+		for (CFTabletopServiceListener listener : this.getListeners()) {
 			listener.removeMobileDevice(name);
 		}
 		return true;
 	}
 
-	protected void fileFinished(File file, String name){
-		for(TabletopServiceListener listener : this.getListeners()){
+	protected void fileFinished(CFFile file, String name){
+		for(CFTabletopServiceListener listener : this.getListeners()){
 			listener.fileFinished(file, name);
 		}
 	}
@@ -188,7 +189,7 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 		return this.clientManager;
 	}
 	
-	private synchronized Vector<TabletopServiceListener> getListeners() {
+	private synchronized Vector<CFTabletopServiceListener> getListeners() {
 		return listeners;
 	}
 	
@@ -204,13 +205,13 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 	}
 	
 	@Override
-	public boolean receivePieceOfFile(String fileName, String clientName, byte[] buffer, boolean lastPiece)
+	public boolean receivePieceOfFile(String path, String clientName, byte[] buffer, boolean lastPiece)
 			throws BusException {
-		this.getClientManager().receivePieceOfFile(fileName, clientName, buffer, lastPiece);
+		this.getClientManager().receivePieceOfFile(path, clientName, buffer, lastPiece);
 		return true;
 	}
 
-	protected void removeTabletopServiceListener(TabletopServiceListener listener) {
+	protected void removeTabletopServiceListener(CFTabletopServiceListener listener) {
 		if (this.getListeners().contains(listener)) {
 			this.getListeners().remove(listener);
 		}
@@ -220,5 +221,10 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 	public boolean setIdle(String name) throws BusException {
 		this.getClientManager().setIdle(name);
 		return false;
+	}
+
+	@Override
+	public String getFileToPublish(String clientName){
+		return this.getClientManager().getFileToPublish(clientName);
 	}
 }
