@@ -42,6 +42,7 @@ public class CFPhotoAlbum extends CFComponent {
 		if (!this.getImages().contains(image)) {
 			this.getImages().add(image);
 			image.getImage().removeFromParent();
+			image.rotateTo(0);
 			image.getImage().setPickable(false);
 			loadImages();
 		}
@@ -81,11 +82,13 @@ public class CFPhotoAlbum extends CFComponent {
 		if (leftImage != null) {
 			this.getMTComponent().addChild(leftImage.getImage());
 			this.resizeImage(leftImage);
+//			leftImage.rotateTo(this.getAngle());
 			leftImage.getImage().setPositionRelativeToParent(leftImagePosition);
 		}
 		if (rightImage != null) {
 			this.getMTComponent().addChild(rightImage.getImage());
 			this.resizeImage(rightImage);
+//			rightImage.rotateTo(this.getAngle());
 			rightImage.getImage().setPositionRelativeToParent(rightImagePosition);
 		}
 	}
