@@ -43,7 +43,7 @@ public interface CFTabletopServiceInterface {
     public String ping(String inStr) throws BusException;
     
     @BusMethod
-    public boolean receivePieceOfFile(String name, byte[] buf, boolean lastPiece) throws BusException;
+    public boolean receivePieceOfFile(String fileName, String clientName, byte[] buf, boolean lastPiece) throws BusException;
     
     @BusMethod
     public boolean setIdle(String name) throws BusException;

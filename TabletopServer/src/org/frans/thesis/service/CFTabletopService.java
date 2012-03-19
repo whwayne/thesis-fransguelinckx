@@ -204,9 +204,9 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 	}
 	
 	@Override
-	public boolean receivePieceOfFile(String name, byte[] buffer, boolean lastPiece)
+	public boolean receivePieceOfFile(String fileName, String clientName, byte[] buffer, boolean lastPiece)
 			throws BusException {
-		this.getClientManager().receivePieceOfFile(name, buffer, lastPiece);
+		this.getClientManager().receivePieceOfFile(fileName, clientName, buffer, lastPiece);
 		return true;
 	}
 
