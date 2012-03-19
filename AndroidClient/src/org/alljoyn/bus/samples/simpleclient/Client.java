@@ -64,10 +64,10 @@ import com.facebook.android.Facebook.DialogListener;
 import com.facebook.android.FacebookError;
 
 public class Client extends Activity {
-	
+
 	private Facebook facebook = new Facebook("292760657458958");
 	String FILENAME = "CFClient_data";
-    
+
 	/* Load the native alljoyn_java library. */
 	static {
 		System.loadLibrary("alljoyn_java");
@@ -97,15 +97,6 @@ public class Client extends Activity {
 		@Override
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
-			case MESSAGE_PING:
-				String ping = (String) msg.obj;
-				mListViewArrayAdapter.add("Ping:  " + ping);
-				break;
-			case MESSAGE_PING_REPLY:
-				String ret = (String) msg.obj;
-				mListViewArrayAdapter.add("Reply:  " + ret);
-				mEditText.setText("");
-				break;
 			case MESSAGE_POST_TOAST:
 				Toast.makeText(getApplicationContext(), (String) msg.obj,
 						Toast.LENGTH_LONG).show();
@@ -127,29 +118,31 @@ public class Client extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-		String[] permissions = { "offline_access", "publish_stream", "user_photos", "publish_checkins",
-        "photo_upload" };
-		
+		String[] permissions = { "offline_access", "publish_stream",
+				"user_photos", "publish_checkins", "photo_upload" };
+
 		facebook.authorize(this, permissions, new DialogListener() {
-            @Override
-            public void onComplete(Bundle values) {
-            	logInfo("Facebook login complete.");
-            }
+			@Override
+			public void onComplete(Bundle values) {
+				logInfo("Facebook login complete.");
+			}
 
-            @Override
-            public void onFacebookError(FacebookError error) {
-            	logInfo(error.getMessage());
-            }
+			@Override
+			public void onFacebookError(FacebookError error) {
+				logInfo(error.getMessage());
+			}
 
-            @Override
-            public void onError(DialogError e) {
-            	logInfo(e.getMessage());}
+			@Override
+			public void onError(DialogError e) {
+				logInfo(e.getMessage());
+			}
 
-            @Override
-            public void onCancel() {
-            	logInfo("Cancelled");}
-        });
-        
+			@Override
+			public void onCancel() {
+				logInfo("Cancelled");
+			}
+		});
+
 		mListViewArrayAdapter = new ArrayAdapter<String>(this, R.layout.message);
 		mListView = (ListView) findViewById(R.id.ListView);
 		mListView.setAdapter(mListViewArrayAdapter);
@@ -361,7 +354,7 @@ public class Client extends Activity {
 								mHandler.sendEmptyMessage(MESSAGE_START_PROGRESS_DIALOG);
 								Message msg = obtainMessage(CONNECT);
 								sendMessage(msg);
-								
+
 							}
 						});
 				logStatus("BusAttachment.joinSession() - sessionId: "
@@ -426,12 +419,15 @@ public class Client extends Activity {
 					} catch (BusException e) {
 						e.printStackTrace();
 					}
-					if (status != 0) {
+					if (status == 0) {
 						idle = false;
 						Message message = obtainMessage(SEND_PHOTOS);
 						sendMessage(message);
-					} else {
-//						logInfo("Client idle");
+					} else if(status == 1){
+						Message message = obtainMessage(PUBLISH_ON_FACEBOOK);
+						sendMessage(message);
+					}else {
+						// logInfo("Client idle");
 					}
 					try {
 						Thread.sleep(2500);
@@ -445,8 +441,8 @@ public class Client extends Activity {
 
 			case SEND_PHOTOS: {
 				if (mSimpleInterface != null) {
-//					sendUiMessage(MESSAGE_PING, msg.obj);
-//					sendUiMessage(MESSAGE_PING_REPLY, "reply");
+					// sendUiMessage(MESSAGE_PING, msg.obj);
+					// sendUiMessage(MESSAGE_PING_REPLY, "reply");
 					List<String> files = ReadSDCard();
 					FileInputStream in;
 					try {
@@ -481,7 +477,6 @@ public class Client extends Activity {
 				}
 				break;
 			}
-			
 
 			/*
 			 * Call the service's Ping method through the ProxyBusObject.
@@ -528,29 +523,28 @@ public class Client extends Activity {
 				break;
 			}
 			case PUBLISH_ON_FACEBOOK: {
-				ArrayList<String> files = mSimpleInterface.getFilesToPublish();
+				String file = mSimpleInterface.getFileToPublish(deviceName);
 				byte[] data;
 				Bitmap bi;
 				ByteArrayOutputStream baos;
 				Bundle params;
-				AsyncFacebookRunner mAsyncRunner = new AsyncFacebookRunner(facebook);
-				
-				for(String file : files){
-					data = null;
-					bi = BitmapFactory.decodeFile(file);
-					baos = new ByteArrayOutputStream();
-					bi.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-					data = baos.toByteArray();
-					
-					params = new Bundle();
-					params.putString(Facebook.TOKEN, facebook.getAccessToken());
-					params.putString("method", "photos.upload");
-					params.putByteArray("picture", data);
-					
-					mAsyncRunner.request(null, params, "POST", this, null);
-				}
+				AsyncFacebookRunner mAsyncRunner = new AsyncFacebookRunner(
+						facebook);
+
+				data = null;
+				bi = BitmapFactory.decodeFile(file);
+				baos = new ByteArrayOutputStream();
+				bi.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+				data = baos.toByteArray();
+
+				params = new Bundle();
+				params.putString(Facebook.TOKEN, facebook.getAccessToken());
+				params.putString("method", "photos.upload");
+				params.putByteArray("picture", data);
+
+				mAsyncRunner.request(null, params, "POST", this, null);
 			}
-			
+
 			default:
 				break;
 			}
@@ -632,11 +626,11 @@ public class Client extends Activity {
 
 		return tFileList;
 	}
-	
-	@Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
 
-        facebook.authorizeCallback(requestCode, resultCode, data);
-    }
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+
+		facebook.authorizeCallback(requestCode, resultCode, data);
+	}
 }
