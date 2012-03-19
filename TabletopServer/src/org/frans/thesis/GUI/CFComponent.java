@@ -19,11 +19,11 @@ public abstract class CFComponent {
 
 	protected MTRectangle component;
 	protected MTApplication mtApplication;
+	private int angle = 0;
 
 	public CFComponent(MTApplication mtApplication) {
 		this.mtApplication = mtApplication;
 		this.component = new MTRectangle(mtApplication, 10, 10);
-		
 
 		this.getMTComponent().unregisterAllInputProcessors();
 		this.getMTComponent().removeAllGestureEventListeners();
@@ -39,29 +39,51 @@ public abstract class CFComponent {
 						case MTGestureEvent.GESTURE_ENDED:
 							break;
 						case MTGestureEvent.GESTURE_UPDATED:
-							Vector3D position = getMTComponent().getPosition(
-									TransformSpace.GLOBAL);
 							
-							if(position.x < X_LOW_TRESHHOLD && position.y < Y_LOW_TRESHHOLD){
-								System.out.println("zone 1");
-							}else if(position.x > X_LOW_TRESHHOLD & position.x < X_HIGH_TRESHHOLD && position.y  < Y_LOW_TRESHHOLD){
-								System.out.println("zone 2");
-							}else if(position.x > X_HIGH_TRESHHOLD && position.y < Y_LOW_TRESHHOLD){
-								System.out.println("zone 3");
-							}else if(position.x > X_HIGH_TRESHHOLD && position.y > Y_LOW_TRESHHOLD && position.y < Y_HIGH_TRESHHOLD){
-								System.out.println("zone 4");
-							}else if(position.x > X_HIGH_TRESHHOLD && position.y > Y_HIGH_TRESHHOLD){
-								System.out.println("zone 5");
-							}else if(position.x > X_LOW_TRESHHOLD && position.x < X_HIGH_TRESHHOLD && position.y > Y_HIGH_TRESHHOLD){
-								System.out.println("zone 6");
-							}else if(position.x < X_LOW_TRESHHOLD && position.y > Y_HIGH_TRESHHOLD){
-								System.out.println("zone 7");
-							}else if(position.x < X_LOW_TRESHHOLD && position.y > Y_LOW_TRESHHOLD && position.y < Y_HIGH_TRESHHOLD){
-								System.out.println("zone 8");
-							}
+								Vector3D position = getMTComponent()
+										.getPosition(TransformSpace.GLOBAL);
+
+								if (position.x < X_LOW_TRESHHOLD
+										&& position.y < Y_LOW_TRESHHOLD) {
+									rotateTo(135);
+								} else if (position.x > X_LOW_TRESHHOLD
+										& position.x < X_HIGH_TRESHHOLD
+										&& position.y < Y_LOW_TRESHHOLD) {
+									// System.out.println("zone 2");
+									rotateTo(180);
+								} else if (position.x > X_HIGH_TRESHHOLD
+										&& position.y < Y_LOW_TRESHHOLD) {
+									// System.out.println("zone 3");
+									rotateTo(225);
+								} else if (position.x > X_HIGH_TRESHHOLD
+										&& position.y > Y_LOW_TRESHHOLD
+										&& position.y < Y_HIGH_TRESHHOLD) {
+									// System.out.println("zone 4");
+									rotateTo(270);
+								} else if (position.x > X_HIGH_TRESHHOLD
+										&& position.y > Y_HIGH_TRESHHOLD) {
+									// System.out.println("zone 5");
+									rotateTo(315);
+								} else if (position.x > X_LOW_TRESHHOLD
+										&& position.x < X_HIGH_TRESHHOLD
+										&& position.y > Y_HIGH_TRESHHOLD) {
+									// System.out.println("zone 6");
+									rotateTo(0);
+								} else if (position.x < X_LOW_TRESHHOLD
+										&& position.y > Y_HIGH_TRESHHOLD) {
+									// System.out.println("zone 7");
+									rotateTo(45);
+								} else if (position.x < X_LOW_TRESHHOLD
+										&& position.y > Y_LOW_TRESHHOLD
+										&& position.y < Y_HIGH_TRESHHOLD) {
+									// System.out.println("zone 8");
+									rotateTo(90);
+								}
+							
 							break;
 						default:
 							break;
+
 						}
 						return false;
 					}
@@ -116,10 +138,19 @@ public abstract class CFComponent {
 		this.getMTComponent().setPositionGlobal(position);
 	}
 
-	protected void rotate(Vector3D rotationPoint, float degrees) {
+	protected void rotate(Vector3D rotationPoint, int degrees) {
+		this.angle += degrees;
+		this.angle = this.angle % 360;
+
 		Vector3D point = new Vector3D(rotationPoint.x + this.getWidth() / 2,
 				rotationPoint.y + this.getHeight() / 2);
 		this.getMTComponent().rotateZ(point, degrees);
+	}
+
+	protected void rotateTo(int angle) {
+		int result = (angle - this.angle) % 360;
+		this.angle = angle;
+		this.getMTComponent().rotateZ(this.getMTComponent().getCenterPointGlobal(), result);
 	}
 
 	protected void rotateRandomlyForStack() {
