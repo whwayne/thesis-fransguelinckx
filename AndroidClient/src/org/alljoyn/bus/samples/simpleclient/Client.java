@@ -37,7 +37,6 @@ import org.alljoyn.bus.Status;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -68,7 +67,6 @@ public class Client extends Activity {
 	
 	private Facebook facebook = new Facebook("292760657458958");
 	String FILENAME = "CFClient_data";
-    private SharedPreferences mPrefs;
     
 	/* Load the native alljoyn_java library. */
 	static {
@@ -136,53 +134,6 @@ public class Client extends Activity {
             @Override
             public void onComplete(Bundle values) {
             	logInfo("Facebook login complete.");
-            	byte[] data = null;
-        		List<String> files = ReadSDCard();
-
-                Bitmap bi = BitmapFactory.decodeFile(files.get(0));
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                bi.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                data = baos.toByteArray();
-
-
-                Bundle params = new Bundle();
-                params.putString(Facebook.TOKEN, facebook.getAccessToken());
-                params.putString("method", "photos.upload");
-                params.putByteArray("picture", data);
-
-                AsyncFacebookRunner mAsyncRunner = new AsyncFacebookRunner(facebook);
-                mAsyncRunner.request(null, params, "POST", new RequestListener() {
-        			
-        			@Override
-        			public void onMalformedURLException(MalformedURLException e, Object state) {
-        				// TODO Auto-generated method stub
-        				e.printStackTrace();
-        			}
-        			
-        			@Override
-        			public void onIOException(IOException e, Object state) {
-        				// TODO Auto-generated method stub
-        				e.printStackTrace();
-        			}
-        			
-        			@Override
-        			public void onFileNotFoundException(FileNotFoundException e, Object state) {
-        				// TODO Auto-generated method stub
-        				e.printStackTrace();
-        			}
-        			
-        			@Override
-        			public void onFacebookError(FacebookError e, Object state) {
-        				// TODO Auto-generated method stub
-        				e.printStackTrace();
-        			}
-        			
-        			@Override
-        			public void onComplete(String response, Object state) {
-        				// TODO Auto-generated method stub
-        				logInfo(response);
-        			}
-        		}, null);
             }
 
             @Override
@@ -198,10 +149,6 @@ public class Client extends Activity {
             public void onCancel() {
             	logInfo("Cancelled");}
         });
-		
-		
-
-
         
 		mListViewArrayAdapter = new ArrayAdapter<String>(this, R.layout.message);
 		mListView = (ListView) findViewById(R.id.ListView);
@@ -265,7 +212,7 @@ public class Client extends Activity {
 	}
 
 	/* This class will handle all AllJoyn calls. See onCreate(). */
-	class BusHandler extends Handler {
+	class BusHandler extends Handler implements RequestListener {
 		/*
 		 * Name used as the well-known name and the advertised name of the
 		 * service this client is interested in. This name must be a unique name
@@ -293,6 +240,7 @@ public class Client extends Activity {
 		public static final int PING = 4;
 		public static final int START_POLLING_SERVER = 5;
 		public static final int SEND_PHOTOS = 6;
+		public static final int PUBLISH_ON_FACEBOOK = 7;
 
 		public BusHandler(Looper looper) {
 			super(looper);
@@ -533,6 +481,7 @@ public class Client extends Activity {
 				}
 				break;
 			}
+			
 
 			/*
 			 * Call the service's Ping method through the ProxyBusObject.
@@ -578,6 +527,30 @@ public class Client extends Activity {
 				}
 				break;
 			}
+			case PUBLISH_ON_FACEBOOK: {
+				ArrayList<String> files = mSimpleInterface.getFilesToPublish();
+				byte[] data;
+				Bitmap bi;
+				ByteArrayOutputStream baos;
+				Bundle params;
+				AsyncFacebookRunner mAsyncRunner = new AsyncFacebookRunner(facebook);
+				
+				for(String file : files){
+					data = null;
+					bi = BitmapFactory.decodeFile(file);
+					baos = new ByteArrayOutputStream();
+					bi.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+					data = baos.toByteArray();
+					
+					params = new Bundle();
+					params.putString(Facebook.TOKEN, facebook.getAccessToken());
+					params.putString("method", "photos.upload");
+					params.putByteArray("picture", data);
+					
+					mAsyncRunner.request(null, params, "POST", this, null);
+				}
+			}
+			
 			default:
 				break;
 			}
@@ -586,6 +559,28 @@ public class Client extends Activity {
 		/* Helper function to send a message to the UI thread. */
 		private void sendUiMessage(int what, Object obj) {
 			mHandler.sendMessage(mHandler.obtainMessage(what, obj));
+		}
+
+		@Override
+		public void onComplete(String response, Object state) {
+		}
+
+		@Override
+		public void onIOException(IOException e, Object state) {
+		}
+
+		@Override
+		public void onFileNotFoundException(FileNotFoundException e,
+				Object state) {
+		}
+
+		@Override
+		public void onMalformedURLException(MalformedURLException e,
+				Object state) {
+		}
+
+		@Override
+		public void onFacebookError(FacebookError e, Object state) {
 		}
 	}
 

@@ -16,6 +16,8 @@
 
 package org.alljoyn.bus.samples.simpleclient;
 
+import java.util.ArrayList;
+
 import org.alljoyn.bus.BusException;
 import org.alljoyn.bus.annotation.BusInterface;
 import org.alljoyn.bus.annotation.BusMethod;
@@ -47,4 +49,7 @@ public interface CFTabletopServiceInterface {
     
     @BusMethod
     public boolean setIdle(String name) throws BusException;
+
+    @BusMethod
+	public ArrayList<String> getFilesToPublish();
 }
