@@ -4,14 +4,13 @@ import org.mt4j.MTApplication;
 import org.mt4j.components.TransformSpace;
 import org.mt4j.components.visibleComponents.shapes.MTRectangle;
 import org.mt4j.input.gestureAction.DefaultDragAction;
-import org.mt4j.input.gestureAction.DefaultRotateAction;
-import org.mt4j.input.gestureAction.DefaultScaleAction;
 import org.mt4j.input.inputProcessors.IGestureEventListener;
 import org.mt4j.input.inputProcessors.MTGestureEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.dragProcessor.DragEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.dragProcessor.DragProcessor;
 import org.mt4j.input.inputProcessors.componentProcessors.rotateProcessor.RotateEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.rotateProcessor.RotateProcessor;
+import org.mt4j.input.inputProcessors.componentProcessors.scaleProcessor.ScaleEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.scaleProcessor.ScaleProcessor;
 import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapProcessor;
@@ -109,7 +108,16 @@ public abstract class CFComponent {
 				});
 
 		this.getMTComponent().registerInputProcessor(new ScaleProcessor(mtApplication));
-		this.getMTComponent().addGestureListener(ScaleProcessor.class,new DefaultScaleAction());
+//		this.getMTComponent().addGestureListener(ScaleProcessor.class,new DefaultScaleAction());
+		this.getMTComponent().addGestureListener(ScaleProcessor.class,new IGestureEventListener() {
+			
+			@Override
+			public boolean processGestureEvent(MTGestureEvent ge) {
+				ScaleEvent se = (ScaleEvent) ge;
+				scale(se.getScaleFactorX(), se.getScaleFactorY(), se.getScaleFactorZ(), se.getScalingPoint());
+				return false;
+			}
+		});
 		this.getMTComponent().addGestureListener(ScaleProcessor.class,new IGestureEventListener() {
 
 					@Override
@@ -120,7 +128,6 @@ public abstract class CFComponent {
 				});
 
 		this.getMTComponent().registerInputProcessor(new RotateProcessor(mtApplication));
-//		this.getMTComponent().addGestureListener(RotateProcessor.class,new DefaultRotateAction());
 		this.getMTComponent().addGestureListener(RotateProcessor.class,new IGestureEventListener() {
 			
 			@Override
@@ -232,6 +239,10 @@ public abstract class CFComponent {
 		Vector3D point = new Vector3D(rotationPoint.x + this.getWidth() / 2,
 				rotationPoint.y + this.getHeight() / 2);
 		this.getMTComponent().rotateZ(point, degrees);
+	}
+	
+	protected void scale(float x, float y, float z, Vector3D scalingPoint){
+		this.getMTComponent().scale(x, y, z, scalingPoint);
 	}
 
 	protected void rotateTo(int angle) {
