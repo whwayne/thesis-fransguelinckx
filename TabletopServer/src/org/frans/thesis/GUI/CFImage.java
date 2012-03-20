@@ -3,15 +3,11 @@ package org.frans.thesis.GUI;
 import org.frans.thesis.service.CFFile;
 import org.mt4j.MTApplication;
 import org.mt4j.components.visibleComponents.shapes.MTRectangle;
-import org.mt4j.input.gestureAction.DefaultRotateAction;
-import org.mt4j.input.gestureAction.DefaultScaleAction;
 import org.mt4j.input.gestureAction.TapAndHoldVisualizer;
 import org.mt4j.input.inputProcessors.IGestureEventListener;
 import org.mt4j.input.inputProcessors.MTGestureEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.dragProcessor.DragEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.dragProcessor.DragProcessor;
-import org.mt4j.input.inputProcessors.componentProcessors.rotateProcessor.RotateProcessor;
-import org.mt4j.input.inputProcessors.componentProcessors.scaleProcessor.ScaleProcessor;
 import org.mt4j.input.inputProcessors.componentProcessors.tapAndHoldProcessor.TapAndHoldEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.tapAndHoldProcessor.TapAndHoldProcessor;
 import org.mt4j.util.MTColor;
@@ -51,15 +47,15 @@ public class CFImage extends CFComponent implements IGestureEventListener {
 //				new DragProcessor(mtApplication));
 		this.getMTComponent().addGestureListener(DragProcessor.class, this);
 
-		this.getMTComponent().registerInputProcessor(
-				new ScaleProcessor(mtApplication));
-		this.getMTComponent().addGestureListener(ScaleProcessor.class,
-				new DefaultScaleAction());
-
-		this.getMTComponent().registerInputProcessor(
-				new RotateProcessor(mtApplication));
-		this.getMTComponent().addGestureListener(RotateProcessor.class,
-				new DefaultRotateAction());
+//		this.getMTComponent().registerInputProcessor(
+//				new ScaleProcessor(mtApplication));
+//		this.getMTComponent().addGestureListener(ScaleProcessor.class,
+//				new DefaultScaleAction());
+//
+//		this.getMTComponent().registerInputProcessor(
+//				new RotateProcessor(mtApplication));
+//		this.getMTComponent().addGestureListener(RotateProcessor.class,
+//				new DefaultRotateAction());
 		
 		this.getMTComponent().registerInputProcessor(new TapAndHoldProcessor(mtApplication, 1500));
 		this.getMTComponent().addGestureListener(TapAndHoldProcessor.class, new TapAndHoldVisualizer(mtApplication, this.getCFScene().getCanvas()));
@@ -107,7 +103,7 @@ public class CFImage extends CFComponent implements IGestureEventListener {
 	@Override
 	public boolean processGestureEvent(MTGestureEvent ge) {
 		DragEvent de = (DragEvent) ge;
-		de.getTarget().translateGlobal(de.getTranslationVect());
+//		de.getTarget().translateGlobal(de.getTranslationVect());
 		
 		switch (de.getId()) {
 		case MTGestureEvent.GESTURE_ENDED:

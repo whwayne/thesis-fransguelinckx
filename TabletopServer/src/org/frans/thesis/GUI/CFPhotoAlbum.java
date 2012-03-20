@@ -4,12 +4,10 @@ import java.util.ArrayList;
 
 import org.mt4j.MTApplication;
 import org.mt4j.components.TransformSpace;
-import org.mt4j.input.gestureAction.DefaultRotateAction;
 import org.mt4j.input.inputProcessors.IGestureEventListener;
 import org.mt4j.input.inputProcessors.MTGestureEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.dragProcessor.DragEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.dragProcessor.DragProcessor;
-import org.mt4j.input.inputProcessors.componentProcessors.rotateProcessor.RotateProcessor;
 import org.mt4j.util.math.Vector3D;
 
 public class CFPhotoAlbum extends CFComponent implements IGestureEventListener {
@@ -144,10 +142,10 @@ public class CFPhotoAlbum extends CFComponent implements IGestureEventListener {
 		// new DragProcessor(mtApplication));
 		this.getMTComponent().addGestureListener(DragProcessor.class, this);
 
-		this.getMTComponent().registerInputProcessor(
-				new RotateProcessor(mtApplication));
-		this.getMTComponent().addGestureListener(RotateProcessor.class,
-				new DefaultRotateAction());
+//		this.getMTComponent().registerInputProcessor(
+//				new RotateProcessor(mtApplication));
+//		this.getMTComponent().addGestureListener(RotateProcessor.class,
+//				new DefaultRotateAction());
 	}
 
 	@Override
@@ -184,7 +182,7 @@ public class CFPhotoAlbum extends CFComponent implements IGestureEventListener {
 	@Override
 	public boolean processGestureEvent(MTGestureEvent ge) {
 		DragEvent de = (DragEvent) ge;
-		de.getTarget().translateGlobal(de.getTranslationVect());
+//		de.getTarget().translateGlobal(de.getTranslationVect());
 		switch (de.getId()) {
 		case MTGestureEvent.GESTURE_ENDED:
 			if (this.getCFScene().isCloseToCFComponent(this)) {
