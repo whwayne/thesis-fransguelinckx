@@ -15,8 +15,8 @@ public class CFPhotoAlbum extends CFComponent implements IGestureEventListener {
 	private ArrayList<CFImage> images;
 	private MTApplication mtApplication;
 	private CFComponentMenu menu;
-	private final float DIMENSION_X = 500;
-	private final float DIMENSION_Y = 350;
+	private float DIMENSION_X = 500;
+	private float DIMENSION_Y = 350;
 	private int pageNumber = 0;
 	private final Vector3D leftImagePosition;
 	private final Vector3D rightImagePosition;
@@ -203,4 +203,11 @@ public class CFPhotoAlbum extends CFComponent implements IGestureEventListener {
 		}
 		return false;
 	}
+	
+	protected void scale(float x, float y, float z, Vector3D scalingPoint){
+		super.scale(x, y, z, scalingPoint);
+		this.DIMENSION_X *= x;
+		this.DIMENSION_Y *= y;
+	}
+
 }

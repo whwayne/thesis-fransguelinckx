@@ -290,18 +290,19 @@ public abstract class CFComponent {
 		float scalingWidthFactor = CFComponent.STANDARD_MEASURE
 				/ this.getWidth();
 		if (scalingHeightFactor < scalingWidthFactor) {
-			this.getMTComponent().scale(scalingWidthFactor, scalingWidthFactor,
+			this.scale(scalingWidthFactor, scalingWidthFactor,
 					1, this.getMTComponent().getPosition(TransformSpace.GLOBAL));
 		} else {
-			this.getMTComponent().scaleGlobal(scalingHeightFactor,
+			this.scale(scalingHeightFactor,
 					scalingHeightFactor, 1,
 					this.getMTComponent().getPosition(TransformSpace.GLOBAL));
 		}
 	}
 
 	protected void scaleImage(float factor) {
-		this.getMTComponent().scale(factor, factor, 1,
-				this.getMTComponent().getPosition(TransformSpace.GLOBAL));
+		this.scale(factor, factor, 1, this.getMTComponent().getPosition(TransformSpace.GLOBAL));
+//		this.getMTComponent().scale(factor, factor, 1,
+//				this.getMTComponent().getPosition(TransformSpace.GLOBAL));
 	}
 
 	protected int getAngle() {
