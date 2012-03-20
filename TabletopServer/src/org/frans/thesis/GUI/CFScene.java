@@ -21,6 +21,7 @@ public class CFScene extends AbstractScene implements CFTabletopServiceListener 
 		super(mtApplication, name);
 		this.cfComponents = new ArrayList<CFComponent>();
 		this.cfMobileDeviceProxies = new HashMap<String, CFMobileDeviceProxy>();
+		new CFTrashCan(mtApplication, this);
 	}
 
 	protected void addCFComponent(CFComponent component) {

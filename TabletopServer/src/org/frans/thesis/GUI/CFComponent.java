@@ -117,6 +117,20 @@ public abstract class CFComponent {
 						return false;
 					}
 				});
+		this.getMTComponent().addGestureListener(DragProcessor.class, new IGestureEventListener() {
+			@Override
+			public boolean processGestureEvent(MTGestureEvent ge) {
+				DragEvent de = (DragEvent) ge;
+				switch (de.getId()) {
+				case MTGestureEvent.GESTURE_ENDED:
+					checkIfDroppedOnTrashCan();
+					break;
+				default:
+					break;
+				}
+				return false;
+			}
+		});
 		
 		this.getMTComponent().registerInputProcessor(new ScaleProcessor(mtApplication));
 		this.getMTComponent().addGestureListener(ScaleProcessor.class,new IGestureEventListener() {
@@ -178,7 +192,7 @@ public abstract class CFComponent {
 	}
 
 	private void autoScale() {
-		double distance = getDistanceToCenter();
+//		double distance = getDistanceToCenter();
 		float scaleX = X_WIDTH/this.getWidth();
 		float scaleY = Y_HEIGHT/this.getHeight();
 		float scalefactor = Math.min(scaleX, scaleY);
@@ -250,6 +264,10 @@ public abstract class CFComponent {
 		return false;
 	}
 
+	protected boolean isTrashCan() {
+		return false;
+	}
+
 	protected boolean isMobileProxy() {
 		return false;
 	}
@@ -311,5 +329,19 @@ public abstract class CFComponent {
 
 	protected CFScene getCFScene() {
 		return this.scene;
+	}
+	
+	private void checkIfDroppedOnTrashCan(){
+		boolean hit = false;
+		if (getCFScene().isCloseToCFComponent(this)) {
+			for (CFComponent component : getCFScene().getNearCFComponents(this)) {
+				if(component.isTrashCan()){
+					hit = true;
+				}
+			}
+		}
+		if(hit){
+			this.getMTComponent().removeFromParent();
+		}
 	}
 }
