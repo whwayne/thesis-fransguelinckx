@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import org.mt4j.MTApplication;
 import org.mt4j.components.TransformSpace;
-import org.mt4j.input.gestureAction.DefaultDragAction;
 import org.mt4j.input.gestureAction.DefaultRotateAction;
 import org.mt4j.input.inputProcessors.IGestureEventListener;
 import org.mt4j.input.inputProcessors.MTGestureEvent;
@@ -186,7 +185,6 @@ public class CFPhotoAlbum extends CFComponent implements IGestureEventListener {
 	public boolean processGestureEvent(MTGestureEvent ge) {
 		DragEvent de = (DragEvent) ge;
 		de.getTarget().translateGlobal(de.getTranslationVect());
-
 		switch (de.getId()) {
 		case MTGestureEvent.GESTURE_ENDED:
 			if (this.getCFScene().isCloseToCFComponent(this)) {
