@@ -44,8 +44,7 @@ public abstract class CFComponent {
 		
 		this.getMTComponent().registerInputProcessor(new DragProcessor(mtApplication));
 		this.getMTComponent().addGestureListener(DragProcessor.class, new DefaultDragAction());
-		this.getMTComponent().addGestureListener(DragProcessor.class,
-				new IGestureEventListener() {
+		this.getMTComponent().addGestureListener(DragProcessor.class,new IGestureEventListener() {
 					@Override
 					public boolean processGestureEvent(MTGestureEvent ge) {
 						DragEvent de = (DragEvent) ge;
@@ -106,9 +105,32 @@ public abstract class CFComponent {
 						return false;
 					}
 				});
+		this.getMTComponent().addGestureListener(DragProcessor.class, new IGestureEventListener() {@Override
+			public boolean processGestureEvent(MTGestureEvent ge) {
+			DragEvent de = (DragEvent) ge;
 
+			switch (de.getId()) {
+			case MTGestureEvent.GESTURE_ENDED:
+				break;
+			case MTGestureEvent.GESTURE_UPDATED:
+
+				Vector3D position = getMTComponent().getPosition(
+						TransformSpace.GLOBAL);
+
+				if (autoScaleIsOn()) {
+					double distance = getDistanceToCenter();
+					System.out.println(distance);
+				}
+				break;
+			default:
+				break;
+
+			}
+			return false;
+		}
+	});
+		
 		this.getMTComponent().registerInputProcessor(new ScaleProcessor(mtApplication));
-//		this.getMTComponent().addGestureListener(ScaleProcessor.class,new DefaultScaleAction());
 		this.getMTComponent().addGestureListener(ScaleProcessor.class,new IGestureEventListener() {
 			
 			@Override
@@ -157,6 +179,14 @@ public abstract class CFComponent {
 						return false;
 					}
 				});
+	}
+	
+	private double getDistanceToCenter(){
+		double result = 0;
+		float x = Math.abs(this.getMTComponent().getPosition(TransformSpace.GLOBAL).getX() - (this.getMTApplication().getWidth()/2));
+		float y = Math.abs(this.getMTComponent().getPosition(TransformSpace.GLOBAL).getY() - (this.getMTApplication().getHeight()/2));
+		result = Math.sqrt((x*x)+(y*y));
+		return result;
 	}
 
 	private boolean autoRotateIsOn() {
