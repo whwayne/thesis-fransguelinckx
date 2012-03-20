@@ -3,10 +3,18 @@ package org.frans.thesis.GUI;
 import org.mt4j.MTApplication;
 import org.mt4j.components.TransformSpace;
 import org.mt4j.components.visibleComponents.shapes.MTRectangle;
+import org.mt4j.input.gestureAction.DefaultDragAction;
+import org.mt4j.input.gestureAction.DefaultRotateAction;
+import org.mt4j.input.gestureAction.DefaultScaleAction;
 import org.mt4j.input.inputProcessors.IGestureEventListener;
 import org.mt4j.input.inputProcessors.MTGestureEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.dragProcessor.DragEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.dragProcessor.DragProcessor;
+import org.mt4j.input.inputProcessors.componentProcessors.rotateProcessor.RotateEvent;
+import org.mt4j.input.inputProcessors.componentProcessors.rotateProcessor.RotateProcessor;
+import org.mt4j.input.inputProcessors.componentProcessors.scaleProcessor.ScaleProcessor;
+import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapEvent;
+import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapProcessor;
 import org.mt4j.util.math.Vector3D;
 
 public abstract class CFComponent {
@@ -21,16 +29,22 @@ public abstract class CFComponent {
 	protected MTApplication mtApplication;
 	private int angle = 0;
 	private CFScene scene;
+	private boolean autoRotate = true;
+	private boolean autoScale = true;
 
 	public CFComponent(MTApplication mtApplication, CFScene scene) {
 		this.scene = scene;
 		this.mtApplication = mtApplication;
 		this.component = new MTRectangle(mtApplication, 10, 10);
+		setUpGestures(mtApplication);
+	}
 
+	private void setUpGestures(MTApplication mtApplication) {
 		this.getMTComponent().unregisterAllInputProcessors();
 		this.getMTComponent().removeAllGestureEventListeners();
-		this.getMTComponent().registerInputProcessor(
-				new DragProcessor(mtApplication));
+		
+		this.getMTComponent().registerInputProcessor(new DragProcessor(mtApplication));
+		this.getMTComponent().addGestureListener(DragProcessor.class, new DefaultDragAction());
 		this.getMTComponent().addGestureListener(DragProcessor.class,
 				new IGestureEventListener() {
 					@Override
@@ -41,12 +55,14 @@ public abstract class CFComponent {
 						case MTGestureEvent.GESTURE_ENDED:
 							break;
 						case MTGestureEvent.GESTURE_UPDATED:
-							
-								Vector3D position = getMTComponent()
-										.getPosition(TransformSpace.GLOBAL);
 
+							Vector3D position = getMTComponent().getPosition(
+									TransformSpace.GLOBAL);
+
+							if (autoRotateIsOn()) {
 								if (position.x < X_LOW_TRESHHOLD
 										&& position.y < Y_LOW_TRESHHOLD) {
+									// System.out.println("zone 1");
 									rotateTo(135);
 								} else if (position.x > X_LOW_TRESHHOLD
 										& position.x < X_HIGH_TRESHHOLD
@@ -81,7 +97,8 @@ public abstract class CFComponent {
 									// System.out.println("zone 8");
 									rotateTo(90);
 								}
-							
+							}
+
 							break;
 						default:
 							break;
@@ -90,9 +107,73 @@ public abstract class CFComponent {
 						return false;
 					}
 				});
+
+		this.getMTComponent().registerInputProcessor(new ScaleProcessor(mtApplication));
+		this.getMTComponent().addGestureListener(ScaleProcessor.class,new DefaultScaleAction());
+		this.getMTComponent().addGestureListener(ScaleProcessor.class,new IGestureEventListener() {
+
+					@Override
+					public boolean processGestureEvent(MTGestureEvent ge) {
+						turnAutoScaleOff();
+						return false;
+					}
+				});
+
+		this.getMTComponent().registerInputProcessor(new RotateProcessor(mtApplication));
+//		this.getMTComponent().addGestureListener(RotateProcessor.class,new DefaultRotateAction());
+		this.getMTComponent().addGestureListener(RotateProcessor.class,new IGestureEventListener() {
+			
+			@Override
+			public boolean processGestureEvent(MTGestureEvent ge) {
+				RotateEvent re = (RotateEvent) ge;
+				rotate(re.getRotationPoint(), (int) re.getRotationDegrees());
+				return false;
+			}
+		});
+		this.getMTComponent().addGestureListener(RotateProcessor.class,new IGestureEventListener() {
+
+					@Override
+					public boolean processGestureEvent(MTGestureEvent ge) {
+						turnAutoRotateOff();
+						return false;
+					}
+				});
+
+		this.getMTComponent().registerInputProcessor(new TapProcessor(mtApplication, 25, true, 350));
+		this.getMTComponent().addGestureListener(TapProcessor.class,new IGestureEventListener() {
+					public boolean processGestureEvent(MTGestureEvent ge) {
+						TapEvent te = (TapEvent) ge;
+						if (te.isDoubleTap()) {
+							turnAutoRotateOn();
+							turnAutoScaleOn();
+						}
+						return false;
+					}
+				});
 	}
 
-	public void testForBounds(MTGestureEvent ge) {
+	private boolean autoRotateIsOn() {
+		return this.autoRotate;
+	}
+
+	private boolean autoScaleIsOn() {
+		return this.autoScale;
+	}
+
+	private void turnAutoRotateOff() {
+		this.autoRotate = false;
+	}
+
+	private void turnAutoScaleOff() {
+		this.autoScale = false;
+	}
+
+	private void turnAutoRotateOn() {
+		this.autoRotate = true;
+	}
+
+	private void turnAutoScaleOn() {
+		this.autoScale = true;
 	}
 
 	protected MTApplication getMTApplication() {
@@ -156,7 +237,8 @@ public abstract class CFComponent {
 	protected void rotateTo(int angle) {
 		int result = (angle - this.angle) % 360;
 		this.angle = angle;
-		this.getMTComponent().rotateZ(this.getMTComponent().getCenterPointGlobal(), result);
+		this.getMTComponent().rotateZ(
+				this.getMTComponent().getCenterPointGlobal(), result);
 	}
 
 	protected void rotateRandomlyForStack() {
@@ -184,8 +266,8 @@ public abstract class CFComponent {
 		this.getMTComponent().scale(factor, factor, 1,
 				this.getMTComponent().getPosition(TransformSpace.GLOBAL));
 	}
-	
-	protected int getAngle(){
+
+	protected int getAngle() {
 		return this.angle;
 	}
 

@@ -28,10 +28,10 @@ public class CFComponentMenuItem extends CFComponent {
 		this.component.setHeightLocal(75);
 		this.component.setVisible(false);
 
-//		this.getMTComponent().unregisterAllInputProcessors();
-//		this.getMTComponent().removeAllGestureEventListeners();
-		this.getMTComponent().registerInputProcessor(
-				new TapProcessor(mtApplication));
+		this.getMTComponent().unregisterAllInputProcessors();
+		this.getMTComponent().removeAllGestureEventListeners();
+//		this.getMTComponent().registerInputProcessor(
+//				new TapProcessor(mtApplication));
 		this.getMTComponent().addGestureListener(TapProcessor.class,
 				new IGestureEventListener() {
 					@Override
