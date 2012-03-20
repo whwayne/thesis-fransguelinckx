@@ -63,7 +63,7 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 
 	@Override
 	public boolean attach(String clientName) throws BusException {
-		CFTabletopClient tabletopClient = this.getClientManager().addTabletopClient(clientName);
+		this.getClientManager().addTabletopClient(clientName);
 		for (CFTabletopServiceListener listener : this.getListeners()) {
 			listener.addMobileDevice(clientName, this.getClientManager());
 		}
