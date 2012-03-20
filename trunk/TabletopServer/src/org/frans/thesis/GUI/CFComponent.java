@@ -23,6 +23,8 @@ public abstract class CFComponent {
 	private static final int X_HIGH_TRESHHOLD = 1440;
 	private static final int Y_LOW_TRESHHOLD = 270;
 	private static final int Y_HIGH_TRESHHOLD = 810;
+	private static final int X_WIDTH = 960;
+	private static final int Y_HEIGHT = 540;
 
 	protected MTRectangle component;
 	protected MTApplication mtApplication;
@@ -62,38 +64,48 @@ public abstract class CFComponent {
 										&& position.y < Y_LOW_TRESHHOLD) {
 									// System.out.println("zone 1");
 									rotateTo(135);
+									scaleImageToStackSize();
 								} else if (position.x > X_LOW_TRESHHOLD
 										& position.x < X_HIGH_TRESHHOLD
 										&& position.y < Y_LOW_TRESHHOLD) {
 									// System.out.println("zone 2");
 									rotateTo(180);
+									scaleImageToStackSize();
 								} else if (position.x > X_HIGH_TRESHHOLD
 										&& position.y < Y_LOW_TRESHHOLD) {
 									// System.out.println("zone 3");
 									rotateTo(225);
+									scaleImageToStackSize();
 								} else if (position.x > X_HIGH_TRESHHOLD
 										&& position.y > Y_LOW_TRESHHOLD
 										&& position.y < Y_HIGH_TRESHHOLD) {
 									// System.out.println("zone 4");
 									rotateTo(270);
+									scaleImageToStackSize();
 								} else if (position.x > X_HIGH_TRESHHOLD
 										&& position.y > Y_HIGH_TRESHHOLD) {
 									// System.out.println("zone 5");
 									rotateTo(315);
+									scaleImageToStackSize();
 								} else if (position.x > X_LOW_TRESHHOLD
 										&& position.x < X_HIGH_TRESHHOLD
 										&& position.y > Y_HIGH_TRESHHOLD) {
 									// System.out.println("zone 6");
 									rotateTo(0);
+									scaleImageToStackSize();
 								} else if (position.x < X_LOW_TRESHHOLD
 										&& position.y > Y_HIGH_TRESHHOLD) {
 									// System.out.println("zone 7");
 									rotateTo(45);
+									scaleImageToStackSize();
 								} else if (position.x < X_LOW_TRESHHOLD
 										&& position.y > Y_LOW_TRESHHOLD
 										&& position.y < Y_HIGH_TRESHHOLD) {
 									// System.out.println("zone 8");
 									rotateTo(90);
+									scaleImageToStackSize();
+								}else if(autoScaleIsOn()){
+									autoScale();
 								}
 							}
 
@@ -105,30 +117,6 @@ public abstract class CFComponent {
 						return false;
 					}
 				});
-		this.getMTComponent().addGestureListener(DragProcessor.class, new IGestureEventListener() {@Override
-			public boolean processGestureEvent(MTGestureEvent ge) {
-			DragEvent de = (DragEvent) ge;
-
-			switch (de.getId()) {
-			case MTGestureEvent.GESTURE_ENDED:
-				break;
-			case MTGestureEvent.GESTURE_UPDATED:
-
-				Vector3D position = getMTComponent().getPosition(
-						TransformSpace.GLOBAL);
-
-				if (autoScaleIsOn()) {
-					double distance = getDistanceToCenter();
-					System.out.println(distance);
-				}
-				break;
-			default:
-				break;
-
-			}
-			return false;
-		}
-	});
 		
 		this.getMTComponent().registerInputProcessor(new ScaleProcessor(mtApplication));
 		this.getMTComponent().addGestureListener(ScaleProcessor.class,new IGestureEventListener() {
@@ -187,6 +175,14 @@ public abstract class CFComponent {
 		float y = Math.abs(this.getMTComponent().getPosition(TransformSpace.GLOBAL).getY() - (this.getMTApplication().getHeight()/2));
 		result = Math.sqrt((x*x)+(y*y));
 		return result;
+	}
+
+	private void autoScale() {
+		double distance = getDistanceToCenter();
+		float scaleX = X_WIDTH/this.getWidth();
+		float scaleY = Y_HEIGHT/this.getHeight();
+		float scalefactor = Math.min(scaleX, scaleY);
+		this.scaleImage(scalefactor);
 	}
 
 	private boolean autoRotateIsOn() {
@@ -295,7 +291,7 @@ public abstract class CFComponent {
 				/ this.getWidth();
 		if (scalingHeightFactor < scalingWidthFactor) {
 			this.getMTComponent().scale(scalingWidthFactor, scalingWidthFactor,
-					1, new Vector3D(0, 0, 0));
+					1, this.getMTComponent().getPosition(TransformSpace.GLOBAL));
 		} else {
 			this.getMTComponent().scaleGlobal(scalingHeightFactor,
 					scalingHeightFactor, 1,
