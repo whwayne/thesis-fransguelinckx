@@ -132,6 +132,21 @@ public abstract class CFComponent {
 			}
 		});
 		
+		this.getMTComponent().addGestureListener(DragProcessor.class, new IGestureEventListener() {
+			@Override
+			public boolean processGestureEvent(MTGestureEvent ge) {
+				DragEvent de = (DragEvent) ge;
+				switch (de.getId()) {
+				case MTGestureEvent.GESTURE_ENDED:
+					checkIfDroppedOnCopier();
+					break;
+				default:
+					break;
+				}
+				return false;
+			}
+		});
+		
 		this.getMTComponent().registerInputProcessor(new ScaleProcessor(mtApplication));
 		this.getMTComponent().addGestureListener(ScaleProcessor.class,new IGestureEventListener() {
 			
@@ -211,7 +226,7 @@ public abstract class CFComponent {
 		this.autoRotate = false;
 	}
 
-	private void turnAutoScaleOff() {
+	protected void turnAutoScaleOff() {
 		this.autoScale = false;
 	}
 
@@ -343,5 +358,27 @@ public abstract class CFComponent {
 		if(hit){
 			this.getMTComponent().removeFromParent();
 		}
+	}
+	
+	private void checkIfDroppedOnCopier(){
+		boolean hit = false;
+		if (getCFScene().isCloseToCFComponent(this)) {
+			for (CFComponent component : getCFScene().getNearCFComponents(this)) {
+				if(component.isCopier()){
+					hit = true;
+				}
+			}
+		}
+		if(hit){
+			try {
+				this.getCFScene().addCFComponent((CFComponent)this.clone());
+			} catch (CloneNotSupportedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	protected boolean isCopier() {
+		return false;
 	}
 }

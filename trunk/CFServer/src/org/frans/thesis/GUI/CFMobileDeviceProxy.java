@@ -130,6 +130,7 @@ public class CFMobileDeviceProxy extends CFComponent{
 		mtImage.translate(new Vector3D(0, textField
 				.getHeightXY(TransformSpace.GLOBAL), 0));
 		this.getMTComponent().setFillColor(getColor());
+		this.turnAutoScaleOff();
 	}
 
 	private void setUpGestures(MTApplication mtApplication) {
