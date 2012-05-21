@@ -53,5 +53,6 @@
 	<classpathentry kind="lib" path="/MT4j/mt4jLibs/mri.jar"/>
 	<classpathentry kind="lib" path="/MT4j/mt4jLibs/muito_blobtracking.jar"/>
 	<classpathentry kind="src" path="/MT4j"/>
+	<classpathentry kind="lib" path="jar/gifAnimation.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

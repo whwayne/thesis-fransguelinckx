@@ -217,6 +217,9 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 	@Override
 	public boolean setIdle(String name) throws BusException {
 		this.getClientManager().setIdle(name);
+		for (CFTabletopServiceListener listener : this.getListeners()) {
+			listener.setIdle(name);
+		}
 		return false;
 	}
 

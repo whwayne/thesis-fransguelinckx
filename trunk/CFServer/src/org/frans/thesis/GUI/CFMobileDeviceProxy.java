@@ -25,9 +25,15 @@ public class CFMobileDeviceProxy extends CFComponent{
 			+ MTApplication.separator + "android.png";
 	private CFComponentMenu menu;
 	private String clientName;
+	private CFSpinner spinner;
 	
 	public String getClientName() {
 		return clientName;
+	}
+	
+	private void startSpinner(){
+		this.spinner = new CFSpinner(this.getMTApplication(), this.getCFScene(), this);
+		spinner.start();
 	}
 
 	private MTColor color;
@@ -87,6 +93,7 @@ public class CFMobileDeviceProxy extends CFComponent{
 
 	private void downloadPhotos() {
 		this.getTabletopClientManager().setStatus(this.getClientName(), CFTabletopClient.REQUESTING_PHOTOS);
+		this.startSpinner();
 	}
 
 	private CFComponentMenu getMenu() {
@@ -182,5 +189,9 @@ public class CFMobileDeviceProxy extends CFComponent{
 
 	protected void publishImageOnFacebook(CFFile cfFile) {
 		this.getTabletopClientManager().publishImageOnFacebook(this.getClientName(), cfFile);
+	}
+
+	public void stopSpinner() {
+		spinner.stop();
 	}
 }

@@ -9,4 +9,6 @@ public interface CFTabletopServiceListener {
 	
 	public void removeMobileDevice(String name);
 
+	public void setIdle(String name);
+
 }
