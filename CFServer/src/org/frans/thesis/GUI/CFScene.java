@@ -134,4 +134,9 @@ public class CFScene extends AbstractScene implements CFTabletopServiceListener 
 			album.loadImages();
 		}
 	}
+
+	@Override
+	public void setIdle(String name) {
+		this.getCfMobileDeviceProxies().get(name).stopSpinner();
+	}
 }
