@@ -27,6 +27,7 @@ public class CFComponentMenuItem extends CFComponent {
 		this.component.setWidthLocal(75);
 		this.component.setHeightLocal(75);
 		this.component.setVisible(false);
+		this.component.setNoStroke(true);
 
 		this.getMTComponent().unregisterAllInputProcessors();
 		this.getMTComponent().removeAllGestureEventListeners();
