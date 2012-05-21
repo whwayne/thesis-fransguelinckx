@@ -14,12 +14,14 @@ import org.mt4j.util.math.Vector3D;
 public class CFScene extends AbstractScene implements CFTabletopServiceListener {
 
 	private ArrayList<CFComponent> cfComponents;
+	private ArrayList<CFPhotoAlbum> photoalbums;
 	private HashMap<String, CFMobileDeviceProxy> cfMobileDeviceProxies;
 	private final float CRITICAL_STACK_DISTANCE = 100;
 
 	public CFScene(MTApplication mtApplication, String name) {
 		super(mtApplication, name);
 		this.cfComponents = new ArrayList<CFComponent>();
+		this.photoalbums = new ArrayList<CFPhotoAlbum>();
 		this.cfMobileDeviceProxies = new HashMap<String, CFMobileDeviceProxy>();
 		new CFTrashCan(mtApplication, this);
 		new CFTrashCan(mtApplication, this);
@@ -120,5 +122,16 @@ public class CFScene extends AbstractScene implements CFTabletopServiceListener 
 
 	@Override
 	public void shutDown() {
+	}
+
+	public void addPhotoalbum(CFPhotoAlbum cfPhotoAlbum) {
+		this.photoalbums.add(cfPhotoAlbum);
+	}
+	
+	protected void reloadAlbums(){
+		for(CFPhotoAlbum album : this.photoalbums){
+			album.unloadImages();
+			album.loadImages();
+		}
 	}
 }

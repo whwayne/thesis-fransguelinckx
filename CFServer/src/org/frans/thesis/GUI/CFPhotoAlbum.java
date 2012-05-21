@@ -18,12 +18,13 @@ public class CFPhotoAlbum extends CFComponent implements IGestureEventListener {
 	private float DIMENSION_X = 500;
 	private float DIMENSION_Y = 350;
 	private int pageNumber = 0;
-	private final Vector3D leftImagePosition;
-	private final Vector3D rightImagePosition;
+	private Vector3D leftImagePosition;
+	private Vector3D rightImagePosition;
 
 	public CFPhotoAlbum(MTApplication application, CFImage initialImage,
 			CFScene scene) {
 		super(application, scene);
+		this.getCFScene().addPhotoalbum(this);
 		this.mtApplication = application;
 		// this.component = new MTRectangle(application, DIMENSION_X,
 		// DIMENSION_Y);
@@ -37,16 +38,16 @@ public class CFPhotoAlbum extends CFComponent implements IGestureEventListener {
 		leftImagePosition = new Vector3D(DIMENSION_X / 4, DIMENSION_Y / 2);
 		rightImagePosition = new Vector3D((3 * DIMENSION_X) / 4,
 				DIMENSION_Y / 2);
-		this.addImage(initialImage);
+//		this.addImage(initialImage);
 	}
 
 	protected void addImage(CFImage image) {
 		if (!this.getImages().contains(image)) {
 			this.getImages().add(image);
-			image.getImage().removeFromParent();
+			this.getMTComponent().addChild(image.getMTComponent());
+			image.getImage().setVisible(false);
 			image.rotateTo(0);
 			image.getImage().setPickable(false);
-			loadImages();
 		}
 	}
 
@@ -72,7 +73,7 @@ public class CFPhotoAlbum extends CFComponent implements IGestureEventListener {
 		}
 	}
 
-	private void loadImages() {
+	protected void loadImages() {
 		CFImage leftImage = null;
 		CFImage rightImage = null;
 		if (this.getImages().size() - 1 >= this.getPageNumber() * 2) {
@@ -82,13 +83,15 @@ public class CFPhotoAlbum extends CFComponent implements IGestureEventListener {
 			rightImage = this.getImages().get((this.getPageNumber() * 2) + 1);
 		}
 		if (leftImage != null) {
-			this.getMTComponent().addChild(leftImage.getImage());
+//			this.getMTComponent().addChild(leftImage.getImage());
+			leftImage.getImage().setVisible(true);
 			this.resizeImage(leftImage);
 			// leftImage.rotateTo(this.getAngle());
 			leftImage.getImage().setPositionRelativeToParent(leftImagePosition);
 		}
 		if (rightImage != null) {
-			this.getMTComponent().addChild(rightImage.getImage());
+//			this.getMTComponent().addChild(rightImage.getImage());
+			rightImage.getImage().setVisible(true);
 			this.resizeImage(rightImage);
 			// rightImage.rotateTo(this.getAngle());
 			rightImage.getImage().setPositionRelativeToParent(
@@ -105,7 +108,7 @@ public class CFPhotoAlbum extends CFComponent implements IGestureEventListener {
 		image.scaleImage(result);
 	}
 
-	private void unloadImages() {
+	protected void unloadImages() {
 		CFImage leftImage = null;
 		CFImage rightImage = null;
 		if (this.getImages().size() - 1 >= this.getPageNumber() * 2) {
@@ -115,10 +118,12 @@ public class CFPhotoAlbum extends CFComponent implements IGestureEventListener {
 			rightImage = this.getImages().get((this.getPageNumber() * 2) + 1);
 		}
 		if (leftImage != null) {
-			this.getMTComponent().removeChild(leftImage.getImage());
+//			this.getMTComponent().removeChild(leftImage.getImage());
+			leftImage.getImage().setVisible(false);
 		}
 		if (rightImage != null) {
-			this.getMTComponent().removeChild(rightImage.getImage());
+//			this.getMTComponent().removeChild(rightImage.getImage());
+			rightImage.getImage().setVisible(false);
 		}
 	}
 
