@@ -452,7 +452,6 @@ public class Client extends Activity {
 							byte[] buf = new byte[255];
 							int len;
 							while ((len = in.read(buf)) > 0) {
-								logInfo("" + len);
 								if (len != 255) {
 									mSimpleInterface.receivePieceOfFile(file, 
 											deviceName, buf, true);
