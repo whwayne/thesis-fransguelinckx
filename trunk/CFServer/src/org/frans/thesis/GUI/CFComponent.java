@@ -206,7 +206,7 @@ public abstract class CFComponent {
 		return result;
 	}
 
-	private void autoScale() {
+	protected void autoScale() {
 //		double distance = getDistanceToCenter();
 		float scaleX = X_WIDTH/this.getWidth();
 		float scaleY = Y_HEIGHT/this.getHeight();
