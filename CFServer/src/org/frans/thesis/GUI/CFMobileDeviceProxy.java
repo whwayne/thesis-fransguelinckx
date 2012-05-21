@@ -23,6 +23,10 @@ public class CFMobileDeviceProxy extends CFComponent{
 			+ MTApplication.separator + "thesis" + MTApplication.separator
 			+ "GUI" + MTApplication.separator + "data"
 			+ MTApplication.separator + "android.png";
+	private String fbImagePath = "org" + MTApplication.separator + "frans"
+					+ MTApplication.separator + "thesis" + MTApplication.separator
+					+ "GUI" + MTApplication.separator + "data"
+					+ MTApplication.separator + "facebook_logo.png";
 	private CFComponentMenu menu;
 	private String clientName;
 	private CFSpinner spinner;
@@ -138,6 +142,13 @@ public class CFMobileDeviceProxy extends CFComponent{
 				.getHeightXY(TransformSpace.GLOBAL), 0));
 		this.getMTComponent().setFillColor(getColor());
 		this.turnAutoScaleOff();
+		
+		PImage facebookImage = getMTApplication().loadImage(fbImagePath);
+		MTRectangle facebookLogo = new MTRectangle(getMTApplication(), facebookImage);
+		facebookLogo.setNoStroke(true);
+		facebookLogo.setPickable(false);
+		this.getMTComponent().addChild(facebookLogo);
+		facebookLogo.setPositionRelativeToParent(new Vector3D(this.getMTComponent().getWidthXY(TransformSpace.GLOBAL), this.getMTComponent().getHeightXY(TransformSpace.GLOBAL)));
 	}
 
 	private void setUpGestures(MTApplication mtApplication) {
