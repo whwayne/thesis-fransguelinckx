@@ -33,11 +33,6 @@ public class CFTrashCan extends CFComponent{
 		this.getMTComponent().setNoStroke(true);
 	}
 
-	@Override
-	protected boolean isStackable() {
-		return false;
-	}
-
 	protected boolean isTrashCan() {
 		return true;
 	}

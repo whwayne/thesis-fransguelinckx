@@ -88,11 +88,6 @@ public class CFImage extends CFComponent {
 	}
 
 	@Override
-	public boolean isStackable() {
-		return true;
-	}
-
-	@Override
 	public void handleDroppedCFComponent(CFComponent component) {
 		if(component instanceof CFImage){
 			this.scaleImageToStackSize();

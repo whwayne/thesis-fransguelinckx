@@ -4,13 +4,9 @@ import java.util.ArrayList;
 
 import org.mt4j.MTApplication;
 import org.mt4j.components.TransformSpace;
-import org.mt4j.input.inputProcessors.IGestureEventListener;
-import org.mt4j.input.inputProcessors.MTGestureEvent;
-import org.mt4j.input.inputProcessors.componentProcessors.dragProcessor.DragEvent;
-import org.mt4j.input.inputProcessors.componentProcessors.dragProcessor.DragProcessor;
 import org.mt4j.util.math.Vector3D;
 
-public class CFPhotoAlbum extends CFComponent implements IGestureEventListener {
+public class CFPhotoAlbum extends CFComponent {
 
 	private ArrayList<CFImage> images;
 	private MTApplication mtApplication;
@@ -33,7 +29,6 @@ public class CFPhotoAlbum extends CFComponent implements IGestureEventListener {
 		this.component.setNoFill(true);
 		this.images = new ArrayList<CFImage>();
 		scene.addCFComponent(this);
-		setUpGestures(application);
 		this.createMenu();
 		leftImagePosition = new Vector3D(DIMENSION_X / 4, DIMENSION_Y / 2);
 		rightImagePosition = new Vector3D((3 * DIMENSION_X) / 4,
@@ -139,25 +134,6 @@ public class CFPhotoAlbum extends CFComponent implements IGestureEventListener {
 		return this.pageNumber;
 	}
 
-	private void setUpGestures(MTApplication mtApplication) {
-		// this.getMTComponent().unregisterAllInputProcessors();
-		// this.getMTComponent().removeAllGestureEventListeners();
-
-		// this.getMTComponent().registerInputProcessor(
-		// new DragProcessor(mtApplication));
-		this.getMTComponent().addGestureListener(DragProcessor.class, this);
-
-//		this.getMTComponent().registerInputProcessor(
-//				new RotateProcessor(mtApplication));
-//		this.getMTComponent().addGestureListener(RotateProcessor.class,
-//				new DefaultRotateAction());
-	}
-
-	@Override
-	protected boolean isStackable() {
-		return false;
-	}
-
 	private void createMenu() {
 		this.menu = new CFComponentMenu(this, mtApplication);
 		this.menu.addMenuItem("left_arrow.png",
@@ -182,31 +158,6 @@ public class CFPhotoAlbum extends CFComponent implements IGestureEventListener {
 
 	protected boolean isPhotoAlbum() {
 		return true;
-	}
-
-	@Override
-	public boolean processGestureEvent(MTGestureEvent ge) {
-		DragEvent de = (DragEvent) ge;
-//		de.getTarget().translateGlobal(de.getTranslationVect());
-		switch (de.getId()) {
-		case MTGestureEvent.GESTURE_ENDED:
-			if (this.getCFScene().isCloseToCFComponent(this)) {
-				for (CFComponent component : this.getCFScene()
-						.getNearCFComponents(this)) {
-					if (component.isMobileProxy()) {
-						CFMobileDeviceProxy proxy = (CFMobileDeviceProxy) component;
-						for (CFImage image : this.getImages()) {
-							proxy.publishImageOnFacebook(image.getFile());
-						}
-						this.getMTComponent().removeFromParent();
-					}
-				}
-			}
-			break;
-		default:
-			break;
-		}
-		return false;
 	}
 	
 	protected void scale(float x, float y, float z, Vector3D scalingPoint){

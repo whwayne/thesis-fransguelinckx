@@ -46,11 +46,6 @@ public class CFComponentMenuItem extends CFComponent {
 				});
 	}
 
-	@Override
-	protected boolean isStackable() {
-		return false;
-	}
-
 	protected void setPosition(Vector3D position) {
 		this.getMTComponent().setPositionGlobal(position);
 	}

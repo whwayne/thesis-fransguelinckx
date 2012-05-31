@@ -108,11 +108,6 @@ public class CFMobileDeviceProxy extends CFComponent{
 		return this.tabletopClientManager;
 	}
 
-	@Override
-	public boolean isStackable() {
-		return false;
-	}
-
 	private void setUpComponent(MTApplication mtApplication) {
 		MTTextArea textField = new MTTextArea(mtApplication, FontManager
 				.getInstance().createFont(mtApplication, "SansSerif", 30,
@@ -202,6 +197,7 @@ public class CFMobileDeviceProxy extends CFComponent{
 			for(CFImage image : album.getImages()){
 				this.publishImageOnFacebook(image.getFile());
 			}
+			album.getMTComponent().removeFromParent();
 		}
 	}
 }
