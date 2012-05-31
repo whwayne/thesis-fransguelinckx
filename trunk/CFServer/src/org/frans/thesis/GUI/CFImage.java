@@ -1,7 +1,5 @@
 package org.frans.thesis.GUI;
 
-import java.awt.dnd.Autoscroll;
-
 import org.frans.thesis.service.CFFile;
 import org.mt4j.MTApplication;
 import org.mt4j.components.visibleComponents.shapes.MTRectangle;
