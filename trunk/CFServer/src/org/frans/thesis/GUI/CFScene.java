@@ -17,15 +17,20 @@ public class CFScene extends AbstractScene implements CFTabletopServiceListener 
 	private ArrayList<CFPhotoAlbum> photoalbums;
 	private HashMap<String, CFMobileDeviceProxy> cfMobileDeviceProxies;
 	private final float CRITICAL_STACK_DISTANCE = 100;
+	private ArrayList<CFComponentModifier> componentModifiers;
 
 	public CFScene(MTApplication mtApplication, String name) {
 		super(mtApplication, name);
 		this.cfComponents = new ArrayList<CFComponent>();
 		this.photoalbums = new ArrayList<CFPhotoAlbum>();
+		this.componentModifiers = new ArrayList<CFComponentModifier>();
 		this.cfMobileDeviceProxies = new HashMap<String, CFMobileDeviceProxy>();
 		new CFTrashCan(mtApplication, this);
 		new CFTrashCan(mtApplication, this);
-		// new CFCopier(mtApplication, this);
+	}
+	
+	public void addComponentModifier(CFComponentModifier modifier){
+		this.componentModifiers.add(modifier);
 	}
 
 	protected void addCFComponent(CFComponent component) {
@@ -138,6 +143,9 @@ public class CFScene extends AbstractScene implements CFTabletopServiceListener 
 	}
 
 	protected void cFComponentDropped(CFComponent component) {
+		for(CFComponentModifier modifier : this.componentModifiers){
+			modifier.handleMovedCFComponent(component);
+		}
 			for (CFComponent otherComponent : this.getCfComponents()) {
 				if (!component.equals(otherComponent) && component.getDistanceto(otherComponent) < this.CRITICAL_STACK_DISTANCE) {
 					otherComponent.handleDroppedCFComponent(component);

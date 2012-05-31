@@ -1,5 +1,7 @@
 package org.frans.thesis.test;
 
+import org.frans.thesis.GUI.CFAutoRotator;
+import org.frans.thesis.GUI.CFAutoScaler;
 import org.frans.thesis.GUI.CFScene;
 import org.frans.thesis.service.CFTabletopService;
 import org.mt4j.MTApplication;
@@ -25,6 +27,8 @@ public class TestProgram extends MTApplication{
 	@Override
 	public void startUp() {
 		scene = new CFScene(this, "CFScene");
+		scene.addComponentModifier(new CFAutoRotator());
+		scene.addComponentModifier(new CFAutoScaler());
 		this.addScene(scene);
 	}
 }
