@@ -123,6 +123,9 @@ public abstract class CFComponent {
 					public boolean processGestureEvent(MTGestureEvent ge) {
 						DragEvent de = (DragEvent) ge;
 						switch (de.getId()) {
+						case MTGestureEvent.GESTURE_UPDATED:
+							getCFScene().cfComponentMoved(getCFComponent());
+							break;
 						case MTGestureEvent.GESTURE_ENDED:
 							getCFScene().cFComponentDropped(getCFComponent());
 							break;
