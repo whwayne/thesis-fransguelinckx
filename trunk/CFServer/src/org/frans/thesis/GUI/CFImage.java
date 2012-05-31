@@ -15,7 +15,7 @@ import org.mt4j.util.math.Vector3D;
 
 import processing.core.PImage;
 
-public class CFImage extends CFComponent implements IGestureEventListener {
+public class CFImage extends CFComponent {
 
 	private MTColor color;
 	private CFFile image;
@@ -26,7 +26,6 @@ public class CFImage extends CFComponent implements IGestureEventListener {
 		this.color = color;
 		this.image = image;
 		PImage pImage = getMTApplication().loadImage(image.getFile().getPath());
-		// this.component = new MTRectangle(this.mtApplication, pImage);
 		this.component.setTexture(pImage);
 		this.scaleImageToStackSize();
 
@@ -43,7 +42,6 @@ public class CFImage extends CFComponent implements IGestureEventListener {
 	}
 
 	private void setUpGestures(MTApplication mtApplication) {
-		this.getMTComponent().addGestureListener(DragProcessor.class, this);
 		this.getMTComponent().registerInputProcessor(new TapAndHoldProcessor(mtApplication, 1500));
 		this.getMTComponent().addGestureListener(TapAndHoldProcessor.class,new TapAndHoldVisualizer(mtApplication, this.getCFScene().getCanvas()));
 		this.getMTComponent().addGestureListener(TapAndHoldProcessor.class,
@@ -92,41 +90,6 @@ public class CFImage extends CFComponent implements IGestureEventListener {
 	@Override
 	public boolean isStackable() {
 		return true;
-	}
-
-	@Override
-	public boolean processGestureEvent(MTGestureEvent ge) {
-		DragEvent de = (DragEvent) ge;
-		// de.getTarget().translateGlobal(de.getTranslationVect());
-
-		switch (de.getId()) {
-		case MTGestureEvent.GESTURE_ENDED:
-			if (this.getCFScene().isCloseToCFComponent(this)) {
-				if (this.getCFScene().getNearCFComponents(this).get(0)
-						.isStackable()) {
-//					this.getCFScene().addToStack(this);
-				} else {
-					for (CFComponent component : this.getCFScene()
-							.getNearCFComponents(this)) {
-						if (component.isPhotoAlbum()) {
-//							CFPhotoAlbum album = (CFPhotoAlbum) component;
-//							album.addImage(this);
-//							this.getCFScene().reloadAlbums();
-							break;
-						} else if (component.isMobileProxy()) {
-//							CFMobileDeviceProxy proxy = (CFMobileDeviceProxy) component;
-//							proxy.publishImageOnFacebook(this.getFile());
-//							this.getMTComponent().removeFromParent();
-
-						}
-					}
-				}
-			}
-			break;
-		default:
-			break;
-		}
-		return false;
 	}
 
 	@Override

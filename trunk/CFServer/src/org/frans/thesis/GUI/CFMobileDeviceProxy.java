@@ -152,21 +152,6 @@ public class CFMobileDeviceProxy extends CFComponent{
 	}
 
 	private void setUpGestures(MTApplication mtApplication) {
-//		this.getMTComponent().unregisterAllInputProcessors();
-//		this.getMTComponent().removeAllGestureEventListeners();
-
-//		this.getMTComponent().registerInputProcessor(
-//				new DragProcessor(mtApplication));
-//		this.getMTComponent().addGestureListener(DragProcessor.class,
-//				new DefaultDragAction());
-
-//		this.getMTComponent().registerInputProcessor(
-//				new RotateProcessor(mtApplication));
-//		this.getMTComponent().addGestureListener(RotateProcessor.class,
-//				new DefaultRotateAction());
-
-//		this.getMTComponent().registerInputProcessor(
-//				new TapProcessor(mtApplication));
 		this.getMTComponent().addGestureListener(TapProcessor.class,
 				new IGestureEventListener() {
 
