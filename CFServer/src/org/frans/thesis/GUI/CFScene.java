@@ -143,9 +143,6 @@ public class CFScene extends AbstractScene implements CFTabletopServiceListener 
 	}
 
 	protected void cFComponentDropped(CFComponent component) {
-		for(CFComponentModifier modifier : this.componentModifiers){
-			modifier.handleMovedCFComponent(component);
-		}
 			for (CFComponent otherComponent : this.getCfComponents()) {
 				if (!component.equals(otherComponent) && component.getDistanceto(otherComponent) < this.CRITICAL_STACK_DISTANCE) {
 					otherComponent.handleDroppedCFComponent(component);
@@ -156,5 +153,13 @@ public class CFScene extends AbstractScene implements CFTabletopServiceListener 
 	public void removeCFComponent(CFComponent component) {
 //		this.getCfComponents().remove(component);
 		this.getCanvas().removeChild(component.getMTComponent());
+	}
+
+	public void cfComponentMoved(CFComponent component) {
+		// TODO Auto-generated method stub
+		for(CFComponentModifier modifier : this.componentModifiers){
+			modifier.handleMovedCFComponent(component);
+		}
+		
 	}
 }
