@@ -18,9 +18,9 @@ public class CFPhotoAlbum extends CFComponent {
 	private Vector3D rightImagePosition;
 
 	public CFPhotoAlbum(MTApplication application, CFImage initialImage,
-			CFScene scene) {
+			CFPhotoScene scene) {
 		super(application, scene);
-		this.getCFScene().addPhotoalbum(this);
+		((CFPhotoScene) this.getCFScene()).addPhotoalbum(this);
 		this.mtApplication = application;
 		// this.component = new MTRectangle(application, DIMENSION_X,
 		// DIMENSION_Y);
@@ -171,7 +171,7 @@ public class CFPhotoAlbum extends CFComponent {
 		if(component instanceof CFImage){
 			CFImage image = (CFImage) component;
 			this.addImage(image);
-			this.getCFScene().reloadAlbums();
+			((CFPhotoScene) this.getCFScene()).reloadAlbums();
 		}
 	}
 

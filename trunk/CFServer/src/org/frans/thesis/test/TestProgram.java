@@ -2,13 +2,13 @@ package org.frans.thesis.test;
 
 import org.frans.thesis.GUI.CFAutoRotator;
 import org.frans.thesis.GUI.CFAutoScaler;
-import org.frans.thesis.GUI.CFScene;
+import org.frans.thesis.GUI.CFPhotoScene;
 import org.frans.thesis.service.CFTabletopService;
 import org.mt4j.MTApplication;
 
 public class TestProgram extends MTApplication{                              
 
-	private static CFScene scene;
+	private static CFPhotoScene scene;
 	private static final long serialVersionUID = 7630065981396687470L;
 	private static CFTabletopService service;
 	
@@ -26,7 +26,7 @@ public class TestProgram extends MTApplication{
 	
 	@Override
 	public void startUp() {
-		scene = new CFScene(this, "CFScene");
+		scene = new CFPhotoScene(this, "CFPhotoScene");
 		scene.addComponentModifier(new CFAutoRotator());
 		scene.addComponentModifier(new CFAutoScaler());
 		this.addScene(scene);

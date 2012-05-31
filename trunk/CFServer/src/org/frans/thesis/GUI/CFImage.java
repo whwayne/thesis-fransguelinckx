@@ -62,8 +62,7 @@ public class CFImage extends CFComponent {
 	}
 
 	private void createNewPhotoalbum() {
-		CFPhotoAlbum album = new CFPhotoAlbum(getMTApplication(), getCFImage(),
-				getCFScene());
+		CFPhotoAlbum album = new CFPhotoAlbum(getMTApplication(), getCFImage(),(CFPhotoScene) getCFScene());
 		album.addImage(getCFImage());
 
 	}
