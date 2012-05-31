@@ -25,25 +25,32 @@ public class CFScene extends AbstractScene implements CFTabletopServiceListener 
 		this.cfMobileDeviceProxies = new HashMap<String, CFMobileDeviceProxy>();
 		new CFTrashCan(mtApplication, this);
 		new CFTrashCan(mtApplication, this);
-//		new CFCopier(mtApplication, this);
+		// new CFCopier(mtApplication, this);
 	}
 
 	protected void addCFComponent(CFComponent component) {
 		if (!this.getCfComponents().contains(component)) {
 			this.getCanvas().addChild(component.getMTComponent());
-			component.getMTComponent().setPositionGlobal(new Vector3D(this.getMTApplication().getWidth()/2, this.getMTApplication().getHeight()/2));
+			component.getMTComponent().setPositionGlobal(
+					new Vector3D(this.getMTApplication().getWidth() / 2, this
+							.getMTApplication().getHeight() / 2));
 			this.getCfComponents().add(component);
 		}
 	}
 
 	@Override
-	public void addMobileDevice(String clientName, CFTabletopClientManager tabletopClientManager) {
+	public void addMobileDevice(String clientName,
+			CFTabletopClientManager tabletopClientManager) {
 		if (!this.getCfMobileDeviceProxies().keySet().contains(clientName)) {
 			MTColor color = MTColor.randomColor();
 			color.setAlpha(MTColor.ALPHA_HALF_TRANSPARENCY);
-			CFMobileDeviceProxy proxy = new CFMobileDeviceProxy(getMTApplication(), clientName, this, tabletopClientManager, color);
+			CFMobileDeviceProxy proxy = new CFMobileDeviceProxy(
+					getMTApplication(), clientName, this,
+					tabletopClientManager, color);
 			this.getCfMobileDeviceProxies().put(clientName, proxy);
-			proxy.getMTComponent().setPositionGlobal(new Vector3D(this.getMTApplication().getWidth()/2, this.getMTApplication().getHeight()/2));
+			proxy.getMTComponent().setPositionGlobal(
+					new Vector3D(this.getMTApplication().getWidth() / 2, this
+							.getMTApplication().getHeight() / 2));
 			this.getCanvas().addChild(proxy.getMTComponent());
 		}
 	}
@@ -54,9 +61,9 @@ public class CFScene extends AbstractScene implements CFTabletopServiceListener 
 		component1.scaleImageToStackSize();
 		CFComponent component2 = nearCFComponents.get(0);
 		Vector3D position = component2.getPosition();
-		if(component2.isStackable()){
-				component2.scaleImageToStackSize();
-				component1.reposition(position);
+		if (component2.isStackable()) {
+			component2.scaleImageToStackSize();
+			component1.reposition(position);
 		}
 	}
 
@@ -102,7 +109,7 @@ public class CFScene extends AbstractScene implements CFTabletopServiceListener 
 				return true;
 			}
 		}
-		for(CFComponent component : this.getCfMobileDeviceProxies().values()){
+		for (CFComponent component : this.getCfMobileDeviceProxies().values()) {
 			if (!component.equals(image1)
 					&& image1.getDistanceto(component) < this.CRITICAL_STACK_DISTANCE) {
 				return true;
@@ -113,8 +120,9 @@ public class CFScene extends AbstractScene implements CFTabletopServiceListener 
 
 	@Override
 	public void removeMobileDevice(String name) {
-		if(this.getCfMobileDeviceProxies().containsKey(name)){
-			CFMobileDeviceProxy proxy = this.getCfMobileDeviceProxies().get(name);
+		if (this.getCfMobileDeviceProxies().containsKey(name)) {
+			CFMobileDeviceProxy proxy = this.getCfMobileDeviceProxies().get(
+					name);
 			this.getCanvas().removeChild(proxy.getMTComponent());
 			this.getCfMobileDeviceProxies().remove(proxy);
 		}
@@ -127,9 +135,9 @@ public class CFScene extends AbstractScene implements CFTabletopServiceListener 
 	public void addPhotoalbum(CFPhotoAlbum cfPhotoAlbum) {
 		this.photoalbums.add(cfPhotoAlbum);
 	}
-	
-	protected void reloadAlbums(){
-		for(CFPhotoAlbum album : this.photoalbums){
+
+	protected void reloadAlbums() {
+		for (CFPhotoAlbum album : this.photoalbums) {
 			album.unloadImages();
 			album.loadImages();
 		}
@@ -138,5 +146,18 @@ public class CFScene extends AbstractScene implements CFTabletopServiceListener 
 	@Override
 	public void setIdle(String name) {
 		this.getCfMobileDeviceProxies().get(name).stopSpinner();
+	}
+
+	protected void cFComponentDropped(CFComponent component) {
+			for (CFComponent otherComponent : this.getCfComponents()) {
+				if (!component.equals(otherComponent) && component.getDistanceto(otherComponent) < this.CRITICAL_STACK_DISTANCE) {
+					otherComponent.handleDroppedCFComponent(component);
+				}
+			}
+	}
+
+	public void removeCFComponent(CFComponent component) {
+//		this.getCfComponents().remove(component);
+		this.getCanvas().removeChild(component.getMTComponent());
 	}
 }

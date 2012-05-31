@@ -205,4 +205,18 @@ public class CFMobileDeviceProxy extends CFComponent{
 	public void stopSpinner() {
 		spinner.stop();
 	}
+
+	@Override
+	public void handleDroppedCFComponent(CFComponent component) {
+		if(component instanceof CFImage){
+			CFImage image = (CFImage) component;
+			this.publishImageOnFacebook(image.getFile());
+			image.getMTComponent().removeFromParent();
+		}else if(component instanceof CFPhotoAlbum){
+			CFPhotoAlbum album = (CFPhotoAlbum) component;
+			for(CFImage image : album.getImages()){
+				this.publishImageOnFacebook(image.getFile());
+			}
+		}
+	}
 }

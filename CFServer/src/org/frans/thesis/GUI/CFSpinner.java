@@ -44,4 +44,10 @@ public class CFSpinner extends CFComponent {
 		this.component.setVisible(false);
 	}
 
+	@Override
+	public void handleDroppedCFComponent(CFComponent component) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -43,10 +43,13 @@ public abstract class CFComponent {
 	private void setUpGestures(MTApplication mtApplication) {
 		this.getMTComponent().unregisterAllInputProcessors();
 		this.getMTComponent().removeAllGestureEventListeners();
-		
-		this.getMTComponent().registerInputProcessor(new DragProcessor(mtApplication));
-		this.getMTComponent().addGestureListener(DragProcessor.class, new DefaultDragAction());
-		this.getMTComponent().addGestureListener(DragProcessor.class,new IGestureEventListener() {
+
+		this.getMTComponent().registerInputProcessor(
+				new DragProcessor(mtApplication));
+		this.getMTComponent().addGestureListener(DragProcessor.class,
+				new DefaultDragAction());
+		this.getMTComponent().addGestureListener(DragProcessor.class,
+				new IGestureEventListener() {
 					@Override
 					public boolean processGestureEvent(MTGestureEvent ge) {
 						DragEvent de = (DragEvent) ge;
@@ -104,7 +107,7 @@ public abstract class CFComponent {
 									// System.out.println("zone 8");
 									rotateTo(90);
 									scaleImageToStackSize();
-								}else if(autoScaleIsOn()){
+								} else if (autoScaleIsOn()) {
 									autoScale();
 								}
 							}
@@ -117,47 +120,38 @@ public abstract class CFComponent {
 						return false;
 					}
 				});
-		this.getMTComponent().addGestureListener(DragProcessor.class, new IGestureEventListener() {
-			@Override
-			public boolean processGestureEvent(MTGestureEvent ge) {
-				DragEvent de = (DragEvent) ge;
-				switch (de.getId()) {
-				case MTGestureEvent.GESTURE_ENDED:
-					checkIfDroppedOnTrashCan();
-					break;
-				default:
-					break;
-				}
-				return false;
-			}
-		});
 		
-		this.getMTComponent().addGestureListener(DragProcessor.class, new IGestureEventListener() {
-			@Override
-			public boolean processGestureEvent(MTGestureEvent ge) {
-				DragEvent de = (DragEvent) ge;
-				switch (de.getId()) {
-				case MTGestureEvent.GESTURE_ENDED:
-					checkIfDroppedOnCopier();
-					break;
-				default:
-					break;
-				}
-				return false;
-			}
-		});
-		
-		this.getMTComponent().registerInputProcessor(new ScaleProcessor(mtApplication));
-		this.getMTComponent().addGestureListener(ScaleProcessor.class,new IGestureEventListener() {
-			
-			@Override
-			public boolean processGestureEvent(MTGestureEvent ge) {
-				ScaleEvent se = (ScaleEvent) ge;
-				scale(se.getScaleFactorX(), se.getScaleFactorY(), se.getScaleFactorZ(), se.getScalingPoint());
-				return false;
-			}
-		});
-		this.getMTComponent().addGestureListener(ScaleProcessor.class,new IGestureEventListener() {
+		this.getMTComponent().addGestureListener(DragProcessor.class,
+				new IGestureEventListener() {
+					@Override
+					public boolean processGestureEvent(MTGestureEvent ge) {
+						DragEvent de = (DragEvent) ge;
+						switch (de.getId()) {
+						case MTGestureEvent.GESTURE_ENDED:
+							getCFScene().cFComponentDropped(getCFComponent());
+							break;
+						default:
+							break;
+						}
+						return false;
+					}
+				});
+
+		this.getMTComponent().registerInputProcessor(
+				new ScaleProcessor(mtApplication));
+		this.getMTComponent().addGestureListener(ScaleProcessor.class,
+				new IGestureEventListener() {
+
+					@Override
+					public boolean processGestureEvent(MTGestureEvent ge) {
+						ScaleEvent se = (ScaleEvent) ge;
+						scale(se.getScaleFactorX(), se.getScaleFactorY(),
+								se.getScaleFactorZ(), se.getScalingPoint());
+						return false;
+					}
+				});
+		this.getMTComponent().addGestureListener(ScaleProcessor.class,
+				new IGestureEventListener() {
 
 					@Override
 					public boolean processGestureEvent(MTGestureEvent ge) {
@@ -166,17 +160,21 @@ public abstract class CFComponent {
 					}
 				});
 
-		this.getMTComponent().registerInputProcessor(new RotateProcessor(mtApplication));
-		this.getMTComponent().addGestureListener(RotateProcessor.class,new IGestureEventListener() {
-			
-			@Override
-			public boolean processGestureEvent(MTGestureEvent ge) {
-				RotateEvent re = (RotateEvent) ge;
-				rotate(re.getRotationPoint(), (int) re.getRotationDegrees());
-				return false;
-			}
-		});
-		this.getMTComponent().addGestureListener(RotateProcessor.class,new IGestureEventListener() {
+		this.getMTComponent().registerInputProcessor(
+				new RotateProcessor(mtApplication));
+		this.getMTComponent().addGestureListener(RotateProcessor.class,
+				new IGestureEventListener() {
+
+					@Override
+					public boolean processGestureEvent(MTGestureEvent ge) {
+						RotateEvent re = (RotateEvent) ge;
+						rotate(re.getRotationPoint(),
+								(int) re.getRotationDegrees());
+						return false;
+					}
+				});
+		this.getMTComponent().addGestureListener(RotateProcessor.class,
+				new IGestureEventListener() {
 
 					@Override
 					public boolean processGestureEvent(MTGestureEvent ge) {
@@ -185,8 +183,10 @@ public abstract class CFComponent {
 					}
 				});
 
-		this.getMTComponent().registerInputProcessor(new TapProcessor(mtApplication, 25, true, 350));
-		this.getMTComponent().addGestureListener(TapProcessor.class,new IGestureEventListener() {
+		this.getMTComponent().registerInputProcessor(
+				new TapProcessor(mtApplication, 25, true, 350));
+		this.getMTComponent().addGestureListener(TapProcessor.class,
+				new IGestureEventListener() {
 					public boolean processGestureEvent(MTGestureEvent ge) {
 						TapEvent te = (TapEvent) ge;
 						if (te.isDoubleTap()) {
@@ -197,19 +197,29 @@ public abstract class CFComponent {
 					}
 				});
 	}
-	
-	private double getDistanceToCenter(){
-		double result = 0;
-		float x = Math.abs(this.getMTComponent().getPosition(TransformSpace.GLOBAL).getX() - (this.getMTApplication().getWidth()/2));
-		float y = Math.abs(this.getMTComponent().getPosition(TransformSpace.GLOBAL).getY() - (this.getMTApplication().getHeight()/2));
-		result = Math.sqrt((x*x)+(y*y));
-		return result;
+
+	protected CFComponent getCFComponent() {
+		return this;
 	}
 
+	public abstract void handleDroppedCFComponent(CFComponent component);
+
+//	private double getDistanceToCenter() {
+//		double result = 0;
+//		float x = Math.abs(this.getMTComponent()
+//				.getPosition(TransformSpace.GLOBAL).getX()
+//				- (this.getMTApplication().getWidth() / 2));
+//		float y = Math.abs(this.getMTComponent()
+//				.getPosition(TransformSpace.GLOBAL).getY()
+//				- (this.getMTApplication().getHeight() / 2));
+//		result = Math.sqrt((x * x) + (y * y));
+//		return result;
+//	}
+
 	protected void autoScale() {
-//		double distance = getDistanceToCenter();
-		float scaleX = X_WIDTH/this.getWidth();
-		float scaleY = Y_HEIGHT/this.getHeight();
+		// double distance = getDistanceToCenter();
+		float scaleX = X_WIDTH / this.getWidth();
+		float scaleY = Y_HEIGHT / this.getHeight();
 		float scalefactor = Math.min(scaleX, scaleY);
 		this.scaleImage(scalefactor);
 	}
@@ -299,8 +309,8 @@ public abstract class CFComponent {
 				rotationPoint.y + this.getHeight() / 2);
 		this.getMTComponent().rotateZ(point, degrees);
 	}
-	
-	protected void scale(float x, float y, float z, Vector3D scalingPoint){
+
+	protected void scale(float x, float y, float z, Vector3D scalingPoint) {
 		this.getMTComponent().scale(x, y, z, scalingPoint);
 	}
 
@@ -323,19 +333,19 @@ public abstract class CFComponent {
 		float scalingWidthFactor = CFComponent.STANDARD_MEASURE
 				/ this.getWidth();
 		if (scalingHeightFactor < scalingWidthFactor) {
-			this.scale(scalingWidthFactor, scalingWidthFactor,
-					1, this.getMTComponent().getPosition(TransformSpace.GLOBAL));
+			this.scale(scalingWidthFactor, scalingWidthFactor, 1, this
+					.getMTComponent().getPosition(TransformSpace.GLOBAL));
 		} else {
-			this.scale(scalingHeightFactor,
-					scalingHeightFactor, 1,
-					this.getMTComponent().getPosition(TransformSpace.GLOBAL));
+			this.scale(scalingHeightFactor, scalingHeightFactor, 1, this
+					.getMTComponent().getPosition(TransformSpace.GLOBAL));
 		}
 	}
 
 	protected void scaleImage(float factor) {
-		this.scale(factor, factor, 1, this.getMTComponent().getPosition(TransformSpace.GLOBAL));
-//		this.getMTComponent().scale(factor, factor, 1,
-//				this.getMTComponent().getPosition(TransformSpace.GLOBAL));
+		this.scale(factor, factor, 1,
+				this.getMTComponent().getPosition(TransformSpace.GLOBAL));
+		// this.getMTComponent().scale(factor, factor, 1,
+		// this.getMTComponent().getPosition(TransformSpace.GLOBAL));
 	}
 
 	protected int getAngle() {
@@ -344,41 +354,5 @@ public abstract class CFComponent {
 
 	protected CFScene getCFScene() {
 		return this.scene;
-	}
-	
-	private void checkIfDroppedOnTrashCan(){
-		boolean hit = false;
-		if (getCFScene().isCloseToCFComponent(this)) {
-			for (CFComponent component : getCFScene().getNearCFComponents(this)) {
-				if(component.isTrashCan()){
-					hit = true;
-				}
-			}
-		}
-		if(hit){
-			this.getMTComponent().removeFromParent();
-		}
-	}
-	
-	private void checkIfDroppedOnCopier(){
-		boolean hit = false;
-		if (getCFScene().isCloseToCFComponent(this)) {
-			for (CFComponent component : getCFScene().getNearCFComponents(this)) {
-				if(component.isCopier()){
-					hit = true;
-				}
-			}
-		}
-		if(hit){
-			try {
-				this.getCFScene().addCFComponent((CFComponent)this.clone());
-			} catch (CloneNotSupportedException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-	
-	protected boolean isCopier() {
-		return false;
 	}
 }

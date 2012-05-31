@@ -61,7 +61,7 @@ public class CFPhotoAlbum extends CFComponent implements IGestureEventListener {
 		}
 	}
 
-	private ArrayList<CFImage> getImages() {
+	protected ArrayList<CFImage> getImages() {
 		return this.images;
 	}
 
@@ -213,6 +213,15 @@ public class CFPhotoAlbum extends CFComponent implements IGestureEventListener {
 		super.scale(x, y, z, scalingPoint);
 		this.DIMENSION_X *= x;
 		this.DIMENSION_Y *= y;
+	}
+
+	@Override
+	public void handleDroppedCFComponent(CFComponent component) {
+		if(component instanceof CFImage){
+			CFImage image = (CFImage) component;
+			this.addImage(image);
+			this.getCFScene().reloadAlbums();
+		}
 	}
 
 }
