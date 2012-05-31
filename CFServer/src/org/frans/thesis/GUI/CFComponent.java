@@ -18,13 +18,9 @@ import org.mt4j.util.math.Vector3D;
 
 public abstract class CFComponent {
 
-	private static final float STANDARD_MEASURE = 150;
-	private static final int X_LOW_TRESHHOLD = 480;
-	private static final int X_HIGH_TRESHHOLD = 1440;
-	private static final int Y_LOW_TRESHHOLD = 270;
-	private static final int Y_HIGH_TRESHHOLD = 810;
-	private static final int X_WIDTH = 960;
-	private static final int Y_HEIGHT = 540;
+	protected static final float STANDARD_MEASURE = 150;
+	protected static final int X_WIDTH = 960;
+	protected static final int Y_HEIGHT = 540;
 
 	protected MTRectangle component;
 	protected MTApplication mtApplication;
@@ -48,78 +44,78 @@ public abstract class CFComponent {
 				new DragProcessor(mtApplication));
 		this.getMTComponent().addGestureListener(DragProcessor.class,
 				new DefaultDragAction());
-		this.getMTComponent().addGestureListener(DragProcessor.class,
-				new IGestureEventListener() {
-					@Override
-					public boolean processGestureEvent(MTGestureEvent ge) {
-						DragEvent de = (DragEvent) ge;
-
-						switch (de.getId()) {
-						case MTGestureEvent.GESTURE_ENDED:
-							break;
-						case MTGestureEvent.GESTURE_UPDATED:
-
-							Vector3D position = getMTComponent().getPosition(
-									TransformSpace.GLOBAL);
-
-							if (autoRotateIsOn()) {
-								if (position.x < X_LOW_TRESHHOLD
-										&& position.y < Y_LOW_TRESHHOLD) {
-									// System.out.println("zone 1");
-									rotateTo(135);
-									scaleImageToStackSize();
-								} else if (position.x > X_LOW_TRESHHOLD
-										& position.x < X_HIGH_TRESHHOLD
-										&& position.y < Y_LOW_TRESHHOLD) {
-									// System.out.println("zone 2");
-									rotateTo(180);
-									scaleImageToStackSize();
-								} else if (position.x > X_HIGH_TRESHHOLD
-										&& position.y < Y_LOW_TRESHHOLD) {
-									// System.out.println("zone 3");
-									rotateTo(225);
-									scaleImageToStackSize();
-								} else if (position.x > X_HIGH_TRESHHOLD
-										&& position.y > Y_LOW_TRESHHOLD
-										&& position.y < Y_HIGH_TRESHHOLD) {
-									// System.out.println("zone 4");
-									rotateTo(270);
-									scaleImageToStackSize();
-								} else if (position.x > X_HIGH_TRESHHOLD
-										&& position.y > Y_HIGH_TRESHHOLD) {
-									// System.out.println("zone 5");
-									rotateTo(315);
-									scaleImageToStackSize();
-								} else if (position.x > X_LOW_TRESHHOLD
-										&& position.x < X_HIGH_TRESHHOLD
-										&& position.y > Y_HIGH_TRESHHOLD) {
-									// System.out.println("zone 6");
-									rotateTo(0);
-									scaleImageToStackSize();
-								} else if (position.x < X_LOW_TRESHHOLD
-										&& position.y > Y_HIGH_TRESHHOLD) {
-									// System.out.println("zone 7");
-									rotateTo(45);
-									scaleImageToStackSize();
-								} else if (position.x < X_LOW_TRESHHOLD
-										&& position.y > Y_LOW_TRESHHOLD
-										&& position.y < Y_HIGH_TRESHHOLD) {
-									// System.out.println("zone 8");
-									rotateTo(90);
-									scaleImageToStackSize();
-								} else if (autoScaleIsOn()) {
-									autoScale();
-								}
-							}
-
-							break;
-						default:
-							break;
-
-						}
-						return false;
-					}
-				});
+//		this.getMTComponent().addGestureListener(DragProcessor.class,
+//				new IGestureEventListener() {
+//					@Override
+//					public boolean processGestureEvent(MTGestureEvent ge) {
+//						DragEvent de = (DragEvent) ge;
+//
+//						switch (de.getId()) {
+//						case MTGestureEvent.GESTURE_ENDED:
+//							break;
+//						case MTGestureEvent.GESTURE_UPDATED:
+//
+//							Vector3D position = getMTComponent().getPosition(
+//									TransformSpace.GLOBAL);
+//
+//							if (autoRotateIsOn()) {
+//								if (position.x < X_LOW_TRESHHOLD
+//										&& position.y < Y_LOW_TRESHHOLD) {
+//									// System.out.println("zone 1");
+//									rotateTo(135);
+//									scaleImageToStackSize();
+//								} else if (position.x > X_LOW_TRESHHOLD
+//										& position.x < X_HIGH_TRESHHOLD
+//										&& position.y < Y_LOW_TRESHHOLD) {
+//									// System.out.println("zone 2");
+//									rotateTo(180);
+//									scaleImageToStackSize();
+//								} else if (position.x > X_HIGH_TRESHHOLD
+//										&& position.y < Y_LOW_TRESHHOLD) {
+//									// System.out.println("zone 3");
+//									rotateTo(225);
+//									scaleImageToStackSize();
+//								} else if (position.x > X_HIGH_TRESHHOLD
+//										&& position.y > Y_LOW_TRESHHOLD
+//										&& position.y < Y_HIGH_TRESHHOLD) {
+//									// System.out.println("zone 4");
+//									rotateTo(270);
+//									scaleImageToStackSize();
+//								} else if (position.x > X_HIGH_TRESHHOLD
+//										&& position.y > Y_HIGH_TRESHHOLD) {
+//									// System.out.println("zone 5");
+//									rotateTo(315);
+//									scaleImageToStackSize();
+//								} else if (position.x > X_LOW_TRESHHOLD
+//										&& position.x < X_HIGH_TRESHHOLD
+//										&& position.y > Y_HIGH_TRESHHOLD) {
+//									// System.out.println("zone 6");
+//									rotateTo(0);
+//									scaleImageToStackSize();
+//								} else if (position.x < X_LOW_TRESHHOLD
+//										&& position.y > Y_HIGH_TRESHHOLD) {
+//									// System.out.println("zone 7");
+//									rotateTo(45);
+//									scaleImageToStackSize();
+//								} else if (position.x < X_LOW_TRESHHOLD
+//										&& position.y > Y_LOW_TRESHHOLD
+//										&& position.y < Y_HIGH_TRESHHOLD) {
+//									// System.out.println("zone 8");
+//									rotateTo(90);
+//									scaleImageToStackSize();
+//								} else if (autoScaleIsOn()) {
+//									autoScale();
+//								}
+//							}
+//
+//							break;
+//						default:
+//							break;
+//
+//						}
+//						return false;
+//					}
+//				});
 		
 		this.getMTComponent().addGestureListener(DragProcessor.class,
 				new IGestureEventListener() {
@@ -224,11 +220,11 @@ public abstract class CFComponent {
 		this.scaleImage(scalefactor);
 	}
 
-	private boolean autoRotateIsOn() {
+	public boolean autoRotateIsOn() {
 		return this.autoRotate;
 	}
 
-	private boolean autoScaleIsOn() {
+	public boolean autoScaleIsOn() {
 		return this.autoScale;
 	}
 
