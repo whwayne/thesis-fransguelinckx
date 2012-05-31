@@ -86,7 +86,7 @@ public class CFPhotoAlbum extends CFComponent implements IGestureEventListener {
 //			this.getMTComponent().addChild(leftImage.getImage());
 			leftImage.getImage().setVisible(true);
 			this.resizeImage(leftImage);
-			// leftImage.rotateTo(this.getAngle());
+//			 leftImage.rotateTo(this.getAngle());
 			leftImage.getImage().setPositionRelativeToParent(leftImagePosition);
 		}
 		if (rightImage != null) {
