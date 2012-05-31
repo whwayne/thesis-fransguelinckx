@@ -11,6 +11,7 @@ import org.mt4j.input.inputProcessors.componentProcessors.dragProcessor.DragProc
 import org.mt4j.input.inputProcessors.componentProcessors.tapAndHoldProcessor.TapAndHoldEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.tapAndHoldProcessor.TapAndHoldProcessor;
 import org.mt4j.util.MTColor;
+import org.mt4j.util.math.Vector3D;
 
 import processing.core.PImage;
 
@@ -42,32 +43,11 @@ public class CFImage extends CFComponent implements IGestureEventListener {
 	}
 
 	private void setUpGestures(MTApplication mtApplication) {
-		// this.getMTComponent().unregisterAllInputProcessors();
-		// this.getMTComponent().removeAllGestureEventListeners();
-
-		// this.getMTComponent().registerInputProcessor(
-		// new DragProcessor(mtApplication));
 		this.getMTComponent().addGestureListener(DragProcessor.class, this);
-
-		// this.getMTComponent().registerInputProcessor(
-		// new ScaleProcessor(mtApplication));
-		// this.getMTComponent().addGestureListener(ScaleProcessor.class,
-		// new DefaultScaleAction());
-		//
-		// this.getMTComponent().registerInputProcessor(
-		// new RotateProcessor(mtApplication));
-		// this.getMTComponent().addGestureListener(RotateProcessor.class,
-		// new DefaultRotateAction());
-
-		this.getMTComponent().registerInputProcessor(
-				new TapAndHoldProcessor(mtApplication, 1500));
-		this.getMTComponent().addGestureListener(
-				TapAndHoldProcessor.class,
-				new TapAndHoldVisualizer(mtApplication, this.getCFScene()
-						.getCanvas()));
+		this.getMTComponent().registerInputProcessor(new TapAndHoldProcessor(mtApplication, 1500));
+		this.getMTComponent().addGestureListener(TapAndHoldProcessor.class,new TapAndHoldVisualizer(mtApplication, this.getCFScene().getCanvas()));
 		this.getMTComponent().addGestureListener(TapAndHoldProcessor.class,
 				new IGestureEventListener() {
-
 					@Override
 					public boolean processGestureEvent(MTGestureEvent ge) {
 						TapAndHoldEvent th = (TapAndHoldEvent) ge;
@@ -124,19 +104,19 @@ public class CFImage extends CFComponent implements IGestureEventListener {
 			if (this.getCFScene().isCloseToCFComponent(this)) {
 				if (this.getCFScene().getNearCFComponents(this).get(0)
 						.isStackable()) {
-					this.getCFScene().addToStack(this);
+//					this.getCFScene().addToStack(this);
 				} else {
 					for (CFComponent component : this.getCFScene()
 							.getNearCFComponents(this)) {
 						if (component.isPhotoAlbum()) {
-							CFPhotoAlbum album = (CFPhotoAlbum) component;
-							album.addImage(this);
-							this.getCFScene().reloadAlbums();
+//							CFPhotoAlbum album = (CFPhotoAlbum) component;
+//							album.addImage(this);
+//							this.getCFScene().reloadAlbums();
 							break;
 						} else if (component.isMobileProxy()) {
-							CFMobileDeviceProxy proxy = (CFMobileDeviceProxy) component;
-							proxy.publishImageOnFacebook(this.getFile());
-							this.getMTComponent().removeFromParent();
+//							CFMobileDeviceProxy proxy = (CFMobileDeviceProxy) component;
+//							proxy.publishImageOnFacebook(this.getFile());
+//							this.getMTComponent().removeFromParent();
 
 						}
 					}
@@ -147,5 +127,17 @@ public class CFImage extends CFComponent implements IGestureEventListener {
 			break;
 		}
 		return false;
+	}
+
+	@Override
+	public void handleDroppedCFComponent(CFComponent component) {
+		if(component instanceof CFImage){
+			this.scaleImageToStackSize();
+			CFImage image = (CFImage) component;
+			image.scaleImageToStackSize();
+			Vector3D position = this.getPosition();
+			image.reposition(position);
+			
+		}
 	}
 }

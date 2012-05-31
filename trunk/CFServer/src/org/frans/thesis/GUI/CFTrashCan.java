@@ -42,4 +42,13 @@ public class CFTrashCan extends CFComponent{
 		return true;
 	}
 
+	@Override
+	public void handleDroppedCFComponent(CFComponent component) {
+		if(component instanceof CFImage){
+			this.getCFScene().removeCFComponent(component);
+		}else if(component instanceof CFPhotoAlbum){
+			this.getCFScene().removeCFComponent(component);
+		}
+	}
+
 }

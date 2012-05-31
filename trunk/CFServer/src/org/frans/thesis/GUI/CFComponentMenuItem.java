@@ -58,4 +58,10 @@ public class CFComponentMenuItem extends CFComponent {
 	public void setVisible(boolean visible) {
 		this.getMTComponent().setVisible(visible);
 	}
+
+	@Override
+	public void handleDroppedCFComponent(CFComponent component) {
+		// TODO Auto-generated method stub
+		
+	}
 }
