@@ -283,20 +283,6 @@ public abstract class CFComponent {
 		return this.getMTComponent().getWidthXY(TransformSpace.GLOBAL);
 	}
 
-	protected abstract boolean isStackable();
-
-	protected boolean isPhotoAlbum() {
-		return false;
-	}
-
-	protected boolean isTrashCan() {
-		return false;
-	}
-
-	protected boolean isMobileProxy() {
-		return false;
-	}
-
 	protected void reposition(Vector3D position) {
 		this.getMTComponent().setPositionGlobal(position);
 	}

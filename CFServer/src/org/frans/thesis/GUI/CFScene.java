@@ -48,22 +48,11 @@ public class CFScene extends AbstractScene implements CFTabletopServiceListener 
 					getMTApplication(), clientName, this,
 					tabletopClientManager, color);
 			this.getCfMobileDeviceProxies().put(clientName, proxy);
+			this.getCfComponents().add(proxy);
 			proxy.getMTComponent().setPositionGlobal(
 					new Vector3D(this.getMTApplication().getWidth() / 2, this
 							.getMTApplication().getHeight() / 2));
 			this.getCanvas().addChild(proxy.getMTComponent());
-		}
-	}
-
-	protected void addToStack(CFComponent component1) {
-		ArrayList<CFComponent> nearCFComponents = this
-				.getNearCFComponents(component1);
-		component1.scaleImageToStackSize();
-		CFComponent component2 = nearCFComponents.get(0);
-		Vector3D position = component2.getPosition();
-		if (component2.isStackable()) {
-			component2.scaleImageToStackSize();
-			component1.reposition(position);
 		}
 	}
 

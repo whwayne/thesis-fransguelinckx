@@ -29,11 +29,6 @@ public class CFSpinner extends CFComponent {
 		this.getMTComponent().setPositionRelativeToParent(new Vector3D(this.parent.getWidth()-25, this.parent.getHeight()-25));
 	}
 
-	@Override
-	protected boolean isStackable() {
-		return false;
-	}
-
 	public void start() {
 		animation.play();
 		this.component.setVisible(true);
