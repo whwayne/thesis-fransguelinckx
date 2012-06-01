@@ -1,7 +1,9 @@
-package org.frans.thesis.GUI;
+package org.frans.thesis.PhotoApp;
 
 import gifAnimation.Gif;
 
+import org.frans.thesis.GUI.CFComponent;
+import org.frans.thesis.GUI.CFScene;
 import org.mt4j.MTApplication;
 import org.mt4j.util.math.Vector3D;
 

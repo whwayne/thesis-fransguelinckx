@@ -1,8 +1,10 @@
-package org.frans.thesis.GUI;
+package org.frans.thesis.PhotoApp;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.frans.thesis.GUI.CFComponent;
+import org.frans.thesis.GUI.CFScene;
 import org.frans.thesis.service.CFFile;
 import org.frans.thesis.service.CFTabletopClientManager;
 import org.frans.thesis.service.CFTabletopServiceListener;

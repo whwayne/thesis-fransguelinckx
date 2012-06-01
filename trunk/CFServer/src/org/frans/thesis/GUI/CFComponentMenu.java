@@ -20,7 +20,7 @@ public class CFComponentMenu {
 		this.menuItems = new ArrayList<CFComponentMenuItem>();
 	}
 
-	protected void addMenuItem(String fileName,
+	public void addMenuItem(String fileName,
 			CFComponentMenuItemListener listener) {
 		CFComponentMenuItem menuItem = new CFComponentMenuItem(fileName,
 				listener, getMtApplication(), this.getOwner().getCFScene());
@@ -41,11 +41,11 @@ public class CFComponentMenu {
 		return mtApplication;
 	}
 
-	protected boolean isVisible() {
+	public boolean isVisible() {
 		return this.visible;
 	}
 	
-	protected void positionMenuItemsLeftAndRight(){
+	public void positionMenuItemsLeftAndRight(){
 		CFComponent owner = this.getOwner();
 		Vector3D leftPosition = owner.getMTComponent().getPosition(TransformSpace.GLOBAL);
 		leftPosition.translate(new Vector3D(-owner.getWidth()/2, 0));
@@ -56,7 +56,7 @@ public class CFComponentMenu {
 		this.getMenuItems().get(1).setPosition(rightPosition);
 	}
 
-	protected void repositionMenuItemsInCircle() {
+	public void repositionMenuItemsInCircle() {
 		int degrees = 0;
 		for(CFComponentMenuItem item : this.getMenuItems()){
 			item.setPosition(new Vector3D(getOwner().getPosition().x, getOwner().getPosition().y-120));
@@ -65,7 +65,7 @@ public class CFComponentMenu {
 		}
 	}
 
-	protected void setVisible(boolean visible) {
+	public void setVisible(boolean visible) {
 		if (visible && !this.isVisible()) {
 			this.visible = true;
 			for (CFComponentMenuItem item : this.getMenuItems()) {

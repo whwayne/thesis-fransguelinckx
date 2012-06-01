@@ -1,8 +1,8 @@
 package org.frans.thesis.test;
 
-import org.frans.thesis.GUI.CFAutoRotator;
-import org.frans.thesis.GUI.CFAutoScaler;
-import org.frans.thesis.GUI.CFPhotoScene;
+import org.frans.thesis.PhotoApp.CFAutoRotator;
+import org.frans.thesis.PhotoApp.CFAutoScaler;
+import org.frans.thesis.PhotoApp.CFPhotoScene;
 import org.frans.thesis.service.CFTabletopService;
 import org.mt4j.MTApplication;
 

@@ -1,5 +1,7 @@
-package org.frans.thesis.GUI;
+package org.frans.thesis.PhotoApp;
 
+import org.frans.thesis.GUI.CFComponent;
+import org.frans.thesis.GUI.CFScene;
 import org.frans.thesis.service.CFFile;
 import org.mt4j.MTApplication;
 import org.mt4j.components.visibleComponents.shapes.MTRectangle;
@@ -80,7 +82,7 @@ public class CFImage extends CFComponent {
 	}
 
 	@Override
-	protected MTRectangle getMTComponent() {
+	public MTRectangle getMTComponent() {
 		return this.component;
 	}
 

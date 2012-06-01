@@ -1,5 +1,9 @@
-package org.frans.thesis.GUI;
+package org.frans.thesis.PhotoApp;
 
+import org.frans.thesis.GUI.CFComponent;
+import org.frans.thesis.GUI.CFComponentMenu;
+import org.frans.thesis.GUI.CFComponentMenuItemListener;
+import org.frans.thesis.GUI.CFScene;
 import org.frans.thesis.service.CFFile;
 import org.frans.thesis.service.CFTabletopClient;
 import org.frans.thesis.service.CFTabletopClientManager;

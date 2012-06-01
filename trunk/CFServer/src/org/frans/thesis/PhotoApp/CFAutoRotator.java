@@ -1,5 +1,7 @@
-package org.frans.thesis.GUI;
+package org.frans.thesis.PhotoApp;
 
+import org.frans.thesis.GUI.CFComponent;
+import org.frans.thesis.GUI.CFComponentModifier;
 import org.mt4j.components.TransformSpace;
 import org.mt4j.util.math.Vector3D;
 
