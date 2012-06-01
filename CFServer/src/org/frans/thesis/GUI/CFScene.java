@@ -2,6 +2,7 @@ package org.frans.thesis.GUI;
 
 import java.util.ArrayList;
 
+import org.frans.thesis.PhotoApp.CFTrashCan;
 import org.mt4j.MTApplication;
 import org.mt4j.sceneManagement.AbstractScene;
 import org.mt4j.util.math.Vector3D;
@@ -24,7 +25,7 @@ public abstract class CFScene extends AbstractScene{
 		this.componentModifiers.add(modifier);
 	}
 
-	protected void addCFComponent(CFComponent component) {
+	public void addCFComponent(CFComponent component) {
 		if (!this.getCfComponents().contains(component)) {
 			this.getCanvas().addChild(component.getMTComponent());
 			component.getMTComponent().setPositionGlobal(

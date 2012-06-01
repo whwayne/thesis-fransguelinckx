@@ -1,5 +1,7 @@
-package org.frans.thesis.GUI;
+package org.frans.thesis.PhotoApp;
 
+import org.frans.thesis.GUI.CFComponent;
+import org.frans.thesis.GUI.CFScene;
 import org.mt4j.MTApplication;
 import org.mt4j.input.gestureAction.DefaultDragAction;
 import org.mt4j.input.gestureAction.DefaultRotateAction;

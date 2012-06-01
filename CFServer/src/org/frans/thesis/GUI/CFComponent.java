@@ -215,7 +215,7 @@ public abstract class CFComponent {
 //		return result;
 //	}
 
-	protected void autoScale() {
+	public void autoScale() {
 		// double distance = getDistanceToCenter();
 		float scaleX = X_WIDTH / this.getWidth();
 		float scaleY = Y_HEIGHT / this.getHeight();
@@ -251,7 +251,7 @@ public abstract class CFComponent {
 		return this.mtApplication;
 	}
 
-	protected float getDistanceto(CFComponent component) {
+	public float getDistanceto(CFComponent component) {
 		float result = 0;
 		float x, y;
 		x = Math.abs(this.getMTComponent()
@@ -266,11 +266,11 @@ public abstract class CFComponent {
 		return result;
 	}
 
-	protected float getHeight() {
+	public float getHeight() {
 		return this.getMTComponent().getHeightXY(TransformSpace.GLOBAL);
 	}
 
-	protected MTRectangle getMTComponent() {
+	public MTRectangle getMTComponent() {
 		return this.component;
 	}
 
@@ -278,7 +278,7 @@ public abstract class CFComponent {
 		return this.getMTComponent().getPosition(TransformSpace.GLOBAL);
 	}
 
-	protected float getWidth() {
+	public float getWidth() {
 		return this.getMTComponent().getWidthXY(TransformSpace.GLOBAL);
 	}
 
@@ -299,7 +299,7 @@ public abstract class CFComponent {
 		this.getMTComponent().scale(x, y, z, scalingPoint);
 	}
 
-	protected void rotateTo(int angle) {
+	public void rotateTo(int angle) {
 		int result = (angle - this.angle) % 360;
 		this.angle = angle;
 		this.getMTComponent().rotateZ(
@@ -312,7 +312,7 @@ public abstract class CFComponent {
 				(float) (Math.random() * 360), TransformSpace.LOCAL);
 	}
 
-	protected void scaleImageToStackSize() {
+	public void scaleImageToStackSize() {
 		float scalingHeightFactor = CFComponent.STANDARD_MEASURE
 				/ this.getHeight();
 		float scalingWidthFactor = CFComponent.STANDARD_MEASURE
@@ -326,7 +326,7 @@ public abstract class CFComponent {
 		}
 	}
 
-	protected void scaleImage(float factor) {
+	public void scaleImage(float factor) {
 		this.scale(factor, factor, 1,
 				this.getMTComponent().getPosition(TransformSpace.GLOBAL));
 		// this.getMTComponent().scale(factor, factor, 1,
