@@ -93,8 +93,7 @@ public class CFImage extends CFComponent {
 			CFImage image = (CFImage) component;
 			image.scaleImageToStackSize();
 			Vector3D position = this.getPosition();
-			image.reposition(position);
-			
+			image.reposition(position);	
 		}
 	}
 }
