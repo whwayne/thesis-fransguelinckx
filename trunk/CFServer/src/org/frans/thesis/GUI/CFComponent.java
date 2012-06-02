@@ -28,6 +28,7 @@ public abstract class CFComponent {
 	private CFScene scene;
 	private boolean autoRotate = true;
 	private boolean autoScale = true;
+	private CFComponentMenu menu;
 
 	public CFComponent(MTApplication mtApplication, CFScene scene) {
 		this.scene = scene;
@@ -44,78 +45,6 @@ public abstract class CFComponent {
 				new DragProcessor(mtApplication));
 		this.getMTComponent().addGestureListener(DragProcessor.class,
 				new DefaultDragAction());
-//		this.getMTComponent().addGestureListener(DragProcessor.class,
-//				new IGestureEventListener() {
-//					@Override
-//					public boolean processGestureEvent(MTGestureEvent ge) {
-//						DragEvent de = (DragEvent) ge;
-//
-//						switch (de.getId()) {
-//						case MTGestureEvent.GESTURE_ENDED:
-//							break;
-//						case MTGestureEvent.GESTURE_UPDATED:
-//
-//							Vector3D position = getMTComponent().getPosition(
-//									TransformSpace.GLOBAL);
-//
-//							if (autoRotateIsOn()) {
-//								if (position.x < X_LOW_TRESHHOLD
-//										&& position.y < Y_LOW_TRESHHOLD) {
-//									// System.out.println("zone 1");
-//									rotateTo(135);
-//									scaleImageToStackSize();
-//								} else if (position.x > X_LOW_TRESHHOLD
-//										& position.x < X_HIGH_TRESHHOLD
-//										&& position.y < Y_LOW_TRESHHOLD) {
-//									// System.out.println("zone 2");
-//									rotateTo(180);
-//									scaleImageToStackSize();
-//								} else if (position.x > X_HIGH_TRESHHOLD
-//										&& position.y < Y_LOW_TRESHHOLD) {
-//									// System.out.println("zone 3");
-//									rotateTo(225);
-//									scaleImageToStackSize();
-//								} else if (position.x > X_HIGH_TRESHHOLD
-//										&& position.y > Y_LOW_TRESHHOLD
-//										&& position.y < Y_HIGH_TRESHHOLD) {
-//									// System.out.println("zone 4");
-//									rotateTo(270);
-//									scaleImageToStackSize();
-//								} else if (position.x > X_HIGH_TRESHHOLD
-//										&& position.y > Y_HIGH_TRESHHOLD) {
-//									// System.out.println("zone 5");
-//									rotateTo(315);
-//									scaleImageToStackSize();
-//								} else if (position.x > X_LOW_TRESHHOLD
-//										&& position.x < X_HIGH_TRESHHOLD
-//										&& position.y > Y_HIGH_TRESHHOLD) {
-//									// System.out.println("zone 6");
-//									rotateTo(0);
-//									scaleImageToStackSize();
-//								} else if (position.x < X_LOW_TRESHHOLD
-//										&& position.y > Y_HIGH_TRESHHOLD) {
-//									// System.out.println("zone 7");
-//									rotateTo(45);
-//									scaleImageToStackSize();
-//								} else if (position.x < X_LOW_TRESHHOLD
-//										&& position.y > Y_LOW_TRESHHOLD
-//										&& position.y < Y_HIGH_TRESHHOLD) {
-//									// System.out.println("zone 8");
-//									rotateTo(90);
-//									scaleImageToStackSize();
-//								} else if (autoScaleIsOn()) {
-//									autoScale();
-//								}
-//							}
-//
-//							break;
-//						default:
-//							break;
-//
-//						}
-//						return false;
-//					}
-//				});
 		
 		this.getMTComponent().addGestureListener(DragProcessor.class,
 				new IGestureEventListener() {
@@ -339,5 +268,13 @@ public abstract class CFComponent {
 
 	protected CFScene getCFScene() {
 		return this.scene;
+	}
+	
+	protected CFComponentMenu getComponentMenu(){
+		return this.menu;
+	}
+	
+	protected void setComponentMenu(CFComponentMenu menu){
+		this.menu = menu;
 	}
 }

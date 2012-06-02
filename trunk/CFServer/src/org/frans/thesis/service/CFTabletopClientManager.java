@@ -5,6 +5,7 @@ import java.util.HashMap;
 public class CFTabletopClientManager {
 	
 	private HashMap<String, CFTabletopClient> clients;
+	
 	private CFTabletopService service;
 	
 	public CFTabletopClientManager(CFTabletopService service){

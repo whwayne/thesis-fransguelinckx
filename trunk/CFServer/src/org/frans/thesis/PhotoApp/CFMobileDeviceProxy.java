@@ -31,7 +31,6 @@ public class CFMobileDeviceProxy extends CFComponent{
 					+ MTApplication.separator + "thesis" + MTApplication.separator
 					+ "GUI" + MTApplication.separator + "data"
 					+ MTApplication.separator + "facebook_logo.png";
-	private CFComponentMenu menu;
 	private String clientName;
 	private CFSpinner spinner;
 	
@@ -65,15 +64,15 @@ public class CFMobileDeviceProxy extends CFComponent{
 	}
 
 	private void createMenu() {
-		this.menu = new CFComponentMenu(this, mtApplication);
-		this.menu.addMenuItem("photos.png", new CFComponentMenuItemListener() {
+		this.setComponentMenu(new CFComponentMenu(this, mtApplication));
+		this.getComponentMenu().addMenuItem("photos.png", new CFComponentMenuItemListener() {
 
 			@Override
 			public void processEvent() {
 				downloadPhotos();
 			}
 		});
-		this.menu.addMenuItem("calendar.png",
+		this.getComponentMenu().addMenuItem("calendar.png",
 				new CFComponentMenuItemListener() {
 
 					@Override
@@ -81,14 +80,14 @@ public class CFMobileDeviceProxy extends CFComponent{
 						downloadCalendar();
 					}
 				});
-		this.menu.addMenuItem("pdf.png", new CFComponentMenuItemListener() {
+		this.getComponentMenu().addMenuItem("pdf.png", new CFComponentMenuItemListener() {
 
 			@Override
 			public void processEvent() {
 				downloadPdf();
 			}
 		});
-		this.menu.repositionMenuItemsInCircle();
+		this.getComponentMenu().repositionMenuItemsInCircle();
 	}
 
 	private void downloadCalendar() {
@@ -102,10 +101,6 @@ public class CFMobileDeviceProxy extends CFComponent{
 	private void downloadPhotos() {
 		this.getTabletopClientManager().setStatus(this.getClientName(), CFTabletopClient.REQUESTING_PHOTOS);
 		this.startSpinner();
-	}
-
-	private CFComponentMenu getMenu() {
-		return this.menu;
 	}
 
 	private CFTabletopClientManager getTabletopClientManager() {
@@ -166,10 +161,10 @@ public class CFMobileDeviceProxy extends CFComponent{
 	}
 
 	private void showMenu() {
-		if (this.getMenu().isVisible()) {
-			this.getMenu().setVisible(false);
+		if (this.getComponentMenu().isVisible()) {
+			this.getComponentMenu().setVisible(false);
 		} else {
-			this.getMenu().setVisible(true);
+			this.getComponentMenu().setVisible(true);
 		}
 	}
 	
@@ -178,9 +173,9 @@ public class CFMobileDeviceProxy extends CFComponent{
 	}
 	
 
-	protected boolean isMobileProxy() {
-		return true;
-	}
+//	protected boolean isMobileProxy() {
+//		return true;
+//	}
 
 	protected void publishImageOnFacebook(CFFile cfFile) {
 		this.getTabletopClientManager().publishImageOnFacebook(this.getClientName(), cfFile);

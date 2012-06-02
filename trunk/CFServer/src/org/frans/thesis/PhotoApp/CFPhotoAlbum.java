@@ -13,7 +13,6 @@ public class CFPhotoAlbum extends CFComponent {
 
 	private ArrayList<CFImage> images;
 	private MTApplication mtApplication;
-	private CFComponentMenu menu;
 	private float DIMENSION_X = 500;
 	private float DIMENSION_Y = 350;
 	private int pageNumber = 0;
@@ -138,8 +137,8 @@ public class CFPhotoAlbum extends CFComponent {
 	}
 
 	private void createMenu() {
-		this.menu = new CFComponentMenu(this, mtApplication);
-		this.menu.addMenuItem("left_arrow.png",
+		this.setComponentMenu(new CFComponentMenu(this, mtApplication));
+		this.getComponentMenu().addMenuItem("left_arrow.png",
 				new CFComponentMenuItemListener() {
 
 					@Override
@@ -147,7 +146,7 @@ public class CFPhotoAlbum extends CFComponent {
 						pageDown();
 					}
 				});
-		this.menu.addMenuItem("right_arrow.png",
+		this.getComponentMenu().addMenuItem("right_arrow.png",
 				new CFComponentMenuItemListener() {
 
 					@Override
@@ -155,8 +154,8 @@ public class CFPhotoAlbum extends CFComponent {
 						pageUp();
 					}
 				});
-		this.menu.positionMenuItemsLeftAndRight();
-		this.menu.setVisible(true);
+		this.getComponentMenu().positionMenuItemsLeftAndRight();
+		this.getComponentMenu().setVisible(true);
 	}
 
 	protected boolean isPhotoAlbum() {
