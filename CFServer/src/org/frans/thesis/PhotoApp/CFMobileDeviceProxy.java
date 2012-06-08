@@ -168,10 +168,6 @@ public class CFMobileDeviceProxy extends CFComponent{
 		}
 	}
 	
-	protected String getName(){
-		return this.clientName;
-	}
-	
 
 //	protected boolean isMobileProxy() {
 //		return true;
@@ -198,5 +194,17 @@ public class CFMobileDeviceProxy extends CFComponent{
 			}
 			album.getMTComponent().removeFromParent();
 		}
+	}
+
+	@Override
+	public void handleScaledCFComponent(CFComponent component) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void handleRotatedCFComponent(CFComponent component) {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -48,4 +48,16 @@ public class CFTrashCan extends CFComponent{
 		}
 	}
 
+	@Override
+	public void handleScaledCFComponent(CFComponent component) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void handleRotatedCFComponent(CFComponent component) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
