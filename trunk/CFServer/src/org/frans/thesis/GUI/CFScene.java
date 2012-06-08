@@ -77,6 +77,18 @@ public abstract class CFScene extends AbstractScene{
 			}
 	}
 
+	protected void cFComponentRotated(CFComponent component) {
+			for (CFComponent otherComponent : this.getCfComponents()) {
+					otherComponent.handleRotatedCFComponent(component);
+			}
+	}
+
+	protected void cFComponentScaled(CFComponent component) {
+			for (CFComponent otherComponent : this.getCfComponents()) {
+					otherComponent.handleScaledCFComponent(component);
+			}
+	}
+
 	public void removeCFComponent(CFComponent component) {
 //		this.getCfComponents().remove(component);
 		this.getCanvas().removeChild(component.getMTComponent());

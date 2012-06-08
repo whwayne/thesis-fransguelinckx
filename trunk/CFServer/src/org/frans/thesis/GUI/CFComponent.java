@@ -1,6 +1,7 @@
 package org.frans.thesis.GUI;
 
 import org.mt4j.MTApplication;
+import org.mt4j.components.MTComponent;
 import org.mt4j.components.TransformSpace;
 import org.mt4j.components.visibleComponents.shapes.MTRectangle;
 import org.mt4j.input.gestureAction.DefaultDragAction;
@@ -16,7 +17,7 @@ import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapProcessor;
 import org.mt4j.util.math.Vector3D;
 
-public abstract class CFComponent {
+public abstract class CFComponent extends MTComponent{
 
 	protected static final float STANDARD_MEASURE = 150;
 	protected static final int X_WIDTH = 960;
@@ -31,6 +32,7 @@ public abstract class CFComponent {
 	private CFComponentMenu menu;
 
 	public CFComponent(MTApplication mtApplication, CFScene scene) {
+		super(mtApplication);
 		this.scene = scene;
 		this.mtApplication = mtApplication;
 		this.component = new MTRectangle(mtApplication, 10, 10);
@@ -131,6 +133,8 @@ public abstract class CFComponent {
 	}
 
 	public abstract void handleDroppedCFComponent(CFComponent component);
+	public abstract void handleScaledCFComponent(CFComponent component);
+	public abstract void handleRotatedCFComponent(CFComponent component);
 
 //	private double getDistanceToCenter() {
 //		double result = 0;
@@ -224,7 +228,7 @@ public abstract class CFComponent {
 		this.getMTComponent().rotateZ(point, degrees);
 	}
 
-	protected void scale(float x, float y, float z, Vector3D scalingPoint) {
+	public void scale(float x, float y, float z, Vector3D scalingPoint) {
 		this.getMTComponent().scale(x, y, z, scalingPoint);
 	}
 

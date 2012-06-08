@@ -14,6 +14,7 @@ public abstract class CFApplication extends MTApplication {
 	public synchronized void startUp() {
 			setupScene();
 			this.addScene(scene);
+		service.addTabletopServiceListener(scene);
 	}
 
 	protected abstract void setupScene();

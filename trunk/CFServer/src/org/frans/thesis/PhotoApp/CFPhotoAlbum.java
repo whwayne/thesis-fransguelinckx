@@ -162,7 +162,7 @@ public class CFPhotoAlbum extends CFComponent {
 		return true;
 	}
 	
-	protected void scale(float x, float y, float z, Vector3D scalingPoint){
+	public void scale(float x, float y, float z, Vector3D scalingPoint){
 		super.scale(x, y, z, scalingPoint);
 		this.DIMENSION_X *= x;
 		this.DIMENSION_Y *= y;
@@ -175,6 +175,18 @@ public class CFPhotoAlbum extends CFComponent {
 			this.addImage(image);
 			((CFPhotoScene) this.getCFScene()).reloadAlbums();
 		}
+	}
+
+	@Override
+	public void handleScaledCFComponent(CFComponent component) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void handleRotatedCFComponent(CFComponent component) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
