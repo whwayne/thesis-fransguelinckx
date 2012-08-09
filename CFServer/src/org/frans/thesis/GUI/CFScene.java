@@ -27,8 +27,8 @@ public abstract class CFScene extends AbstractScene{
 
 	public void addCFComponent(CFComponent component) {
 		if (!this.getCfComponents().contains(component)) {
-			this.getCanvas().addChild(component.getMTComponent());
-			component.getMTComponent().setPositionGlobal(
+			this.getCanvas().addChild(component);
+			component.setPositionGlobal(
 					new Vector3D(this.getMTApplication().getWidth() / 2, this
 							.getMTApplication().getHeight() / 2));
 			this.getCfComponents().add(component);
@@ -91,7 +91,7 @@ public abstract class CFScene extends AbstractScene{
 
 	public void removeCFComponent(CFComponent component) {
 //		this.getCfComponents().remove(component);
-		this.getCanvas().removeChild(component.getMTComponent());
+		this.getCanvas().removeChild(component);
 	}
 
 	public void cfComponentMoved(CFComponent component) {

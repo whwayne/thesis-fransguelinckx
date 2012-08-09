@@ -33,10 +33,10 @@ public class CFPhotoScene extends CFScene implements CFTabletopServiceListener {
 					tabletopClientManager, color);
 			this.getCfMobileDeviceProxies().put(clientName, proxy);
 			this.getCfComponents().add(proxy);
-			proxy.getMTComponent().setPositionGlobal(
+			proxy.setPositionGlobal(
 					new Vector3D(this.getMTApplication().getWidth() / 2, this
 							.getMTApplication().getHeight() / 2));
-			this.getCanvas().addChild(proxy.getMTComponent());
+			this.getCanvas().addChild(proxy);
 		}
 	}
 
@@ -53,7 +53,7 @@ public class CFPhotoScene extends CFScene implements CFTabletopServiceListener {
 		if (this.getCfMobileDeviceProxies().containsKey(name)) {
 			CFMobileDeviceProxy proxy = this.getCfMobileDeviceProxies().get(
 					name);
-			this.getCanvas().removeChild(proxy.getMTComponent());
+			this.getCanvas().removeChild(proxy);
 			this.getCfMobileDeviceProxies().remove(proxy);
 		}
 	}

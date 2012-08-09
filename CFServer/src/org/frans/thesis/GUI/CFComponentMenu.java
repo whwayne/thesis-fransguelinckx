@@ -25,8 +25,8 @@ public class CFComponentMenu {
 		CFComponentMenuItem menuItem = new CFComponentMenuItem(fileName,
 				listener, getMtApplication(), this.getOwner().getCFScene());
 		this.menuItems.add(menuItem);
-		this.getOwner().getMTComponent()
-				.addChild(menuItem.getMTComponent());
+		this.getOwner()
+				.addChild(menuItem);
 	}
 
 	private CFComponent getOwner() {
@@ -47,9 +47,9 @@ public class CFComponentMenu {
 	
 	public void positionMenuItemsLeftAndRight(){
 		CFComponent owner = this.getOwner();
-		Vector3D leftPosition = owner.getMTComponent().getPosition(TransformSpace.GLOBAL);
+		Vector3D leftPosition = owner.getPosition(TransformSpace.GLOBAL);
 		leftPosition.translate(new Vector3D(-owner.getWidth()/2, 0));
-		Vector3D rightPosition = owner.getMTComponent().getPosition(TransformSpace.GLOBAL);
+		Vector3D rightPosition = owner.getPosition(TransformSpace.GLOBAL);
 		rightPosition.translate(new Vector3D(owner.getWidth()/2, 0));
 		
 		this.getMenuItems().get(0).setPosition(leftPosition);

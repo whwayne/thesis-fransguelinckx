@@ -4,7 +4,6 @@ import org.frans.thesis.GUI.CFComponent;
 import org.frans.thesis.GUI.CFScene;
 import org.frans.thesis.service.CFFile;
 import org.mt4j.MTApplication;
-import org.mt4j.components.visibleComponents.shapes.MTRectangle;
 import org.mt4j.input.gestureAction.TapAndHoldVisualizer;
 import org.mt4j.input.inputProcessors.IGestureEventListener;
 import org.mt4j.input.inputProcessors.MTGestureEvent;
@@ -25,14 +24,14 @@ public class CFImage extends CFComponent {
 		super(mtApplication, scene);
 		this.color = color;
 		this.image = image;
-		PImage pImage = getMTApplication().loadImage(image.getFile().getPath());
-		this.component.setTexture(pImage);
+		PImage pImage = this.getCFScene().getMTApplication().loadImage(image.getFile().getPath());
+		this.setTexture(pImage);
 		this.scaleImageToStackSize();
 
 		setUpGestures(mtApplication);
 
-		this.getMTComponent().setStrokeColor(this.getColor());
-		this.getMTComponent().setStrokeWeight(5);
+		this.setStrokeColor(this.getColor());
+		this.setStrokeWeight(5);
 		this.getCFScene().addCFComponent(getCFImage());
 		autoScale();
 	}
@@ -42,9 +41,9 @@ public class CFImage extends CFComponent {
 	}
 
 	private void setUpGestures(MTApplication mtApplication) {
-		this.getMTComponent().registerInputProcessor(new TapAndHoldProcessor(mtApplication, 1500));
-		this.getMTComponent().addGestureListener(TapAndHoldProcessor.class,new TapAndHoldVisualizer(mtApplication, this.getCFScene().getCanvas()));
-		this.getMTComponent().addGestureListener(TapAndHoldProcessor.class,
+		this.registerInputProcessor(new TapAndHoldProcessor(mtApplication, 1500));
+		this.addGestureListener(TapAndHoldProcessor.class,new TapAndHoldVisualizer(mtApplication, this.getCFScene().getCanvas()));
+		this.addGestureListener(TapAndHoldProcessor.class,
 				new IGestureEventListener() {
 					@Override
 					public boolean processGestureEvent(MTGestureEvent ge) {
@@ -64,7 +63,7 @@ public class CFImage extends CFComponent {
 	}
 
 	private void createNewPhotoalbum() {
-		CFPhotoAlbum album = new CFPhotoAlbum(getMTApplication(), getCFImage(),(CFPhotoScene) getCFScene());
+		CFPhotoAlbum album = new CFPhotoAlbum(this.getCFScene().getMTApplication(), getCFImage(),(CFPhotoScene) getCFScene());
 		album.addImage(getCFImage());
 
 	}
@@ -77,14 +76,14 @@ public class CFImage extends CFComponent {
 		return this;
 	}
 
-	protected MTRectangle getImage() {
-		return this.component;
-	}
+//	protected MTRectangle getImage() {
+//		return this;
+//	}
 
-	@Override
-	public MTRectangle getMTComponent() {
-		return this.component;
-	}
+//	@Override
+//	public MTRectangle getMTComponent() {
+//		return this.component;
+//	}
 
 	@Override
 	public void handleDroppedCFComponent(CFComponent component) {

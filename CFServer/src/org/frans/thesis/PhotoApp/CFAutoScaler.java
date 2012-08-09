@@ -10,7 +10,7 @@ public class CFAutoScaler extends CFComponentModifier {
 	@Override
 	public void handleMovedCFComponent(CFComponent component) {
 		// TODO Auto-generated method stub
-		Vector3D position = component.getMTComponent().getPosition(
+		Vector3D position = component.getPosition(
 				TransformSpace.GLOBAL);
 
 		if (component.autoRotateIsOn()) {

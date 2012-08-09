@@ -23,17 +23,17 @@ public class CFComponentMenuItem extends CFComponent {
 		this.listener = listener;
 		PImage pImage = mtApplication.loadImage(imagePath + fileName);
 //		this.component = new MTRectangle(mtApplication, pImage);
-		this.component.setTexture(pImage);
-		this.component.setWidthLocal(75);
-		this.component.setHeightLocal(75);
-		this.component.setVisible(false);
-		this.component.setNoStroke(true);
+		this.setTexture(pImage);
+		this.setWidthLocal(75);
+		this.setHeightLocal(75);
+		this.setVisible(false);
+		this.setNoStroke(true);
 
-		this.getMTComponent().unregisterAllInputProcessors();
-		this.getMTComponent().removeAllGestureEventListeners();
-		this.getMTComponent().registerInputProcessor(
+		this.unregisterAllInputProcessors();
+		this.removeAllGestureEventListeners();
+		this.registerInputProcessor(
 				new TapProcessor(mtApplication));
-		this.getMTComponent().addGestureListener(TapProcessor.class,
+		this.addGestureListener(TapProcessor.class,
 				new IGestureEventListener() {
 					@Override
 					public boolean processGestureEvent(MTGestureEvent ge) {
@@ -47,11 +47,11 @@ public class CFComponentMenuItem extends CFComponent {
 	}
 
 	protected void setPosition(Vector3D position) {
-		this.getMTComponent().setPositionGlobal(position);
+		this.setPositionGlobal(position);
 	}
 
 	public void setVisible(boolean visible) {
-		this.getMTComponent().setVisible(visible);
+		this.setVisible(visible);
 	}
 
 	@Override
