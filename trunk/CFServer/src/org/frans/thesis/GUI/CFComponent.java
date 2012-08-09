@@ -1,7 +1,6 @@
 package org.frans.thesis.GUI;
 
 import org.mt4j.MTApplication;
-import org.mt4j.components.MTComponent;
 import org.mt4j.components.TransformSpace;
 import org.mt4j.components.visibleComponents.shapes.MTRectangle;
 import org.mt4j.input.gestureAction.DefaultDragAction;
@@ -17,14 +16,29 @@ import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapProcessor;
 import org.mt4j.util.math.Vector3D;
 
-public abstract class CFComponent extends MTComponent{
+/**
+ * This abstract class represents a visual component on the tabletop and inherits from
+ * MTComponent (part of the MT4j-framework)
+ */
+public abstract class CFComponent extends MTRectangle{
 
-	protected static final float STANDARD_MEASURE = 150;
+	/**
+	 * Represents the maximum size of the side of a component when it is reduced to stack size.
+	 */
+	protected static final float STACK_SIZE = 150;
+	
+	/**
+	 * Represents the size of the x-side of a component when it is autoscaled to large size.
+	 */
 	protected static final int X_WIDTH = 960;
+
+	/**
+	 * Represents the size of the y-side of a component when it is autoscaled to large size.
+	 */
 	protected static final int Y_HEIGHT = 540;
 
-	protected MTRectangle component;
-	protected MTApplication mtApplication;
+//	protected MTRectangle component;
+//	protected MTApplication mtApplication;
 	private int angle = 0;
 	private CFScene scene;
 	private boolean autoRotate = true;
@@ -32,23 +46,23 @@ public abstract class CFComponent extends MTComponent{
 	private CFComponentMenu menu;
 
 	public CFComponent(MTApplication mtApplication, CFScene scene) {
-		super(mtApplication);
+		super(mtApplication, 10, 10);
 		this.scene = scene;
-		this.mtApplication = mtApplication;
-		this.component = new MTRectangle(mtApplication, 10, 10);
+//		this.mtApplication = mtApplication;
+//		this.component = new MTRectangle(mtApplication, 10, 10);
 		setUpGestures(mtApplication);
 	}
 
 	private void setUpGestures(MTApplication mtApplication) {
-		this.getMTComponent().unregisterAllInputProcessors();
-		this.getMTComponent().removeAllGestureEventListeners();
+		this.unregisterAllInputProcessors();
+		this.removeAllGestureEventListeners();
 
-		this.getMTComponent().registerInputProcessor(
+		this.registerInputProcessor(
 				new DragProcessor(mtApplication));
-		this.getMTComponent().addGestureListener(DragProcessor.class,
+		this.addGestureListener(DragProcessor.class,
 				new DefaultDragAction());
 		
-		this.getMTComponent().addGestureListener(DragProcessor.class,
+		this.addGestureListener(DragProcessor.class,
 				new IGestureEventListener() {
 					@Override
 					public boolean processGestureEvent(MTGestureEvent ge) {
@@ -67,9 +81,9 @@ public abstract class CFComponent extends MTComponent{
 					}
 				});
 
-		this.getMTComponent().registerInputProcessor(
+		this.registerInputProcessor(
 				new ScaleProcessor(mtApplication));
-		this.getMTComponent().addGestureListener(ScaleProcessor.class,
+		this.addGestureListener(ScaleProcessor.class,
 				new IGestureEventListener() {
 
 					@Override
@@ -80,7 +94,7 @@ public abstract class CFComponent extends MTComponent{
 						return false;
 					}
 				});
-		this.getMTComponent().addGestureListener(ScaleProcessor.class,
+		this.addGestureListener(ScaleProcessor.class,
 				new IGestureEventListener() {
 
 					@Override
@@ -90,9 +104,9 @@ public abstract class CFComponent extends MTComponent{
 					}
 				});
 
-		this.getMTComponent().registerInputProcessor(
+		this.registerInputProcessor(
 				new RotateProcessor(mtApplication));
-		this.getMTComponent().addGestureListener(RotateProcessor.class,
+		this.addGestureListener(RotateProcessor.class,
 				new IGestureEventListener() {
 
 					@Override
@@ -103,7 +117,7 @@ public abstract class CFComponent extends MTComponent{
 						return false;
 					}
 				});
-		this.getMTComponent().addGestureListener(RotateProcessor.class,
+		this.addGestureListener(RotateProcessor.class,
 				new IGestureEventListener() {
 
 					@Override
@@ -113,9 +127,9 @@ public abstract class CFComponent extends MTComponent{
 					}
 				});
 
-		this.getMTComponent().registerInputProcessor(
+		this.registerInputProcessor(
 				new TapProcessor(mtApplication, 25, true, 350));
-		this.getMTComponent().addGestureListener(TapProcessor.class,
+		this.addGestureListener(TapProcessor.class,
 				new IGestureEventListener() {
 					public boolean processGestureEvent(MTGestureEvent ge) {
 						TapEvent te = (TapEvent) ge;
@@ -180,43 +194,39 @@ public abstract class CFComponent extends MTComponent{
 		this.autoScale = true;
 	}
 
-	protected MTApplication getMTApplication() {
-		return this.mtApplication;
-	}
+//	protected MTApplication getMTApplication() {
+//		return this.getMTApplication();
+//	}
 
 	public float getDistanceto(CFComponent component) {
 		float result = 0;
 		float x, y;
-		x = Math.abs(this.getMTComponent()
-				.getPosition(TransformSpace.RELATIVE_TO_PARENT).getX()
-				- component.getMTComponent()
-						.getPosition(TransformSpace.RELATIVE_TO_PARENT).getX());
-		y = Math.abs(this.getMTComponent()
-				.getPosition(TransformSpace.RELATIVE_TO_PARENT).getY()
-				- component.getMTComponent()
-						.getPosition(TransformSpace.RELATIVE_TO_PARENT).getY());
+		x = Math.abs(this.getPosition(TransformSpace.RELATIVE_TO_PARENT).getX()
+				- component.getPosition(TransformSpace.RELATIVE_TO_PARENT).getX());
+		y = Math.abs(this.getPosition(TransformSpace.RELATIVE_TO_PARENT).getY()
+				- component.getPosition(TransformSpace.RELATIVE_TO_PARENT).getY());
 		result = (float) Math.sqrt((x * x) + (y * y));
 		return result;
 	}
 
 	public float getHeight() {
-		return this.getMTComponent().getHeightXY(TransformSpace.GLOBAL);
+		return this.getHeightXY(TransformSpace.GLOBAL);
 	}
 
-	public MTRectangle getMTComponent() {
-		return this.component;
-	}
+//	public MTRectangle getMTComponent() {
+//		return this.component;
+//	}
 
 	protected Vector3D getPosition() {
-		return this.getMTComponent().getPosition(TransformSpace.GLOBAL);
+		return this.getPosition(TransformSpace.GLOBAL);
 	}
 
 	public float getWidth() {
-		return this.getMTComponent().getWidthXY(TransformSpace.GLOBAL);
+		return this.getWidthXY(TransformSpace.GLOBAL);
 	}
 
 	protected void reposition(Vector3D position) {
-		this.getMTComponent().setPositionGlobal(position);
+		this.setPositionGlobal(position);
 	}
 
 	protected void rotate(Vector3D rotationPoint, int degrees) {
@@ -225,43 +235,41 @@ public abstract class CFComponent extends MTComponent{
 
 		Vector3D point = new Vector3D(rotationPoint.x + this.getWidth() / 2,
 				rotationPoint.y + this.getHeight() / 2);
-		this.getMTComponent().rotateZ(point, degrees);
+		this.rotateZ(point, degrees);
 	}
 
 	public void scale(float x, float y, float z, Vector3D scalingPoint) {
-		this.getMTComponent().scale(x, y, z, scalingPoint);
+		this.scale(x, y, z, scalingPoint);
 	}
 
 	public void rotateTo(int angle) {
 		int result = (angle - this.angle) % 360;
 		this.angle = angle;
-		this.getMTComponent().rotateZ(
-				this.getMTComponent().getCenterPointGlobal(), result);
+		this.rotateZ(
+				this.getCenterPointGlobal(), result);
 	}
 
 	protected void rotateRandomlyForStack() {
-		this.getMTComponent().rotateZ(
+		this.rotateZ(
 				new Vector3D(this.getHeight() / 2, this.getWidth() / 2, 0),
 				(float) (Math.random() * 360), TransformSpace.LOCAL);
 	}
 
 	public void scaleImageToStackSize() {
-		float scalingHeightFactor = CFComponent.STANDARD_MEASURE
+		float scalingHeightFactor = CFComponent.STACK_SIZE
 				/ this.getHeight();
-		float scalingWidthFactor = CFComponent.STANDARD_MEASURE
+		float scalingWidthFactor = CFComponent.STACK_SIZE
 				/ this.getWidth();
 		if (scalingHeightFactor < scalingWidthFactor) {
-			this.scale(scalingWidthFactor, scalingWidthFactor, 1, this
-					.getMTComponent().getPosition(TransformSpace.GLOBAL));
+			this.scale(scalingWidthFactor, scalingWidthFactor, 1, this.getPosition(TransformSpace.GLOBAL));
 		} else {
-			this.scale(scalingHeightFactor, scalingHeightFactor, 1, this
-					.getMTComponent().getPosition(TransformSpace.GLOBAL));
+			this.scale(scalingHeightFactor, scalingHeightFactor, 1, this.getPosition(TransformSpace.GLOBAL));
 		}
 	}
 
 	public void scaleImage(float factor) {
 		this.scale(factor, factor, 1,
-				this.getMTComponent().getPosition(TransformSpace.GLOBAL));
+				this.getPosition(TransformSpace.GLOBAL));
 		// this.getMTComponent().scale(factor, factor, 1,
 		// this.getMTComponent().getPosition(TransformSpace.GLOBAL));
 	}

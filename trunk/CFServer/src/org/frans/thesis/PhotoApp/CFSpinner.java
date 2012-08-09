@@ -18,27 +18,27 @@ public class CFSpinner extends CFComponent {
 
 	public CFSpinner(MTApplication mtApplication, CFScene scene, CFComponent parent) {
 		super(mtApplication, scene);
-		this.component.setHeightLocal(50);
-		this.component.setWidthLocal(50);
-		this.component.setNoStroke(true);
+		this.setHeightLocal(50);
+		this.setWidthLocal(50);
+		this.setNoStroke(true);
 		this.parent = parent;
 		animation = new Gif(mtApplication, imagePath);
 //		this.component.setPositionGlobal(this.parent.getPosition());
-		this.component.setTexture(animation);
-		this.component.setVisible(false);
+		this.setTexture(animation);
+		this.setVisible(false);
 //		scene.addCFComponent(this);
-		this.parent.getMTComponent().addChild(this.getMTComponent());
-		this.getMTComponent().setPositionRelativeToParent(new Vector3D(this.parent.getWidth()-25, this.parent.getHeight()-25));
+		this.parent.addChild(this);
+		this.setPositionRelativeToParent(new Vector3D(this.parent.getWidth()-25, this.parent.getHeight()-25));
 	}
 
 	public void start() {
 		animation.play();
-		this.component.setVisible(true);
+		this.setVisible(true);
 	}
 	
 	public void stop(){
 		animation.stop();
-		this.component.setVisible(false);
+		this.setVisible(false);
 	}
 
 	@Override

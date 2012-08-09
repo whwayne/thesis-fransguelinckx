@@ -21,18 +21,18 @@ public class CFTrashCan extends CFComponent{
 		super(mtApplication, scene);
 		PImage pImage = mtApplication.loadImage(imagePath);
 //		this.component = new MTRectangle(mtApplication, pImage);
-		this.component.setTexture(pImage);
+		this.setTexture(pImage);
 		this.scaleImageToStackSize();
 		this.getCFScene().addCFComponent(this);
 
-		this.getMTComponent().unregisterAllInputProcessors();
-		this.getMTComponent().removeAllGestureEventListeners();
-		this.getMTComponent().registerInputProcessor(new DragProcessor(getMTApplication()));
-		this.getMTComponent().addGestureListener(DragProcessor.class, new DefaultDragAction());
-		this.getMTComponent().registerInputProcessor(new RotateProcessor(getMTApplication()));
-		this.getMTComponent().addGestureListener(RotateProcessor.class, new DefaultRotateAction());
+		this.unregisterAllInputProcessors();
+		this.removeAllGestureEventListeners();
+		this.registerInputProcessor(new DragProcessor(this.getCFScene().getMTApplication()));
+		this.addGestureListener(DragProcessor.class, new DefaultDragAction());
+		this.registerInputProcessor(new RotateProcessor(this.getCFScene().getMTApplication()));
+		this.addGestureListener(RotateProcessor.class, new DefaultRotateAction());
 		
-		this.getMTComponent().setNoStroke(true);
+		this.setNoStroke(true);
 	}
 
 	protected boolean isTrashCan() {

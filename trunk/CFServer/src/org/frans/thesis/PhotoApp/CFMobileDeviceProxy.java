@@ -39,7 +39,7 @@ public class CFMobileDeviceProxy extends CFComponent{
 	}
 	
 	private void startSpinner(){
-		this.spinner = new CFSpinner(this.getMTApplication(), this.getCFScene(), this);
+		this.spinner = new CFSpinner(this.getCFScene().getMTApplication(), this.getCFScene(), this);
 		spinner.start();
 	}
 
@@ -55,7 +55,7 @@ public class CFMobileDeviceProxy extends CFComponent{
 		setUpComponent(mtApplication);
 		this.scaleImageToStackSize();
 		setUpGestures(mtApplication);
-		this.getMTComponent().setStrokeColor(this.getColor());
+		this.setStrokeColor(this.getColor());
 		createMenu();
 	}
 	
@@ -64,7 +64,7 @@ public class CFMobileDeviceProxy extends CFComponent{
 	}
 
 	private void createMenu() {
-		this.setComponentMenu(new CFComponentMenu(this, mtApplication));
+		this.setComponentMenu(new CFComponentMenu(this, this.getCFScene().getMTApplication()));
 		this.getComponentMenu().addMenuItem("photos.png", new CFComponentMenuItemListener() {
 
 			@Override
@@ -117,8 +117,8 @@ public class CFMobileDeviceProxy extends CFComponent{
 		textField.setText(this.clientName);
 		textField.setPickable(false);
 
-		PImage pImage = getMTApplication().loadImage(imagePath);
-		MTRectangle mtImage = new MTRectangle(getMTApplication(), pImage);
+		PImage pImage = getCFScene().getMTApplication().loadImage(imagePath);
+		MTRectangle mtImage = new MTRectangle(getCFScene().getMTApplication(), pImage);
 		mtImage.setNoStroke(true);
 		mtImage.setPickable(false);
 
@@ -127,26 +127,26 @@ public class CFMobileDeviceProxy extends CFComponent{
 		float width = Math.max(textField.getWidthXY(TransformSpace.GLOBAL),
 				mtImage.getWidthXY(TransformSpace.GLOBAL));
 //		this.component = new MTRectangle(getMTApplication(), width, height);
-		this.component.setHeightLocal(height);
-		this.component.setWidthLocal(width);
+		this.setHeightLocal(height);
+		this.setWidthLocal(width);
 
-		this.getMTComponent().addChild(textField);
-		this.getMTComponent().addChild(mtImage);
+		this.addChild(textField);
+		this.addChild(mtImage);
 		mtImage.translate(new Vector3D(0, textField
 				.getHeightXY(TransformSpace.GLOBAL), 0));
-		this.getMTComponent().setFillColor(getColor());
+		this.setFillColor(getColor());
 		this.turnAutoScaleOff();
 		
-		PImage facebookImage = getMTApplication().loadImage(fbImagePath);
-		MTRectangle facebookLogo = new MTRectangle(getMTApplication(), facebookImage);
+		PImage facebookImage = getCFScene().getMTApplication().loadImage(fbImagePath);
+		MTRectangle facebookLogo = new MTRectangle(getCFScene().getMTApplication(), facebookImage);
 		facebookLogo.setNoStroke(true);
 		facebookLogo.setPickable(false);
-		this.getMTComponent().addChild(facebookLogo);
-		facebookLogo.setPositionRelativeToParent(new Vector3D(this.getMTComponent().getWidthXY(TransformSpace.GLOBAL), this.getMTComponent().getHeightXY(TransformSpace.GLOBAL)));
+		this.addChild(facebookLogo);
+		facebookLogo.setPositionRelativeToParent(new Vector3D(this.getWidthXY(TransformSpace.GLOBAL), this.getHeightXY(TransformSpace.GLOBAL)));
 	}
 
 	private void setUpGestures(MTApplication mtApplication) {
-		this.getMTComponent().addGestureListener(TapProcessor.class,
+		this.addGestureListener(TapProcessor.class,
 				new IGestureEventListener() {
 
 					@Override
@@ -186,13 +186,13 @@ public class CFMobileDeviceProxy extends CFComponent{
 		if(component instanceof CFImage){
 			CFImage image = (CFImage) component;
 			this.publishImageOnFacebook(image.getFile());
-			image.getMTComponent().removeFromParent();
+			image.removeFromParent();
 		}else if(component instanceof CFPhotoAlbum){
 			CFPhotoAlbum album = (CFPhotoAlbum) component;
 			for(CFImage image : album.getImages()){
 				this.publishImageOnFacebook(image.getFile());
 			}
-			album.getMTComponent().removeFromParent();
+			album.removeFromParent();
 		}
 	}
 

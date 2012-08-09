@@ -26,9 +26,9 @@ public class CFPhotoAlbum extends CFComponent {
 		this.mtApplication = application;
 		// this.component = new MTRectangle(application, DIMENSION_X,
 		// DIMENSION_Y);
-		this.component.setHeightLocal(DIMENSION_Y);
-		this.component.setWidthLocal(DIMENSION_X);
-		this.component.setNoFill(true);
+		this.setHeightLocal(DIMENSION_Y);
+		this.setWidthLocal(DIMENSION_X);
+		this.setNoFill(true);
 		this.images = new ArrayList<CFImage>();
 		scene.addCFComponent(this);
 		this.createMenu();
@@ -41,19 +41,19 @@ public class CFPhotoAlbum extends CFComponent {
 	protected void addImage(CFImage image) {
 		if (!this.getImages().contains(image)) {
 			this.getImages().add(image);
-			this.getMTComponent().addChild(image.getMTComponent());
-			image.getImage().setVisible(false);
+			this.addChild(image);
+			image.setVisible(false);
 			image.rotateTo(0);
-			image.getImage().setPickable(false);
+			image.setPickable(false);
 		}
 	}
 
 	protected void removeImage(CFImage image) {
 		if (this.getImages().contains(image)) {
 			this.getImages().remove(image);
-			image.getImage().removeFromParent();
-			this.getMTComponent().getParent().addChild(image.getImage());
-			image.getImage().setPickable(true);
+			image.removeFromParent();
+			this.getParent().addChild(image);
+			image.setPickable(true);
 			loadImages();
 		}
 	}
@@ -81,26 +81,26 @@ public class CFPhotoAlbum extends CFComponent {
 		}
 		if (leftImage != null) {
 //			this.getMTComponent().addChild(leftImage.getImage());
-			leftImage.getImage().setVisible(true);
+			leftImage.setVisible(true);
 			this.resizeImage(leftImage);
 //			 leftImage.rotateTo(this.getAngle());
-			leftImage.getImage().setPositionRelativeToParent(leftImagePosition);
+			leftImage.setPositionRelativeToParent(leftImagePosition);
 		}
 		if (rightImage != null) {
 //			this.getMTComponent().addChild(rightImage.getImage());
-			rightImage.getImage().setVisible(true);
+			rightImage.setVisible(true);
 			this.resizeImage(rightImage);
 			// rightImage.rotateTo(this.getAngle());
-			rightImage.getImage().setPositionRelativeToParent(
+			rightImage.setPositionRelativeToParent(
 					rightImagePosition);
 		}
 	}
 
 	private void resizeImage(CFImage image) {
 		float scaleFactorX = (this.DIMENSION_X / 2)
-				/ image.getImage().getWidthXY(TransformSpace.GLOBAL);
+				/ image.getWidthXY(TransformSpace.GLOBAL);
 		float scaleFactorY = this.DIMENSION_Y
-				/ image.getImage().getHeightXY(TransformSpace.GLOBAL);
+				/ image.getHeightXY(TransformSpace.GLOBAL);
 		float result = Math.min(scaleFactorX, scaleFactorY);
 		image.scaleImage(result);
 	}
@@ -116,11 +116,11 @@ public class CFPhotoAlbum extends CFComponent {
 		}
 		if (leftImage != null) {
 //			this.getMTComponent().removeChild(leftImage.getImage());
-			leftImage.getImage().setVisible(false);
+			leftImage.setVisible(false);
 		}
 		if (rightImage != null) {
 //			this.getMTComponent().removeChild(rightImage.getImage());
-			rightImage.getImage().setVisible(false);
+			rightImage.setVisible(false);
 		}
 	}
 
