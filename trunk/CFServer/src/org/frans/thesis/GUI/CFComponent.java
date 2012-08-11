@@ -46,7 +46,7 @@ public abstract class CFComponent extends MTRectangle{
 	private CFComponentMenu menu;
 
 	public CFComponent(MTApplication mtApplication, CFScene scene) {
-		super(mtApplication, 10, 10);
+		super(mtApplication, 100, 100);
 		this.scene = scene;
 //		this.mtApplication = mtApplication;
 //		this.component = new MTRectangle(mtApplication, 10, 10);
@@ -238,9 +238,9 @@ public abstract class CFComponent extends MTRectangle{
 		this.rotateZ(point, degrees);
 	}
 
-	public void scale(float x, float y, float z, Vector3D scalingPoint) {
-		this.scale(x, y, z, scalingPoint);
-	}
+//	public void scale(float x, float y, float z, Vector3D scalingPoint) {
+//		this.scale(x, y, z, scalingPoint);
+//	}
 
 	public void rotateTo(int angle) {
 		int result = (angle - this.angle) % 360;
@@ -255,7 +255,7 @@ public abstract class CFComponent extends MTRectangle{
 				(float) (Math.random() * 360), TransformSpace.LOCAL);
 	}
 
-	public void scaleImageToStackSize() {
+	public void scaleComponentToStackSize() {
 		float scalingHeightFactor = CFComponent.STACK_SIZE
 				/ this.getHeight();
 		float scalingWidthFactor = CFComponent.STACK_SIZE

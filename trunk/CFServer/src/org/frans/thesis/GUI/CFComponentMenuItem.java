@@ -24,8 +24,10 @@ public class CFComponentMenuItem extends CFComponent {
 		PImage pImage = mtApplication.loadImage(imagePath + fileName);
 //		this.component = new MTRectangle(mtApplication, pImage);
 		this.setTexture(pImage);
-		this.setWidthLocal(75);
-		this.setHeightLocal(75);
+		this.setWidthXYGlobal(75);
+		this.setHeightXYGlobal(75);
+//		this.setWidthLocal(75);
+//		this.setHeightLocal(75);
 		this.setVisible(false);
 		this.setNoStroke(true);
 
@@ -50,9 +52,9 @@ public class CFComponentMenuItem extends CFComponent {
 		this.setPositionGlobal(position);
 	}
 
-	public void setVisible(boolean visible) {
-		this.setVisible(visible);
-	}
+//	public void setVisible(boolean visible) {
+//		this.setVisible(visible);
+//	}
 
 	@Override
 	public void handleDroppedCFComponent(CFComponent component) {

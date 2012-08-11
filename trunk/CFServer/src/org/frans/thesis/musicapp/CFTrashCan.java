@@ -1,4 +1,4 @@
-package org.frans.thesis.PhotoApp;
+package org.frans.thesis.musicapp;
 
 import org.frans.thesis.GUI.CFComponent;
 import org.frans.thesis.GUI.CFScene;
@@ -41,11 +41,7 @@ public class CFTrashCan extends CFComponent{
 
 	@Override
 	public void handleDroppedCFComponent(CFComponent component) {
-		if(component instanceof CFImage){
-			this.getCFScene().removeCFComponent(component);
-		}else if(component instanceof CFPhotoAlbum){
-			this.getCFScene().removeCFComponent(component);
-		}
+		// TODO Auto-generated method stub
 	}
 
 	@Override
