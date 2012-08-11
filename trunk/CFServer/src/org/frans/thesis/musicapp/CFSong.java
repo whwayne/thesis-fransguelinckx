@@ -9,8 +9,6 @@ import org.frans.thesis.GUI.CFScene;
 import org.frans.thesis.service.CFFile;
 import org.mt4j.MTApplication;
 
-import processing.core.PImage;
-
 public class CFSong extends CFComponent {
 	
 	private CFFile file;
@@ -18,10 +16,10 @@ public class CFSong extends CFComponent {
 		return file;
 	}
 
-	private String imagePath = "org" + MTApplication.separator + "frans"
-			+ MTApplication.separator + "thesis" + MTApplication.separator
-			+ "GUI" + MTApplication.separator + "data"
-			+ MTApplication.separator;
+//	private String imagePath = "org" + MTApplication.separator + "frans"
+//			+ MTApplication.separator + "thesis" + MTApplication.separator
+//			+ "GUI" + MTApplication.separator + "data"
+//			+ MTApplication.separator;
 	private SoundJLayer sound;
 	
 	public CFSong(MTApplication application, CFScene scene, CFFile file){
@@ -29,12 +27,14 @@ public class CFSong extends CFComponent {
 		this.file = file;
 		System.out.println(file.getFile().getPath());
 		sound = new SoundJLayer(file.getFile().getPath());
-		PImage pImage = this.getCFScene().getMTApplication().loadImage(imagePath + "music.png");
-		this.setTexture(pImage);
+//		PImage pImage = this.getCFScene().getMTApplication().loadImage(imagePath + "music.png");
+//		this.setTexture(pImage);
+		this.setNoStroke(true);
+		this.setNoFill(true);
 		this.getCFScene().addCFComponent(this);
 		this.createMenu();
 		this.getComponentMenu().setVisible(true);
-		this.scaleComponentToStackSize();
+//		this.scaleComponentToStackSize();
 	}
 	
 	private void createMenu() {
@@ -43,10 +43,10 @@ public class CFSong extends CFComponent {
 
 			@Override
 			public void processEvent() {
-				sound.play();
+				sound.pauseToggle();
 			}
 		});
-		this.getComponentMenu().repositionMenuItemsInCircle();
+//		this.getComponentMenu().repositionMenuItemsInCircle();
 	}
 
 	@Override
@@ -110,7 +110,10 @@ class SoundJLayer implements Runnable{
     }
 
     public void pauseToggle(){
-            if (this.player != null){
+    	if(this.player == null){
+    		this.play();
+    	}
+    	else {
                     if (this.player.isPaused() && !this.player.isStopped()){
                             this.play();
                     }

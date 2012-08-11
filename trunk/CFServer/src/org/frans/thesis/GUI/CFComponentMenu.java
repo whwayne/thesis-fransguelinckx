@@ -27,6 +27,7 @@ public class CFComponentMenu {
 		this.menuItems.add(menuItem);
 		this.getOwner()
 				.addChild(menuItem);
+		menuItem.setPosition(new Vector3D(getOwner().getPosition().x, getOwner().getPosition().y));
 	}
 
 	private CFComponent getOwner() {
