@@ -1,6 +1,7 @@
 package org.frans.thesis.service;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -14,20 +15,25 @@ public class CFTabletopClient {
 	public static final int REQUESTING_PHOTOS = 1;
 	public static final int PUBLISHING_PHOTOS = 2;
 	public static final int REQUESTING_MUSIC = 3;
+	public static final int SENDING_MUSIC = 4;
 
 	private CFFile file;
 	private boolean isReceivingFile = false;
 	private CFTabletopClientManager manager;
 	private String name;
 	private FileOutputStream out;
+	private FileInputStream in;
 	private int status;
 	private final String workingDirectory = System.getProperty("user.dir");
 	private LinkedList<String> imageCue;
+	private LinkedList<CFFile> fileCue;
+	private CFFile currentFile;
 
 	public CFTabletopClient(String name, CFTabletopClientManager manager) {
 		this.name = name;
 		this.manager = manager;
 		this.imageCue = new LinkedList<String>();
+		this.fileCue = new LinkedList<CFFile>();
 		this.status = IDLE;
 	}
 
@@ -40,8 +46,8 @@ public class CFTabletopClient {
 		this.getOutputStream().close();
 		this.getManager().fileFinished(this.getFile(), this.getName());
 	}
-	
-	private String getName(){
+
+	private String getName() {
 		return this.name;
 	}
 
@@ -61,7 +67,8 @@ public class CFTabletopClient {
 		return this.status;
 	}
 
-	protected void receivePieceOfFile(String path, byte[] buffer, boolean lastPiece) {
+	protected void receivePieceOfFile(String path, byte[] buffer,
+			boolean lastPiece) {
 		try {
 			if (!isReceivingFile) {
 				// nieuwe file maken en beginnen vullen
@@ -89,9 +96,9 @@ public class CFTabletopClient {
 	}
 
 	private void startNewFile(String path) throws FileNotFoundException {
-		String ext = path.substring(path.lastIndexOf(".") + 1,
-				path.length()).toLowerCase();
-		this.file = new CFFile(path,new File(this.workingDirectory
+		String ext = path.substring(path.lastIndexOf(".") + 1, path.length())
+				.toLowerCase();
+		this.file = new CFFile(path, new File(this.workingDirectory
 				+ Calendar.getInstance().getTimeInMillis() + "." + ext));
 		this.out = new FileOutputStream(file.getFile());
 	}
@@ -102,22 +109,55 @@ public class CFTabletopClient {
 	}
 
 	public void publishImagesOnFacebook(ArrayList<String> files) {
-		for(String file : files){
+		for (String file : files) {
 			this.getImageCue().add(file);
 		}
 		this.setStatus(PUBLISHING_PHOTOS);
 	}
-	
-	private LinkedList<String> getImageCue(){
+
+	private LinkedList<String> getImageCue() {
 		return this.imageCue;
 	}
-	
-	protected String popImageCue(){
+
+	protected String popImageCue() {
 		String result = this.getImageCue().poll();
-		if(this.getImageCue().peek() == null){
+		if (this.getImageCue().peek() == null) {
 			this.setStatus(IDLE);
 		}
 		return result;
+	}
+
+	public void sendMusicFile(CFFile file) {
+		this.fileCue.add(file);
+		this.setStatus(SENDING_MUSIC);
+	}
+
+	public byte[] getNextFileBuffer() {
+		this.setStatus(IDLE);
+		byte[] buf = null;
+		int status = -1;
+		try {
+			if (currentFile == null) {
+				currentFile = this.fileCue.poll();
+				if(currentFile != null){
+					in = new FileInputStream(currentFile.getFile());
+				}
+			}
+			buf = new byte[100000];
+			status = in.read(buf);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if (status == -1) {
+			currentFile = null;
+			return new byte[1];
+		} else {
+			return buf;
+		}
 	}
 
 }

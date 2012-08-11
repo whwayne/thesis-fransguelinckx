@@ -55,4 +55,12 @@ public class CFTabletopClientManager {
 		this.getClients().get(clientName).publishImageOnFacebook(cfFile);
 	}
 
+	public void sendFileToClient(String clientName, CFFile file) {
+		this.getClients().get(clientName).sendMusicFile(file);
+	}
+
+	public byte[] getNextFileBuffer(String clientName) {
+		return this.getClients().get(clientName).getNextFileBuffer();
+	}
+
 }

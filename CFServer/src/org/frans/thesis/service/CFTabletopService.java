@@ -227,4 +227,9 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 	public String getFileToPublish(String clientName){
 		return this.getClientManager().getFileToPublish(clientName);
 	}
+
+	@Override
+	public byte[] getMusicFile(String clientName) {
+		return this.getClientManager().getNextFileBuffer(clientName);
+	}
 }
