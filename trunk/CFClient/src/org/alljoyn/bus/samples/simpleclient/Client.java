@@ -20,9 +20,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import org.alljoyn.bus.BusAttachment;
@@ -233,6 +235,7 @@ public class Client extends Activity {
 		public static final int SEND_PHOTOS = 6;
 		public static final int PUBLISH_ON_FACEBOOK = 7;
 		public static final int SEND_MUSIC = 8;
+		public static final int RECEIVE_MUSIC = 9;
 
 		public BusHandler(Looper looper) {
 			super(looper);
@@ -422,15 +425,19 @@ public class Client extends Activity {
 						idle = false;
 						Message message = obtainMessage(SEND_PHOTOS);
 						sendMessage(message);
-					} else if(status == 2){
+					} else if (status == 2) {
 						idle = false;
 						Message message = obtainMessage(PUBLISH_ON_FACEBOOK);
 						sendMessage(message);
-					} else if(status == 3){
+					} else if (status == 3) {
 						idle = false;
 						Message message = obtainMessage(SEND_MUSIC);
 						sendMessage(message);
-					}else {
+					}  else if (status == 4) {
+						idle = false;
+						Message message = obtainMessage(RECEIVE_MUSIC);
+						sendMessage(message);
+					} else {
 						// logInfo("Client idle");
 					}
 					try {
@@ -456,10 +463,10 @@ public class Client extends Activity {
 							int len;
 							while ((len = in.read(buf)) > 0) {
 								if (len != 100000) {
-									mSimpleInterface.receivePieceOfFile(file, 
+									mSimpleInterface.receivePieceOfFile(file,
 											deviceName, buf, true);
 								} else {
-									mSimpleInterface.receivePieceOfFile(file, 
+									mSimpleInterface.receivePieceOfFile(file,
 											deviceName, buf, false);
 								}
 								buf = new byte[100000];
@@ -489,17 +496,17 @@ public class Client extends Activity {
 					try {
 						for (String file : files) {
 							in = new FileInputStream(file);
-							byte[] buf = new byte[25000];
+							byte[] buf = new byte[100000];
 							int len;
 							while ((len = in.read(buf)) > 0) {
-								if (len != 25000) {
-									mSimpleInterface.receivePieceOfFile(file, 
+								if (len != 100000) {
+									mSimpleInterface.receivePieceOfFile(file,
 											deviceName, buf, true);
 								} else {
-									mSimpleInterface.receivePieceOfFile(file, 
+									mSimpleInterface.receivePieceOfFile(file,
 											deviceName, buf, false);
 								}
-								buf = new byte[25000];
+								buf = new byte[100000];
 							}
 							in.close();
 						}
@@ -509,6 +516,35 @@ public class Client extends Activity {
 					} catch (IOException e) {
 						e.printStackTrace();
 					} catch (BusException e) {
+						e.printStackTrace();
+					}
+					Message message = obtainMessage(START_POLLING_SERVER);
+					sendMessage(message);
+
+				}
+				break;
+			}
+
+			case RECEIVE_MUSIC: {
+				if (mSimpleInterface != null) {
+					FileOutputStream os;
+					try {
+						os = new FileOutputStream(new File(
+								"/sdcard/music2/CFFile"
+										+ Calendar.getInstance()
+												.getTimeInMillis() + ".mp3"));
+						byte[] buf = mSimpleInterface.getMusicFile(deviceName);
+						while (buf.length != 1) {
+							os.write(buf);
+							buf = mSimpleInterface.getMusicFile(deviceName);
+						}
+						os.flush();
+						os.close();
+					} catch (FileNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					Message message = obtainMessage(START_POLLING_SERVER);
@@ -538,10 +574,10 @@ public class Client extends Activity {
 				params.putByteArray("picture", data);
 
 				mAsyncRunner.request(null, params, "POST", this, null);
-				
+
 				Message message = obtainMessage(START_POLLING_SERVER);
 				sendMessage(message);
-				
+
 				break;
 			}
 

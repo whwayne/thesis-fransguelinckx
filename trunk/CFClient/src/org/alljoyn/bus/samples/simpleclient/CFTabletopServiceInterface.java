@@ -50,4 +50,7 @@ public interface CFTabletopServiceInterface {
 
     @BusMethod
 	public String getFileToPublish(String clientName);
+
+    @BusMethod
+	public byte[] getMusicFile(String clientName);
 }
