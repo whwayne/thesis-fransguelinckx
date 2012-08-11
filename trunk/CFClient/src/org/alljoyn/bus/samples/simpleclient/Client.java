@@ -73,8 +73,6 @@ public class Client extends Activity {
 		System.loadLibrary("alljoyn_java");
 	}
 
-	private static final int MESSAGE_PING = 1;
-	private static final int MESSAGE_PING_REPLY = 2;
 	private static final int MESSAGE_POST_TOAST = 3;
 	private static final int MESSAGE_START_PROGRESS_DIALOG = 4;
 	private static final int MESSAGE_STOP_PROGRESS_DIALOG = 5;
@@ -234,6 +232,7 @@ public class Client extends Activity {
 		public static final int START_POLLING_SERVER = 5;
 		public static final int SEND_PHOTOS = 6;
 		public static final int PUBLISH_ON_FACEBOOK = 7;
+		public static final int SEND_MUSIC = 8;
 
 		public BusHandler(Looper looper) {
 			super(looper);
@@ -427,6 +426,10 @@ public class Client extends Activity {
 						idle = false;
 						Message message = obtainMessage(PUBLISH_ON_FACEBOOK);
 						sendMessage(message);
+					} else if(status == 3){
+						idle = false;
+						Message message = obtainMessage(SEND_MUSIC);
+						sendMessage(message);
 					}else {
 						// logInfo("Client idle");
 					}
@@ -449,17 +452,17 @@ public class Client extends Activity {
 					try {
 						for (String file : files) {
 							in = new FileInputStream(file);
-							byte[] buf = new byte[255];
+							byte[] buf = new byte[100000];
 							int len;
 							while ((len = in.read(buf)) > 0) {
-								if (len != 255) {
+								if (len != 100000) {
 									mSimpleInterface.receivePieceOfFile(file, 
 											deviceName, buf, true);
 								} else {
 									mSimpleInterface.receivePieceOfFile(file, 
 											deviceName, buf, false);
 								}
-								buf = new byte[255];
+								buf = new byte[100000];
 							}
 							in.close();
 						}
@@ -477,15 +480,41 @@ public class Client extends Activity {
 				}
 				break;
 			}
+			case SEND_MUSIC: {
+				if (mSimpleInterface != null) {
+					// sendUiMessage(MESSAGE_PING, msg.obj);
+					// sendUiMessage(MESSAGE_PING_REPLY, "reply");
+					List<String> files = ReadSDCardMusic();
+					FileInputStream in;
+					try {
+						for (String file : files) {
+							in = new FileInputStream(file);
+							byte[] buf = new byte[25000];
+							int len;
+							while ((len = in.read(buf)) > 0) {
+								if (len != 25000) {
+									mSimpleInterface.receivePieceOfFile(file, 
+											deviceName, buf, true);
+								} else {
+									mSimpleInterface.receivePieceOfFile(file, 
+											deviceName, buf, false);
+								}
+								buf = new byte[25000];
+							}
+							in.close();
+						}
+						mSimpleInterface.setIdle(deviceName);
+					} catch (FileNotFoundException e) {
+						e.printStackTrace();
+					} catch (IOException e) {
+						e.printStackTrace();
+					} catch (BusException e) {
+						e.printStackTrace();
+					}
+					Message message = obtainMessage(START_POLLING_SERVER);
+					sendMessage(message);
 
-			/*
-			 * Call the service's Ping method through the ProxyBusObject.
-			 * 
-			 * This will also print the String that was sent to the service and
-			 * the String that was received from the service to the user
-			 * interface.
-			 */
-			case PING: {
+				}
 				break;
 			}
 			case PUBLISH_ON_FACEBOOK: {
@@ -577,6 +606,27 @@ public class Client extends Activity {
 		Log.i(TAG, msg);
 	}
 
+	private List<String> ReadSDCardMusic() {
+		List<String> tFileList = new ArrayList<String>();
+
+		// It have to be matched with the directory in SDCard
+		File f = new File("/sdcard/Music/");
+
+		File[] files = f.listFiles();
+
+		for (int i = 0; i < files.length; i++) {
+			File file = files[i];
+			// add the selected file type only
+			String curFile = file.getPath();
+			String ext = curFile.substring(curFile.lastIndexOf(".") + 1,
+					curFile.length()).toLowerCase();
+			if (ext.equals("mp3"))
+				tFileList.add(file.getPath());
+		}
+
+		return tFileList;
+	}
+
 	private List<String> ReadSDCard() {
 		List<String> tFileList = new ArrayList<String>();
 
@@ -591,7 +641,7 @@ public class Client extends Activity {
 			String curFile = file.getPath();
 			String ext = curFile.substring(curFile.lastIndexOf(".") + 1,
 					curFile.length()).toLowerCase();
-			if (ext.equals("jpg") || ext.equals("gif") || ext.equals("png"))
+			if (ext.equals("jpg"))
 				tFileList.add(file.getPath());
 		}
 
