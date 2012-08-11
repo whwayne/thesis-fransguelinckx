@@ -36,9 +36,7 @@ public abstract class CFComponent extends MTRectangle{
 	 * Represents the size of the y-side of a component when it is autoscaled to large size.
 	 */
 	protected static final int Y_HEIGHT = 540;
-
-//	protected MTRectangle component;
-//	protected MTApplication mtApplication;
+	
 	private int angle = 0;
 	private CFScene scene;
 	private boolean autoRotate = true;
@@ -48,8 +46,7 @@ public abstract class CFComponent extends MTRectangle{
 	public CFComponent(MTApplication mtApplication, CFScene scene) {
 		super(mtApplication, 100, 100);
 		this.scene = scene;
-//		this.mtApplication = mtApplication;
-//		this.component = new MTRectangle(mtApplication, 10, 10);
+
 		setUpGestures(mtApplication);
 	}
 
@@ -150,20 +147,9 @@ public abstract class CFComponent extends MTRectangle{
 	public abstract void handleScaledCFComponent(CFComponent component);
 	public abstract void handleRotatedCFComponent(CFComponent component);
 
-//	private double getDistanceToCenter() {
-//		double result = 0;
-//		float x = Math.abs(this.getMTComponent()
-//				.getPosition(TransformSpace.GLOBAL).getX()
-//				- (this.getMTApplication().getWidth() / 2));
-//		float y = Math.abs(this.getMTComponent()
-//				.getPosition(TransformSpace.GLOBAL).getY()
-//				- (this.getMTApplication().getHeight() / 2));
-//		result = Math.sqrt((x * x) + (y * y));
-//		return result;
-//	}
 
 	public void autoScale() {
-		// double distance = getDistanceToCenter();
+
 		float scaleX = X_WIDTH / this.getWidth();
 		float scaleY = Y_HEIGHT / this.getHeight();
 		float scalefactor = Math.min(scaleX, scaleY);
@@ -194,10 +180,6 @@ public abstract class CFComponent extends MTRectangle{
 		this.autoScale = true;
 	}
 
-//	protected MTApplication getMTApplication() {
-//		return this.getMTApplication();
-//	}
-
 	public float getDistanceto(CFComponent component) {
 		float result = 0;
 		float x, y;
@@ -212,10 +194,6 @@ public abstract class CFComponent extends MTRectangle{
 	public float getHeight() {
 		return this.getHeightXY(TransformSpace.GLOBAL);
 	}
-
-//	public MTRectangle getMTComponent() {
-//		return this.component;
-//	}
 
 	protected Vector3D getPosition() {
 		return this.getPosition(TransformSpace.GLOBAL);
@@ -237,10 +215,6 @@ public abstract class CFComponent extends MTRectangle{
 				rotationPoint.y + this.getHeight() / 2);
 		this.rotateZ(point, degrees);
 	}
-
-//	public void scale(float x, float y, float z, Vector3D scalingPoint) {
-//		this.scale(x, y, z, scalingPoint);
-//	}
 
 	public void rotateTo(int angle) {
 		int result = (angle - this.angle) % 360;
@@ -270,8 +244,6 @@ public abstract class CFComponent extends MTRectangle{
 	public void scaleImage(float factor) {
 		this.scale(factor, factor, 1,
 				this.getPosition(TransformSpace.GLOBAL));
-		// this.getMTComponent().scale(factor, factor, 1,
-		// this.getMTComponent().getPosition(TransformSpace.GLOBAL));
 	}
 
 	protected int getAngle() {

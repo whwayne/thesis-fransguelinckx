@@ -54,10 +54,8 @@ public class CFMusicScene extends CFScene implements CFTabletopServiceListener {
 		}
 	}
 
-	@Override
 	public void setIdle(String name) {
-		// TODO Auto-generated method stub
-
+		this.getCfMobileDeviceProxies().get(name).stopSpinner();
 	}
 
 }

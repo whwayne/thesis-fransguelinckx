@@ -20,7 +20,6 @@ public class CFTrashCan extends CFComponent{
 	public CFTrashCan(MTApplication mtApplication, CFScene scene) {
 		super(mtApplication, scene);
 		PImage pImage = mtApplication.loadImage(imagePath);
-//		this.component = new MTRectangle(mtApplication, pImage);
 		this.setTexture(pImage);
 		this.scaleComponentToStackSize();
 		this.getCFScene().addCFComponent(this);
