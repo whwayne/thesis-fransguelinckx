@@ -17,40 +17,40 @@ public class CFAutoScaler extends CFComponentModifier {
 			if (position.x < X_LOW_TRESHHOLD
 					&& position.y < Y_LOW_TRESHHOLD) {
 				// System.out.println("zone 1");
-				component.scaleImageToStackSize();
+				component.scaleComponentToStackSize();
 			} else if (position.x > X_LOW_TRESHHOLD
 					& position.x < X_HIGH_TRESHHOLD
 					&& position.y < Y_LOW_TRESHHOLD) {
 				// System.out.println("zone 2");
-				component.scaleImageToStackSize();
+				component.scaleComponentToStackSize();
 			} else if (position.x > X_HIGH_TRESHHOLD
 					&& position.y < Y_LOW_TRESHHOLD) {
 				// System.out.println("zone 3");
-				component.scaleImageToStackSize();
+				component.scaleComponentToStackSize();
 			} else if (position.x > X_HIGH_TRESHHOLD
 					&& position.y > Y_LOW_TRESHHOLD
 					&& position.y < Y_HIGH_TRESHHOLD) {
 				// System.out.println("zone 4");
-				component.scaleImageToStackSize();
+				component.scaleComponentToStackSize();
 			} else if (position.x > X_HIGH_TRESHHOLD
 					&& position.y > Y_HIGH_TRESHHOLD) {
 				// System.out.println("zone 5");
-				component.scaleImageToStackSize();
+				component.scaleComponentToStackSize();
 			} else if (position.x > X_LOW_TRESHHOLD
 					&& position.x < X_HIGH_TRESHHOLD
 					&& position.y > Y_HIGH_TRESHHOLD) {
 				// System.out.println("zone 6");
 				component.rotateTo(0);
-				component.scaleImageToStackSize();
+				component.scaleComponentToStackSize();
 			} else if (position.x < X_LOW_TRESHHOLD
 					&& position.y > Y_HIGH_TRESHHOLD) {
 				// System.out.println("zone 7");
-				component.scaleImageToStackSize();
+				component.scaleComponentToStackSize();
 			} else if (position.x < X_LOW_TRESHHOLD
 					&& position.y > Y_LOW_TRESHHOLD
 					&& position.y < Y_HIGH_TRESHHOLD) {
 				// System.out.println("zone 8");
-				component.scaleImageToStackSize();
+				component.scaleComponentToStackSize();
 			} else if (component.autoScaleIsOn()) {
 				component.autoScale();
 			}

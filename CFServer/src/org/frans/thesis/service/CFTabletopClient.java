@@ -13,6 +13,7 @@ public class CFTabletopClient {
 	public static final int IDLE = 0;
 	public static final int REQUESTING_PHOTOS = 1;
 	public static final int PUBLISHING_PHOTOS = 2;
+	public static final int REQUESTING_MUSIC = 3;
 
 	private CFFile file;
 	private boolean isReceivingFile = false;
@@ -88,8 +89,10 @@ public class CFTabletopClient {
 	}
 
 	private void startNewFile(String path) throws FileNotFoundException {
+		String ext = path.substring(path.lastIndexOf(".") + 1,
+				path.length()).toLowerCase();
 		this.file = new CFFile(path,new File(this.workingDirectory
-				+ Calendar.getInstance().getTimeInMillis() + ".jpg"));
+				+ Calendar.getInstance().getTimeInMillis() + "." + ext));
 		this.out = new FileOutputStream(file.getFile());
 	}
 

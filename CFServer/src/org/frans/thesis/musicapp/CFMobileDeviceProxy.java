@@ -1,5 +1,4 @@
-package org.frans.thesis.PhotoApp;
-
+package org.frans.thesis.musicapp;
 
 import org.frans.thesis.GUI.CFComponent;
 import org.frans.thesis.GUI.CFComponentMenu;
@@ -100,7 +99,7 @@ public class CFMobileDeviceProxy extends CFComponent{
 	}
 
 	private void downloadPhotos() {
-		this.getTabletopClientManager().setStatus(this.getClientName(), CFTabletopClient.REQUESTING_PHOTOS);
+		this.getTabletopClientManager().setStatus(this.getClientName(), CFTabletopClient.REQUESTING_MUSIC);
 		this.startSpinner();
 	}
 
@@ -184,17 +183,7 @@ public class CFMobileDeviceProxy extends CFComponent{
 
 	@Override
 	public void handleDroppedCFComponent(CFComponent component) {
-		if(component instanceof CFImage){
-			CFImage image = (CFImage) component;
-			this.publishImageOnFacebook(image.getFile());
-			image.removeFromParent();
-		}else if(component instanceof CFPhotoAlbum){
-			CFPhotoAlbum album = (CFPhotoAlbum) component;
-			for(CFImage image : album.getImages()){
-				this.publishImageOnFacebook(image.getFile());
-			}
-			album.removeFromParent();
-		}
+		// TODO Auto-generated method stub
 	}
 
 	@Override

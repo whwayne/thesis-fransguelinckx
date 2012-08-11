@@ -59,7 +59,7 @@ public class CFComponentMenu {
 	public void repositionMenuItemsInCircle() {
 		int degrees = 0;
 		for(CFComponentMenuItem item : this.getMenuItems()){
-			item.setPosition(new Vector3D(getOwner().getPosition().x, getOwner().getPosition().y-120));
+			item.setPosition(new Vector3D(getOwner().getPosition().x, getOwner().getPosition().y-150));
 			item.rotate(this.getOwner().getPosition(), degrees);
 			degrees += 30;
 		}

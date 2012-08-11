@@ -26,13 +26,13 @@ public class CFImage extends CFComponent {
 		this.image = image;
 		PImage pImage = this.getCFScene().getMTApplication().loadImage(image.getFile().getPath());
 		this.setTexture(pImage);
-		this.scaleImageToStackSize();
+		this.scaleComponentToStackSize();
 
 		setUpGestures(mtApplication);
 
 		this.setStrokeColor(this.getColor());
 		this.setStrokeWeight(5);
-		this.getCFScene().addCFComponent(getCFImage());
+		this.getCFScene().addCFComponent(this);
 		autoScale();
 	}
 
@@ -63,17 +63,13 @@ public class CFImage extends CFComponent {
 	}
 
 	private void createNewPhotoalbum() {
-		CFPhotoAlbum album = new CFPhotoAlbum(this.getCFScene().getMTApplication(), getCFImage(),(CFPhotoScene) getCFScene());
-		album.addImage(getCFImage());
+		CFPhotoAlbum album = new CFPhotoAlbum(this.getCFScene().getMTApplication(), this,(CFPhotoScene) getCFScene());
+		album.addImage(this);
 
 	}
 
 	private MTColor getColor() {
 		return this.color;
-	}
-
-	private CFImage getCFImage() {
-		return this;
 	}
 
 //	protected MTRectangle getImage() {
@@ -88,9 +84,9 @@ public class CFImage extends CFComponent {
 	@Override
 	public void handleDroppedCFComponent(CFComponent component) {
 		if(component instanceof CFImage){
-			this.scaleImageToStackSize();
+			this.scaleComponentToStackSize();
 			CFImage image = (CFImage) component;
-			image.scaleImageToStackSize();
+			image.scaleComponentToStackSize();
 			Vector3D position = this.getPosition();
 			image.reposition(position);	
 		}
