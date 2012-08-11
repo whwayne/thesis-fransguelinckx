@@ -183,7 +183,10 @@ public class CFMobileDeviceProxy extends CFComponent{
 
 	@Override
 	public void handleDroppedCFComponent(CFComponent component) {
-		// TODO Auto-generated method stub
+		if(component instanceof CFSong){
+			CFSong song = (CFSong)component;
+			this.getTabletopClientManager().sendFileToClient(this.getClientName(), song.getFile());
+		}
 	}
 
 	@Override
