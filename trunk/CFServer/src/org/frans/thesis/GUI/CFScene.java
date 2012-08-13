@@ -7,10 +7,25 @@ import org.mt4j.MTApplication;
 import org.mt4j.sceneManagement.AbstractScene;
 import org.mt4j.util.math.Vector3D;
 
+/**
+ * An abstract class that represents a scene on the tabletop. A scene usually contains several interactive components.
+ */
 public abstract class CFScene extends AbstractScene{
 
+	/**
+	 * An list of all interactive components that this scene contains.
+	 */
 	private ArrayList<CFComponent> cfComponents;
+	
+	/**
+	 * The minimum distance (in pixels) between the centers of two interactive components for them to be considered "on top of each other".
+	 * When a user drops an interactive component on top of the other, the method handleDroppedComponent() gets called automatically.
+	 */
 	protected final float CRITICAL_STACK_DISTANCE = 100;
+	
+	/**
+	 * A list of component modifiers that belong to this scene.
+	 */
 	private ArrayList<CFComponentModifier> componentModifiers;
 
 	public CFScene(MTApplication mtApplication, String name) {
@@ -54,7 +69,7 @@ public abstract class CFScene extends AbstractScene{
 	}
 
 
-	protected ArrayList<CFComponent> getNearCFComponents(CFComponent component1) {
+	protected ArrayList<CFComponent> getNearbyCFComponents(CFComponent component1) {
 		ArrayList<CFComponent> result = new ArrayList<CFComponent>();
 		for (CFComponent component2 : this.getCfComponents()) {
 			if (!component2.equals(component1)
@@ -94,7 +109,7 @@ public abstract class CFScene extends AbstractScene{
 		this.getCanvas().removeChild(component);
 	}
 
-	public void cfComponentMoved(CFComponent component) {
+	public void cfComponentMoved(CFComponentModifiable component) {
 		// TODO Auto-generated method stub
 		for(CFComponentModifier modifier : this.componentModifiers){
 			modifier.handleMovedCFComponent(component);

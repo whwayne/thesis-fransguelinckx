@@ -7,17 +7,23 @@ import org.mt4j.MTApplication;
 import org.mt4j.input.gestureAction.TapAndHoldVisualizer;
 import org.mt4j.input.inputProcessors.IGestureEventListener;
 import org.mt4j.input.inputProcessors.MTGestureEvent;
+import org.mt4j.input.inputProcessors.componentProcessors.rotateProcessor.RotateProcessor;
+import org.mt4j.input.inputProcessors.componentProcessors.scaleProcessor.ScaleProcessor;
 import org.mt4j.input.inputProcessors.componentProcessors.tapAndHoldProcessor.TapAndHoldEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.tapAndHoldProcessor.TapAndHoldProcessor;
+import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapEvent;
+import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapProcessor;
 import org.mt4j.util.MTColor;
 import org.mt4j.util.math.Vector3D;
 
 import processing.core.PImage;
 
-public class CFImage extends CFComponent {
+public class CFImage extends CFComponent implements AutoRotatable, AutoScalable{
 
 	private MTColor color;
 	private CFFile image;
+	private boolean autoScale = true;
+	private boolean autoRotate = true;
 
 	public CFImage(MTApplication mtApplication, CFFile image, CFScene scene,
 			MTColor color) {
@@ -56,6 +62,38 @@ public class CFImage extends CFComponent {
 							break;
 						default:
 							break;
+						}
+						return false;
+					}
+				});
+		this.addGestureListener(ScaleProcessor.class,
+				new IGestureEventListener() {
+
+					@Override
+					public boolean processGestureEvent(MTGestureEvent ge) {
+						turnAutoScaleOff();
+						return false;
+					}
+				});
+		this.addGestureListener(RotateProcessor.class,
+				new IGestureEventListener() {
+
+					@Override
+					public boolean processGestureEvent(MTGestureEvent ge) {
+						turnAutoRotateOff();
+						return false;
+					}
+				});
+
+		this.registerInputProcessor(
+				new TapProcessor(mtApplication, 25, true, 350));
+		this.addGestureListener(TapProcessor.class,
+				new IGestureEventListener() {
+					public boolean processGestureEvent(MTGestureEvent ge) {
+						TapEvent te = (TapEvent) ge;
+						if (te.isDoubleTap()) {
+							turnAutoRotateOn();
+							turnAutoScaleOn();
 						}
 						return false;
 					}
@@ -102,5 +140,35 @@ public class CFImage extends CFComponent {
 	public void handleRotatedCFComponent(CFComponent component) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public boolean autoScaleIsOn() {
+		return this.autoScale;
+	}
+
+	@Override
+	public void turnAutoScaleOff() {
+		this.autoScale = false;
+	}
+
+	@Override
+	public void turnAutoScaleOn() {
+		this.autoScale = true;
+	}
+
+	@Override
+	public boolean autoRotateIsOn() {
+		return this.autoRotate;
+	}
+
+	@Override
+	public void turnAutoRotateOff() {
+		this.autoRotate = false;
+	}
+
+	@Override
+	public void turnAutoRotateOn() {
+		this.autoRotate = true;
 	}
 }

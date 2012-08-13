@@ -83,7 +83,7 @@ public class CFPhotoScene extends CFScene implements CFTabletopServiceListener {
 		return super.isCloseToCFComponent(image1);
 	}
 
-	protected ArrayList<CFComponent> getNearCFComponents(CFComponent component1) {
+	protected ArrayList<CFComponent> getNearbyCFComponents(CFComponent component1) {
 		ArrayList<CFComponent> result = new ArrayList<CFComponent>();
 		for (CFComponent component2 : this.getCfMobileDeviceProxies().values()) {
 			if (!component2.equals(component1)
@@ -91,7 +91,7 @@ public class CFPhotoScene extends CFScene implements CFTabletopServiceListener {
 				result.add(component2);
 			}
 		}
-		result.addAll(super.getNearCFComponents(component1));
+		result.addAll(super.getNearbyCFComponents(component1));
 		return result;
 	}
 

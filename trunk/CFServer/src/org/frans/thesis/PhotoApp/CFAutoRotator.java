@@ -1,6 +1,6 @@
 package org.frans.thesis.PhotoApp;
 
-import org.frans.thesis.GUI.CFComponent;
+import org.frans.thesis.GUI.CFComponentModifiable;
 import org.frans.thesis.GUI.CFComponentModifier;
 import org.mt4j.components.TransformSpace;
 import org.mt4j.util.math.Vector3D;
@@ -8,7 +8,9 @@ import org.mt4j.util.math.Vector3D;
 public class CFAutoRotator extends CFComponentModifier {
 
 	@Override
-	public void handleMovedCFComponent(CFComponent component) {
+	public void handleMovedCFComponent(CFComponentModifiable rotatable) {
+			AutoRotatable component = (AutoRotatable) rotatable;
+		
 				Vector3D position = component.getPosition(
 						TransformSpace.GLOBAL);
 

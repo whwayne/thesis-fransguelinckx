@@ -5,32 +5,49 @@ import org.mt4j.input.inputProcessors.IGestureEventListener;
 import org.mt4j.input.inputProcessors.MTGestureEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapProcessor;
-import org.mt4j.util.math.Vector3D;
 
 import processing.core.PImage;
 
+/**
+ * This class represents a menu item that belongs to a CFComponentMenu.
+ */
 public class CFComponentMenuItem extends CFComponent {
 
+	/**
+	 * The path to the folder containing the images of menu items.
+	 * /org/frans/thesis/GUI/data
+	 */
 	private static String imagePath = "org" + MTApplication.separator + "frans"
 			+ MTApplication.separator + "thesis" + MTApplication.separator
 			+ "GUI" + MTApplication.separator + "data"
 			+ MTApplication.separator;
+	
+	/**
+	 * The listener that should be called when a user taps a menu item.
+	 */
 	private CFComponentMenuItemListener listener;
 	
+	/**
+	 * The public constructor for a menu item of 75px by 75px. By default a menu item is invisible.
+	 * @param fileName
+	 * The filename of the image that should be shown as menu item.
+	 * @param listener
+	 * The listener that should be noticed when a user taps the item.
+	 * @param mtApplication
+	 * The application to which this item belongs.
+	 * @param scene
+	 * The scene to which this item belongs.
+	 */
 	public CFComponentMenuItem(String fileName,
 			CFComponentMenuItemListener listener, MTApplication mtApplication, CFScene scene) {
 		super(mtApplication, scene);
 		this.listener = listener;
 		PImage pImage = mtApplication.loadImage(imagePath + fileName);
-//		this.component = new MTRectangle(mtApplication, pImage);
 		this.setTexture(pImage);
 		this.setWidthXYGlobal(75);
 		this.setHeightXYGlobal(75);
-//		this.setWidthLocal(75);
-//		this.setHeightLocal(75);
 		this.setVisible(false);
 		this.setNoStroke(true);
-
 		this.unregisterAllInputProcessors();
 		this.removeAllGestureEventListeners();
 		this.registerInputProcessor(
@@ -47,14 +64,6 @@ public class CFComponentMenuItem extends CFComponent {
 					}
 				});
 	}
-
-	protected void setPosition(Vector3D position) {
-		this.setPositionGlobal(position);
-	}
-
-//	public void setVisible(boolean visible) {
-//		this.setVisible(visible);
-//	}
 
 	@Override
 	public void handleDroppedCFComponent(CFComponent component) {

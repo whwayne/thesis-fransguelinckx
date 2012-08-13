@@ -12,53 +12,241 @@ import org.mt4j.input.inputProcessors.componentProcessors.rotateProcessor.Rotate
 import org.mt4j.input.inputProcessors.componentProcessors.rotateProcessor.RotateProcessor;
 import org.mt4j.input.inputProcessors.componentProcessors.scaleProcessor.ScaleEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.scaleProcessor.ScaleProcessor;
-import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapEvent;
-import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapProcessor;
 import org.mt4j.util.math.Vector3D;
 
 /**
- * This abstract class represents a visual component on the tabletop and inherits from
- * MTComponent (part of the MT4j-framework)
+ * This abstract class represents a visual, interactive component on the
+ * tabletop and inherits from MTComponent (part of the MT4j-framework)
  */
-public abstract class CFComponent extends MTRectangle{
+public abstract class CFComponent extends MTRectangle implements
+		CFComponentModifiable {
 
 	/**
-	 * Represents the maximum size of the side of a component when it is reduced to stack size.
+	 * Represents the maximum size of the side of a component when it is reduced
+	 * to stack size.
 	 */
 	protected static final float STACK_SIZE = 150;
-	
-	/**
-	 * Represents the size of the x-side of a component when it is autoscaled to large size.
-	 */
-	protected static final int X_WIDTH = 960;
 
 	/**
-	 * Represents the size of the y-side of a component when it is autoscaled to large size.
+	 * Represents the size of the x-side of a component when it is autoscaled to
+	 * large size.
 	 */
-	protected static final int Y_HEIGHT = 540;
-	
+	protected static final int X_WIDTH = 500;
+
+	/**
+	 * The angle of the component.
+	 */
 	private int angle = 0;
-	private CFScene scene;
-	private boolean autoRotate = true;
-	private boolean autoScale = true;
+
+	/**
+	 * A contextual menu that belongs to this component.
+	 */
 	private CFComponentMenu menu;
 
+	/**
+	 * The scene to which this component belongs.
+	 */
+	private CFScene scene;
+
+	/**
+	 * Public constructor for this abstract component. Sets two arguments and
+	 * calls setUpGestures().
+	 * 
+	 * @param mtApplication
+	 *            The application to which this component belongs.
+	 * @param scene
+	 *            The scene to which this component belongs.
+	 */
 	public CFComponent(MTApplication mtApplication, CFScene scene) {
 		super(mtApplication, 100, 100);
 		this.scene = scene;
-
-		setUpGestures(mtApplication);
+		setUpGestures();
 	}
 
-	private void setUpGestures(MTApplication mtApplication) {
+	/**
+	 * Autoscales this component so its fits into a square with length X_WIDTH
+	 * as side.
+	 */
+	public void autoScale() {
+		float scalefactor = X_WIDTH / this.getWidth();
+		this.scaleImage(scalefactor);
+	}
+
+	/**
+	 * Returns the current angle of this component.
+	 */
+	protected int getAngle() {
+		return this.angle;
+	}
+
+	/**
+	 * Returns this component
+	 */
+	protected CFComponent getCFComponent() {
+		return this;
+	}
+
+	/**
+	 * Returns the scene to which this component belongs.
+	 */
+	protected CFScene getCFScene() {
+		return this.scene;
+	}
+
+	/**
+	 * Returns the contextual menu that belongs to this components.
+	 * 
+	 * @return The contextual menu that belongs to this component. Return null
+	 *         if this component has no menu.
+	 */
+	protected CFComponentMenu getComponentMenu() {
+		return this.menu;
+	}
+
+	/**
+	 * Calculates the distance between teh centers of this component and a given
+	 * component
+	 * 
+	 * @param component
+	 *            The component to which the distance has to be calculated
+	 * @return The distance in pixels.
+	 */
+	public float getDistanceto(CFComponent component) {
+		float result = 0;
+		float x, y;
+		x = Math.abs(this.getPosition(TransformSpace.RELATIVE_TO_PARENT).getX()
+				- component.getPosition(TransformSpace.RELATIVE_TO_PARENT)
+						.getX());
+		y = Math.abs(this.getPosition(TransformSpace.RELATIVE_TO_PARENT).getY()
+				- component.getPosition(TransformSpace.RELATIVE_TO_PARENT)
+						.getY());
+		result = (float) Math.sqrt((x * x) + (y * y));
+		return result;
+	}
+
+	/**
+	 * Returns the current height of this component.
+	 */
+	public float getHeight() {
+		return this.getHeightXY(TransformSpace.GLOBAL);
+	}
+
+	/**
+	 * Returns the current position of this component.
+	 */
+	protected Vector3D getPosition() {
+		return this.getPosition(TransformSpace.GLOBAL);
+	}
+
+	/**
+	 * Returns the current width of this component.
+	 */
+	public float getWidth() {
+		return this.getWidthXY(TransformSpace.GLOBAL);
+	}
+
+	/**
+	 * An abstract method that gets called automatically when other components
+	 * are dragged near this component.
+	 * 
+	 * @param component
+	 *            The component that was dragged near this component.
+	 */
+	public abstract void handleDroppedCFComponent(CFComponent component);
+
+	/**
+	 * An abstract method that gets called automatically when other components
+	 * are rotated.
+	 * 
+	 * @param component
+	 *            The component that was rotated.
+	 */
+	public abstract void handleRotatedCFComponent(CFComponent component);
+
+	/**
+	 * An abstract method that gets called automatically when other components
+	 * are scaled.
+	 * 
+	 * @param component
+	 *            The component that was scaled.
+	 */
+	public abstract void handleScaledCFComponent(CFComponent component);
+
+	/**
+	 * Repositions this component.
+	 * 
+	 * @param position
+	 *            The position to which this component has to be moved.
+	 */
+	protected void reposition(Vector3D position) {
+		this.setPositionGlobal(position);
+	}
+
+	/**
+	 * Rotates this component.
+	 * 
+	 * @param rotationPoint
+	 *            The point around which this component has to be rotated.
+	 * @param degrees
+	 *            The number of degrees this component has to be rotated.
+	 */
+	protected void rotate(Vector3D rotationPoint, int degrees) {
+		this.angle += degrees;
+		this.angle = this.angle % 360;
+		Vector3D point = new Vector3D(rotationPoint.x + this.getWidth() / 2,
+				rotationPoint.y + this.getHeight() / 2);
+		this.rotateZ(point, degrees);
+	}
+
+	/**
+	 * Rotates this component to a given angle.
+	 */
+	public void rotateTo(int angle) {
+		int result = (angle - this.angle) % 360;
+		this.angle = angle;
+		this.rotateZ(this.getCenterPointGlobal(), result);
+	}
+
+	/**
+	 * Scales this component so it fits into a square with STACK_SIZE as side.
+	 */
+	public void scaleComponentToStackSize() {
+		float scalingHeightFactor = CFComponent.STACK_SIZE / this.getHeight();
+		float scalingWidthFactor = CFComponent.STACK_SIZE / this.getWidth();
+		if (scalingHeightFactor < scalingWidthFactor) {
+			this.scale(scalingWidthFactor, scalingWidthFactor, 1,
+					this.getPosition(TransformSpace.GLOBAL));
+		} else {
+			this.scale(scalingHeightFactor, scalingHeightFactor, 1,
+					this.getPosition(TransformSpace.GLOBAL));
+		}
+	}
+
+	/**
+	 * Scales this component with a given factor.
+	 */
+	public void scaleImage(float factor) {
+		this.scale(factor, factor, 1, this.getPosition(TransformSpace.GLOBAL));
+	}
+
+	/**
+	 * Sets a contextual menu for this component.
+	 */
+	protected void setComponentMenu(CFComponentMenu menu) {
+		this.menu = menu;
+	}
+
+	/**
+	 * Sets up some gesture listeners so this interactive component reacts to
+	 * user gestures, more precisely dragging, scaling and rotating.
+	 */
+	private void setUpGestures() {
 		this.unregisterAllInputProcessors();
 		this.removeAllGestureEventListeners();
 
-		this.registerInputProcessor(
-				new DragProcessor(mtApplication));
-		this.addGestureListener(DragProcessor.class,
-				new DefaultDragAction());
-		
+		this.registerInputProcessor(new DragProcessor(this.getRenderer()));
+		this.addGestureListener(DragProcessor.class, new DefaultDragAction());
+
 		this.addGestureListener(DragProcessor.class,
 				new IGestureEventListener() {
 					@Override
@@ -78,8 +266,7 @@ public abstract class CFComponent extends MTRectangle{
 					}
 				});
 
-		this.registerInputProcessor(
-				new ScaleProcessor(mtApplication));
+		this.registerInputProcessor(new ScaleProcessor(this.getRenderer()));
 		this.addGestureListener(ScaleProcessor.class,
 				new IGestureEventListener() {
 
@@ -91,18 +278,8 @@ public abstract class CFComponent extends MTRectangle{
 						return false;
 					}
 				});
-		this.addGestureListener(ScaleProcessor.class,
-				new IGestureEventListener() {
 
-					@Override
-					public boolean processGestureEvent(MTGestureEvent ge) {
-						turnAutoScaleOff();
-						return false;
-					}
-				});
-
-		this.registerInputProcessor(
-				new RotateProcessor(mtApplication));
+		this.registerInputProcessor(new RotateProcessor(this.getRenderer()));
 		this.addGestureListener(RotateProcessor.class,
 				new IGestureEventListener() {
 
@@ -114,151 +291,5 @@ public abstract class CFComponent extends MTRectangle{
 						return false;
 					}
 				});
-		this.addGestureListener(RotateProcessor.class,
-				new IGestureEventListener() {
-
-					@Override
-					public boolean processGestureEvent(MTGestureEvent ge) {
-						turnAutoRotateOff();
-						return false;
-					}
-				});
-
-		this.registerInputProcessor(
-				new TapProcessor(mtApplication, 25, true, 350));
-		this.addGestureListener(TapProcessor.class,
-				new IGestureEventListener() {
-					public boolean processGestureEvent(MTGestureEvent ge) {
-						TapEvent te = (TapEvent) ge;
-						if (te.isDoubleTap()) {
-							turnAutoRotateOn();
-							turnAutoScaleOn();
-						}
-						return false;
-					}
-				});
-	}
-
-	protected CFComponent getCFComponent() {
-		return this;
-	}
-
-	public abstract void handleDroppedCFComponent(CFComponent component);
-	public abstract void handleScaledCFComponent(CFComponent component);
-	public abstract void handleRotatedCFComponent(CFComponent component);
-
-
-	public void autoScale() {
-
-		float scaleX = X_WIDTH / this.getWidth();
-		float scaleY = Y_HEIGHT / this.getHeight();
-		float scalefactor = Math.min(scaleX, scaleY);
-		this.scaleImage(scalefactor);
-	}
-
-	public boolean autoRotateIsOn() {
-		return this.autoRotate;
-	}
-
-	public boolean autoScaleIsOn() {
-		return this.autoScale;
-	}
-
-	private void turnAutoRotateOff() {
-		this.autoRotate = false;
-	}
-
-	protected void turnAutoScaleOff() {
-		this.autoScale = false;
-	}
-
-	private void turnAutoRotateOn() {
-		this.autoRotate = true;
-	}
-
-	private void turnAutoScaleOn() {
-		this.autoScale = true;
-	}
-
-	public float getDistanceto(CFComponent component) {
-		float result = 0;
-		float x, y;
-		x = Math.abs(this.getPosition(TransformSpace.RELATIVE_TO_PARENT).getX()
-				- component.getPosition(TransformSpace.RELATIVE_TO_PARENT).getX());
-		y = Math.abs(this.getPosition(TransformSpace.RELATIVE_TO_PARENT).getY()
-				- component.getPosition(TransformSpace.RELATIVE_TO_PARENT).getY());
-		result = (float) Math.sqrt((x * x) + (y * y));
-		return result;
-	}
-
-	public float getHeight() {
-		return this.getHeightXY(TransformSpace.GLOBAL);
-	}
-
-	protected Vector3D getPosition() {
-		return this.getPosition(TransformSpace.GLOBAL);
-	}
-
-	public float getWidth() {
-		return this.getWidthXY(TransformSpace.GLOBAL);
-	}
-
-	protected void reposition(Vector3D position) {
-		this.setPositionGlobal(position);
-	}
-
-	protected void rotate(Vector3D rotationPoint, int degrees) {
-		this.angle += degrees;
-		this.angle = this.angle % 360;
-
-		Vector3D point = new Vector3D(rotationPoint.x + this.getWidth() / 2,
-				rotationPoint.y + this.getHeight() / 2);
-		this.rotateZ(point, degrees);
-	}
-
-	public void rotateTo(int angle) {
-		int result = (angle - this.angle) % 360;
-		this.angle = angle;
-		this.rotateZ(
-				this.getCenterPointGlobal(), result);
-	}
-
-	protected void rotateRandomlyForStack() {
-		this.rotateZ(
-				new Vector3D(this.getHeight() / 2, this.getWidth() / 2, 0),
-				(float) (Math.random() * 360), TransformSpace.LOCAL);
-	}
-
-	public void scaleComponentToStackSize() {
-		float scalingHeightFactor = CFComponent.STACK_SIZE
-				/ this.getHeight();
-		float scalingWidthFactor = CFComponent.STACK_SIZE
-				/ this.getWidth();
-		if (scalingHeightFactor < scalingWidthFactor) {
-			this.scale(scalingWidthFactor, scalingWidthFactor, 1, this.getPosition(TransformSpace.GLOBAL));
-		} else {
-			this.scale(scalingHeightFactor, scalingHeightFactor, 1, this.getPosition(TransformSpace.GLOBAL));
-		}
-	}
-
-	public void scaleImage(float factor) {
-		this.scale(factor, factor, 1,
-				this.getPosition(TransformSpace.GLOBAL));
-	}
-
-	protected int getAngle() {
-		return this.angle;
-	}
-
-	protected CFScene getCFScene() {
-		return this.scene;
-	}
-	
-	protected CFComponentMenu getComponentMenu(){
-		return this.menu;
-	}
-	
-	protected void setComponentMenu(CFComponentMenu menu){
-		this.menu = menu;
 	}
 }

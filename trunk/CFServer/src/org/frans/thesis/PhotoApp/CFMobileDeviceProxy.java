@@ -22,7 +22,7 @@ import org.mt4j.util.math.Vector3D;
 
 import processing.core.PImage;
 
-public class CFMobileDeviceProxy extends CFComponent{
+public class CFMobileDeviceProxy extends CFComponent implements AutoRotatable, AutoScalable{
 
 	private String imagePath = "org" + MTApplication.separator + "frans"
 			+ MTApplication.separator + "thesis" + MTApplication.separator
@@ -34,6 +34,8 @@ public class CFMobileDeviceProxy extends CFComponent{
 					+ MTApplication.separator + "facebook_logo.png";
 	private String clientName;
 	private CFSpinner spinner;
+	private boolean autoScale = true;
+	private boolean autoRotate = true;
 	
 	public String getClientName() {
 		return clientName;
@@ -207,5 +209,35 @@ public class CFMobileDeviceProxy extends CFComponent{
 	public void handleRotatedCFComponent(CFComponent component) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public boolean autoScaleIsOn() {
+		return this.autoScale;
+	}
+
+	@Override
+	public void turnAutoScaleOff() {
+		this.autoScale = false;
+	}
+
+	@Override
+	public void turnAutoScaleOn() {
+		this.autoScale = true;
+	}
+
+	@Override
+	public boolean autoRotateIsOn() {
+		return this.autoRotate;
+	}
+
+	@Override
+	public void turnAutoRotateOff() {
+		this.autoRotate = false;
+	}
+
+	@Override
+	public void turnAutoRotateOn() {
+		this.autoRotate = true;
 	}
 }
