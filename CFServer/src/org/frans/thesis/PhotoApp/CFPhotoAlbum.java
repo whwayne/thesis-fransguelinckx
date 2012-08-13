@@ -9,7 +9,7 @@ import org.mt4j.MTApplication;
 import org.mt4j.components.TransformSpace;
 import org.mt4j.util.math.Vector3D;
 
-public class CFPhotoAlbum extends CFComponent {
+public class CFPhotoAlbum extends CFComponent implements AutoRotatable, AutoScalable{
 
 	private ArrayList<CFImage> images;
 	private MTApplication mtApplication;
@@ -18,6 +18,8 @@ public class CFPhotoAlbum extends CFComponent {
 	private int pageNumber = 0;
 	private Vector3D leftImagePosition;
 	private Vector3D rightImagePosition;
+	private boolean autoScale = true;
+	private boolean autoRotate = true;
 
 	public CFPhotoAlbum(MTApplication application, CFImage initialImage,
 			CFPhotoScene scene) {
@@ -187,6 +189,36 @@ public class CFPhotoAlbum extends CFComponent {
 	public void handleRotatedCFComponent(CFComponent component) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public boolean autoScaleIsOn() {
+		return this.autoScale;
+	}
+
+	@Override
+	public void turnAutoScaleOff() {
+		this.autoScale = false;
+	}
+
+	@Override
+	public void turnAutoScaleOn() {
+		this.autoScale = true;
+	}
+
+	@Override
+	public boolean autoRotateIsOn() {
+		return this.autoRotate;
+	}
+
+	@Override
+	public void turnAutoRotateOff() {
+		this.autoRotate = false;
+	}
+
+	@Override
+	public void turnAutoRotateOn() {
+		this.autoRotate = true;
 	}
 
 }

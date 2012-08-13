@@ -4,6 +4,8 @@ import org.frans.thesis.GUI.CFComponent;
 import org.frans.thesis.GUI.CFComponentMenu;
 import org.frans.thesis.GUI.CFComponentMenuItemListener;
 import org.frans.thesis.GUI.CFScene;
+import org.frans.thesis.PhotoApp.AutoRotatable;
+import org.frans.thesis.PhotoApp.AutoScalable;
 import org.frans.thesis.service.CFFile;
 import org.frans.thesis.service.CFTabletopClient;
 import org.frans.thesis.service.CFTabletopClientManager;
@@ -135,7 +137,7 @@ public class CFMobileDeviceProxy extends CFComponent{
 		mtImage.translate(new Vector3D(0, textField
 				.getHeightXY(TransformSpace.GLOBAL), 0));
 		this.setFillColor(getColor());
-		this.turnAutoScaleOff();
+//		this.turnAutoScaleOff();
 		
 		PImage facebookImage = getCFScene().getMTApplication().loadImage(fbImagePath);
 		MTRectangle facebookLogo = new MTRectangle(getCFScene().getMTApplication(), facebookImage);
