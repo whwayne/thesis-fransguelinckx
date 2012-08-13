@@ -197,12 +197,6 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 	}
 	
 	@Override
-	public String ping(String str) {
-		System.out.println("Ping: " + str);
-		return str;
-	}
-	
-	@Override
     public boolean receivePieceOfFile(String path, String clientName, byte[] buf, boolean lastPiece) throws BusException{
 		this.getClientManager().receivePieceOfFile(path, clientName, buf, lastPiece);
 		return true;

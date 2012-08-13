@@ -25,7 +25,6 @@ public class CFTrashCan extends CFComponent implements AutoRotatable, AutoScalab
 //		this.component = new MTRectangle(mtApplication, pImage);
 		this.setTexture(pImage);
 		this.scaleComponentToStackSize();
-		this.getCFScene().addCFComponent(this);
 
 		this.unregisterAllInputProcessors();
 		this.removeAllGestureEventListeners();
