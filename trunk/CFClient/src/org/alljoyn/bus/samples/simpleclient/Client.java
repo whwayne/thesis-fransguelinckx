@@ -354,7 +354,14 @@ public class Client extends Activity {
 										"MyBusListener.sessionLost(%d)",
 										sessionId));
 								mHandler.sendEmptyMessage(MESSAGE_START_PROGRESS_DIALOG);
-								Message msg = obtainMessage(CONNECT);
+								mIsStoppingDiscovery = true;
+								if (mIsConnected) {
+									Status status = mBus.leaveSession(mSessionId);
+									logStatus("BusAttachment.leaveSession()", status);
+								}
+								mBus.disconnect();
+								getLooper().quit();
+								Message msg = obtainMessage(START_POLLING_SERVER);
 								sendMessage(msg);
 
 							}
@@ -409,6 +416,8 @@ public class Client extends Activity {
 				}
 				mBus.disconnect();
 				getLooper().quit();
+				msg = obtainMessage(CONNECT);
+				sendMessage(msg);
 				break;
 			}
 
