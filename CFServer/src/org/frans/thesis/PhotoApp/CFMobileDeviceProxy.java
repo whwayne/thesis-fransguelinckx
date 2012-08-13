@@ -149,9 +149,9 @@ public class CFMobileDeviceProxy extends CFComponent implements AutoRotatable, A
 	}
 
 	private void setUpGestures(MTApplication mtApplication) {
+		this.registerInputProcessor(new TapProcessor(getRenderer()));
 		this.addGestureListener(TapProcessor.class,
 				new IGestureEventListener() {
-
 					@Override
 					public boolean processGestureEvent(MTGestureEvent me) {
 						TapEvent tapEvent = (TapEvent) me;
@@ -170,11 +170,6 @@ public class CFMobileDeviceProxy extends CFComponent implements AutoRotatable, A
 			this.getComponentMenu().setVisible(true);
 		}
 	}
-	
-
-//	protected boolean isMobileProxy() {
-//		return true;
-//	}
 
 	protected void publishImageOnFacebook(CFFile cfFile) {
 		this.getTabletopClientManager().publishImageOnFacebook(this.getClientName(), cfFile);

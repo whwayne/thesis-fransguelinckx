@@ -50,8 +50,8 @@ public class CFComponentMenu extends CFComponent {
 						.getCFScene());
 		this.menuItems.add(menuItem);
 		this.getOwner().addChild(menuItem);
-		menuItem.reposition(new Vector3D(getOwner().getPosition().x,
-				getOwner().getPosition().y));
+		menuItem.reposition(new Vector3D(getOwner().getPosition().x, getOwner()
+				.getPosition().y));
 	}
 
 	/**
@@ -109,8 +109,8 @@ public class CFComponentMenu extends CFComponent {
 	public void repositionMenuItemsInCircle() {
 		int degrees = 0;
 		for (CFComponentMenuItem item : this.getMenuItems()) {
-			item.reposition(new Vector3D(getOwner().getPosition().x,
-					getOwner().getPosition().y - 150));
+			item.reposition(new Vector3D(getOwner().getPosition().x, getOwner()
+					.getPosition().y - 150));
 			item.rotate(this.getOwner().getPosition(), degrees);
 			degrees += 30;
 		}
@@ -125,16 +125,11 @@ public class CFComponentMenu extends CFComponent {
 	 *            visible and vice versa.
 	 */
 	public void setVisible(boolean visible) {
-		if (visible && !this.isVisible()) {
-			super.setVisible(true);
-			for (CFComponentMenuItem item : this.getMenuItems()) {
-				item.setVisible(true);
-			}
-		} else if (!visible && this.isVisible()) {
-			super.setVisible(false);
-			for (CFComponentMenuItem item : this.getMenuItems()) {
-				item.setVisible(false);
-			}
+		super.setVisible(visible);
+		if(this.getMenuItems() != null){
+		for (CFComponentMenuItem item : this.getMenuItems()) {
+			item.setVisible(visible);
+		}
 		}
 	}
 
