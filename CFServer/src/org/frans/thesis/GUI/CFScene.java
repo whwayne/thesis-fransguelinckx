@@ -192,7 +192,6 @@ public abstract class CFScene extends AbstractScene {
 	 * The component that was moved.
 	 */
 	public void cfComponentMoved(CFComponentModifiable component) {
-		// TODO Auto-generated method stub
 		for (CFComponentModifier modifier : this.componentModifiers) {
 			modifier.handleMovedCFComponent(component);
 		}
