@@ -12,10 +12,9 @@ public class CFMusicApplication extends CFApplication {
 		service.connect();
 	}
 
+	@Override
 	public void setupScene() {
 		scene = new CFMusicScene(this, "CFPhotoScene");
-//		scene.addComponentModifier(new CFAutoRotator());
-//		scene.addComponentModifier(new CFAutoScaler());
 		service.addTabletopServiceListener((CFTabletopServiceListener) scene);
 	}
 

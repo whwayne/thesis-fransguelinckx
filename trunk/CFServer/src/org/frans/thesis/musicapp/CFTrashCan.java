@@ -10,8 +10,8 @@ import org.mt4j.input.inputProcessors.componentProcessors.rotateProcessor.Rotate
 
 import processing.core.PImage;
 
-public class CFTrashCan extends CFComponent{
-	
+public class CFTrashCan extends CFComponent {
+
 	private String imagePath = "org" + MTApplication.separator + "frans"
 			+ MTApplication.separator + "thesis" + MTApplication.separator
 			+ "GUI" + MTApplication.separator + "data"
@@ -26,16 +26,15 @@ public class CFTrashCan extends CFComponent{
 
 		this.unregisterAllInputProcessors();
 		this.removeAllGestureEventListeners();
-		this.registerInputProcessor(new DragProcessor(this.getCFScene().getMTApplication()));
+		this.registerInputProcessor(new DragProcessor(this.getCFScene()
+				.getMTApplication()));
 		this.addGestureListener(DragProcessor.class, new DefaultDragAction());
-		this.registerInputProcessor(new RotateProcessor(this.getCFScene().getMTApplication()));
-		this.addGestureListener(RotateProcessor.class, new DefaultRotateAction());
-		
-		this.setNoStroke(true);
-	}
+		this.registerInputProcessor(new RotateProcessor(this.getCFScene()
+				.getMTApplication()));
+		this.addGestureListener(RotateProcessor.class,
+				new DefaultRotateAction());
 
-	protected boolean isTrashCan() {
-		return true;
+		this.setNoStroke(true);
 	}
 
 	@Override
@@ -44,15 +43,19 @@ public class CFTrashCan extends CFComponent{
 	}
 
 	@Override
-	public void handleScaledCFComponent(CFComponent component) {
+	public void handleRotatedCFComponent(CFComponent component) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
-	public void handleRotatedCFComponent(CFComponent component) {
+	public void handleScaledCFComponent(CFComponent component) {
 		// TODO Auto-generated method stub
-		
+
+	}
+
+	protected boolean isTrashCan() {
+		return true;
 	}
 
 }

@@ -27,7 +27,9 @@ import org.alljoyn.bus.SessionPortListener;
 import org.alljoyn.bus.Status;
 
 /**
- * A class that communicates directly with mobile devices. It implements the CFTabletopServiceInterface, which contains methods that can be called by connected clients.
+ * A class that communicates directly with mobile devices. It implements the
+ * CFTabletopServiceInterface, which contains methods that can be called by
+ * connected clients.
  */
 public class CFTabletopService implements CFTabletopServiceInterface, BusObject {
 
@@ -58,7 +60,9 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 	private CFTabletopClientManager clientManager;
 
 	/**
-	 * A list of tabletop service listeners that get notified when a client connects or disconnects, when a file has completely been sent to the tabletop or when the status of a client was set to IDLE. 
+	 * A list of tabletop service listeners that get notified when a client
+	 * connects or disconnects, when a file has completely been sent to the
+	 * tabletop or when the status of a client was set to IDLE.
 	 */
 	private Vector<CFTabletopServiceListener> listeners;
 
@@ -72,8 +76,9 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 
 	/**
 	 * Adds a new service listener of it is not already in the list.
+	 * 
 	 * @param listener
-	 * The listener to be added.
+	 *            The listener to be added.
 	 */
 	public void addTabletopServiceListener(CFTabletopServiceListener listener) {
 		if (!this.getListeners().contains(listener)) {
@@ -82,7 +87,8 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 	}
 
 	/**
-	 * Adds a new client to this service. The client manager and all service listeners get notified.
+	 * Adds a new client to this service. The client manager and all service
+	 * listeners get notified.
 	 */
 	@Override
 	public boolean attach(String clientName) throws BusException {
@@ -94,7 +100,8 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 	}
 
 	/**
-	 * Publishes this service in the local wifi network so clients can discover it and connect with it.
+	 * Publishes this service in the local wifi network so clients can discover
+	 * it and connect with it.
 	 */
 	public void connect() {
 		BusAttachment mBus;
@@ -205,11 +212,13 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 	}
 
 	/**
-	 * Notifies this service that a file has been completely transferred to the tabletop.
+	 * Notifies this service that a file has been completely transferred to the
+	 * tabletop.
+	 * 
 	 * @param file
-	 * The file that has been transferred.
+	 *            The file that has been transferred.
 	 * @param name
-	 * The name of the client that has sent the file.
+	 *            The name of the client that has sent the file.
 	 */
 	protected void fileFinished(CFFile file, String name) {
 		for (CFTabletopServiceListener listener : this.getListeners()) {
@@ -256,8 +265,9 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 
 	/**
 	 * Removes a given service listener from this service
+	 * 
 	 * @param listener
-	 * The listener that has to be removed.
+	 *            The listener that has to be removed.
 	 */
 	protected void removeTabletopServiceListener(
 			CFTabletopServiceListener listener) {

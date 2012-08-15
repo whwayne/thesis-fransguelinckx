@@ -14,6 +14,7 @@ public class CFPhotoApplication extends CFApplication {
 		service.connect();
 	}
 
+	@Override
 	public void setupScene() {
 		scene = new CFPhotoScene(this, "CFPhotoScene");
 		scene.addComponentModifier(new CFAutoRotator());

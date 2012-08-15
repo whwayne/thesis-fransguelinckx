@@ -1,6 +1,5 @@
 package org.frans.thesis.PhotoApp;
 
-
 import org.frans.thesis.GUI.CFComponent;
 import org.frans.thesis.GUI.CFComponentMenu;
 import org.frans.thesis.GUI.CFComponentMenuItemListener;
@@ -22,35 +21,29 @@ import org.mt4j.util.math.Vector3D;
 
 import processing.core.PImage;
 
-public class CFMobileDeviceProxy extends CFComponent implements AutoRotatable, AutoScalable{
+public class CFMobileDeviceProxy extends CFComponent implements AutoRotatable,
+		AutoScalable {
 
+	private boolean autoRotate = true;
+	private boolean autoScale = true;
+	private String clientName;
+	private MTColor color;
+	private String fbImagePath = "org" + MTApplication.separator + "frans"
+			+ MTApplication.separator + "thesis" + MTApplication.separator
+			+ "GUI" + MTApplication.separator + "data"
+			+ MTApplication.separator + "facebook_logo.png";
 	private String imagePath = "org" + MTApplication.separator + "frans"
 			+ MTApplication.separator + "thesis" + MTApplication.separator
 			+ "GUI" + MTApplication.separator + "data"
 			+ MTApplication.separator + "android.png";
-	private String fbImagePath = "org" + MTApplication.separator + "frans"
-					+ MTApplication.separator + "thesis" + MTApplication.separator
-					+ "GUI" + MTApplication.separator + "data"
-					+ MTApplication.separator + "facebook_logo.png";
-	private String clientName;
-	private CFSpinner spinner;
-	private boolean autoScale = true;
-	private boolean autoRotate = true;
-	
-	public String getClientName() {
-		return clientName;
-	}
-	
-	private void startSpinner(){
-		this.spinner = new CFSpinner(this.getCFScene().getMTApplication(), this.getCFScene(), this);
-		spinner.start();
-	}
 
-	private MTColor color;
+	private CFSpinner spinner;
+
 	private CFTabletopClientManager tabletopClientManager;
 
 	public CFMobileDeviceProxy(MTApplication mtApplication, String clientName,
-			CFScene scene, CFTabletopClientManager tabletopClientManager, MTColor color) {
+			CFScene scene, CFTabletopClientManager tabletopClientManager,
+			MTColor color) {
 		super(mtApplication, scene);
 		this.color = color;
 		this.clientName = clientName;
@@ -61,20 +54,27 @@ public class CFMobileDeviceProxy extends CFComponent implements AutoRotatable, A
 		this.setStrokeColor(this.getColor());
 		createMenu();
 	}
-	
-	protected MTColor getColor(){
-		return this.color;
+	@Override
+	public boolean autoRotateIsOn() {
+		return this.autoRotate;
+	}
+
+	@Override
+	public boolean autoScaleIsOn() {
+		return this.autoScale;
 	}
 
 	private void createMenu() {
-		this.setComponentMenu(new CFComponentMenu(this, this.getCFScene().getMTApplication()));
-		this.getComponentMenu().addMenuItem("photos.png", new CFComponentMenuItemListener() {
+		this.setComponentMenu(new CFComponentMenu(this, this.getCFScene()
+				.getMTApplication()));
+		this.getComponentMenu().addMenuItem("photos.png",
+				new CFComponentMenuItemListener() {
 
-			@Override
-			public void processEvent() {
-				downloadPhotos();
-			}
-		});
+					@Override
+					public void processEvent() {
+						downloadPhotos();
+					}
+				});
 		this.getComponentMenu().addMenuItem("calendar.png",
 				new CFComponentMenuItemListener() {
 
@@ -83,13 +83,14 @@ public class CFMobileDeviceProxy extends CFComponent implements AutoRotatable, A
 						downloadCalendar();
 					}
 				});
-		this.getComponentMenu().addMenuItem("pdf.png", new CFComponentMenuItemListener() {
+		this.getComponentMenu().addMenuItem("pdf.png",
+				new CFComponentMenuItemListener() {
 
-			@Override
-			public void processEvent() {
-				downloadPdf();
-			}
-		});
+					@Override
+					public void processEvent() {
+						downloadPdf();
+					}
+				});
 		this.getComponentMenu().repositionMenuItemsInCircle();
 	}
 
@@ -102,12 +103,53 @@ public class CFMobileDeviceProxy extends CFComponent implements AutoRotatable, A
 	}
 
 	private void downloadPhotos() {
-		this.getTabletopClientManager().setStatus(this.getClientName(), CFTabletopClient.REQUESTING_PHOTOS);
+		this.getTabletopClientManager().setStatus(this.getClientName(),
+				CFTabletopClient.REQUESTING_PHOTOS);
 		this.startSpinner();
+	}
+
+	public String getClientName() {
+		return clientName;
+	}
+
+	protected MTColor getColor() {
+		return this.color;
 	}
 
 	private CFTabletopClientManager getTabletopClientManager() {
 		return this.tabletopClientManager;
+	}
+
+	@Override
+	public void handleDroppedCFComponent(CFComponent component) {
+		if (component instanceof CFImage) {
+			CFImage image = (CFImage) component;
+			this.publishImageOnFacebook(image.getFile());
+			image.removeFromParent();
+		} else if (component instanceof CFPhotoAlbum) {
+			CFPhotoAlbum album = (CFPhotoAlbum) component;
+			for (CFImage image : album.getImages()) {
+				this.publishImageOnFacebook(image.getFile());
+			}
+			album.removeFromParent();
+		}
+	}
+
+	@Override
+	public void handleRotatedCFComponent(CFComponent component) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void handleScaledCFComponent(CFComponent component) {
+		// TODO Auto-generated method stub
+
+	}
+
+	protected void publishImageOnFacebook(CFFile cfFile) {
+		this.getTabletopClientManager().publishImageOnFacebook(
+				this.getClientName(), cfFile);
 	}
 
 	private void setUpComponent(MTApplication mtApplication) {
@@ -121,7 +163,8 @@ public class CFMobileDeviceProxy extends CFComponent implements AutoRotatable, A
 		textField.setPickable(false);
 
 		PImage pImage = getCFScene().getMTApplication().loadImage(imagePath);
-		MTRectangle mtImage = new MTRectangle(getCFScene().getMTApplication(), pImage);
+		MTRectangle mtImage = new MTRectangle(getCFScene().getMTApplication(),
+				pImage);
 		mtImage.setNoStroke(true);
 		mtImage.setPickable(false);
 
@@ -129,7 +172,7 @@ public class CFMobileDeviceProxy extends CFComponent implements AutoRotatable, A
 		height += mtImage.getHeightXY(TransformSpace.GLOBAL);
 		float width = Math.max(textField.getWidthXY(TransformSpace.GLOBAL),
 				mtImage.getWidthXY(TransformSpace.GLOBAL));
-//		this.component = new MTRectangle(getMTApplication(), width, height);
+		// this.component = new MTRectangle(getMTApplication(), width, height);
 		this.setHeightLocal(height);
 		this.setWidthLocal(width);
 
@@ -139,13 +182,17 @@ public class CFMobileDeviceProxy extends CFComponent implements AutoRotatable, A
 				.getHeightXY(TransformSpace.GLOBAL), 0));
 		this.setFillColor(getColor());
 		this.turnAutoScaleOff();
-		
-		PImage facebookImage = getCFScene().getMTApplication().loadImage(fbImagePath);
-		MTRectangle facebookLogo = new MTRectangle(getCFScene().getMTApplication(), facebookImage);
+
+		PImage facebookImage = getCFScene().getMTApplication().loadImage(
+				fbImagePath);
+		MTRectangle facebookLogo = new MTRectangle(getCFScene()
+				.getMTApplication(), facebookImage);
 		facebookLogo.setNoStroke(true);
 		facebookLogo.setPickable(false);
 		this.addChild(facebookLogo);
-		facebookLogo.setPositionRelativeToParent(new Vector3D(this.getWidthXY(TransformSpace.GLOBAL), this.getHeightXY(TransformSpace.GLOBAL)));
+		facebookLogo.setPositionRelativeToParent(new Vector3D(this
+				.getWidthXY(TransformSpace.GLOBAL), this
+				.getHeightXY(TransformSpace.GLOBAL)));
 	}
 
 	private void setUpGestures(MTApplication mtApplication) {
@@ -171,59 +218,14 @@ public class CFMobileDeviceProxy extends CFComponent implements AutoRotatable, A
 		}
 	}
 
-	protected void publishImageOnFacebook(CFFile cfFile) {
-		this.getTabletopClientManager().publishImageOnFacebook(this.getClientName(), cfFile);
+	private void startSpinner() {
+		this.spinner = new CFSpinner(this.getCFScene().getMTApplication(),
+				this.getCFScene(), this);
+		spinner.start();
 	}
 
 	public void stopSpinner() {
 		spinner.stop();
-	}
-
-	@Override
-	public void handleDroppedCFComponent(CFComponent component) {
-		if(component instanceof CFImage){
-			CFImage image = (CFImage) component;
-			this.publishImageOnFacebook(image.getFile());
-			image.removeFromParent();
-		}else if(component instanceof CFPhotoAlbum){
-			CFPhotoAlbum album = (CFPhotoAlbum) component;
-			for(CFImage image : album.getImages()){
-				this.publishImageOnFacebook(image.getFile());
-			}
-			album.removeFromParent();
-		}
-	}
-
-	@Override
-	public void handleScaledCFComponent(CFComponent component) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void handleRotatedCFComponent(CFComponent component) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public boolean autoScaleIsOn() {
-		return this.autoScale;
-	}
-
-	@Override
-	public void turnAutoScaleOff() {
-		this.autoScale = false;
-	}
-
-	@Override
-	public void turnAutoScaleOn() {
-		this.autoScale = true;
-	}
-
-	@Override
-	public boolean autoRotateIsOn() {
-		return this.autoRotate;
 	}
 
 	@Override
@@ -234,5 +236,15 @@ public class CFMobileDeviceProxy extends CFComponent implements AutoRotatable, A
 	@Override
 	public void turnAutoRotateOn() {
 		this.autoRotate = true;
+	}
+
+	@Override
+	public void turnAutoScaleOff() {
+		this.autoScale = false;
+	}
+
+	@Override
+	public void turnAutoScaleOn() {
+		this.autoScale = true;
 	}
 }

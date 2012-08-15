@@ -4,8 +4,6 @@ import org.frans.thesis.GUI.CFComponent;
 import org.frans.thesis.GUI.CFComponentMenu;
 import org.frans.thesis.GUI.CFComponentMenuItemListener;
 import org.frans.thesis.GUI.CFScene;
-import org.frans.thesis.PhotoApp.AutoRotatable;
-import org.frans.thesis.PhotoApp.AutoScalable;
 import org.frans.thesis.service.CFFile;
 import org.frans.thesis.service.CFTabletopClient;
 import org.frans.thesis.service.CFTabletopClientManager;
@@ -23,57 +21,94 @@ import org.mt4j.util.math.Vector3D;
 
 import processing.core.PImage;
 
-public class CFMobileDeviceProxy extends CFComponent{
+/**
+ * This class takes care of the visual representation of a connected client and
+ * a client-menu on the tabletop. It acts as some kind of proxy for the
+ * connected client.
+ */
+public class CFMobileDeviceProxy extends CFComponent {
 
+	/**
+	 * The name of the client that is represented by this proxy.
+	 */
+	private String clientName;
+
+	/**
+	 * The color associated by this proxy.
+	 */
+	private MTColor color;
+
+	/**
+	 * The path to a facebook logo.
+	 */
+	private String fbImagePath = "org" + MTApplication.separator + "frans"
+			+ MTApplication.separator + "thesis" + MTApplication.separator
+			+ "GUI" + MTApplication.separator + "data"
+			+ MTApplication.separator + "facebook_logo.png";
+
+	/**
+	 * The path to an android logo.
+	 */
 	private String imagePath = "org" + MTApplication.separator + "frans"
 			+ MTApplication.separator + "thesis" + MTApplication.separator
 			+ "GUI" + MTApplication.separator + "data"
 			+ MTApplication.separator + "android.png";
-	private String fbImagePath = "org" + MTApplication.separator + "frans"
-					+ MTApplication.separator + "thesis" + MTApplication.separator
-					+ "GUI" + MTApplication.separator + "data"
-					+ MTApplication.separator + "facebook_logo.png";
-	private String clientName;
-	private CFSpinner spinner;
-	
-	public String getClientName() {
-		return clientName;
-	}
-	
-	private void startSpinner(){
-		this.spinner = new CFSpinner(this.getCFScene().getMTApplication(), this.getCFScene(), this);
-		spinner.start();
-	}
 
-	private MTColor color;
+	/**
+	 * A spinner used to indicate when data is being transferred to the
+	 * tabeltop.
+	 */
+	private CFSpinner spinner;
+
+	/**
+	 * The client manager that manages the client that is represented by this
+	 * proxy.
+	 */
 	private CFTabletopClientManager tabletopClientManager;
 
+	/**
+	 * Public constructor for this class. It sets up the component, scales it to
+	 * stack size, sets up the necessary gestures and creates the menu.
+	 * 
+	 * @param mtApplication
+	 *            The application to which this proxy belongs.
+	 * @param clientName
+	 *            The name of the client represented by this proxy.
+	 * @param scene
+	 *            The scene to which this proxy belongs.
+	 * @param tabletopClientManager
+	 *            The clientmanager of the client represented by this proxy.
+	 * @param color
+	 *            The color associated with this proxy.
+	 */
 	public CFMobileDeviceProxy(MTApplication mtApplication, String clientName,
-			CFScene scene, CFTabletopClientManager tabletopClientManager, MTColor color) {
+			CFScene scene, CFTabletopClientManager tabletopClientManager,
+			MTColor color) {
 		super(mtApplication, scene);
 		this.color = color;
 		this.clientName = clientName;
 		this.tabletopClientManager = tabletopClientManager;
 		setUpComponent(mtApplication);
 		this.scaleComponentToStackSize();
-		setUpGestures(mtApplication);
+		setUpGestures();
 		this.setStrokeColor(this.getColor());
 		createMenu();
 	}
-	
-	protected MTColor getColor(){
-		return this.color;
-	}
 
+	/**
+	 * Creates the menu of a proxy with three buttons.
+	 */
 	private void createMenu() {
-		this.setComponentMenu(new CFComponentMenu(this, this.getCFScene().getMTApplication()));
-		this.getComponentMenu().addMenuItem("photos.png", new CFComponentMenuItemListener() {
+		this.setComponentMenu(new CFComponentMenu(this, this.getCFScene()
+				.getMTApplication()));
+		this.getComponentMenu().addMenuItem("photos.png",
+				new CFComponentMenuItemListener() {
 
-			@Override
-			public void processEvent() {
-				downloadPhotos();
-			}
-		});
+					@Override
+					public void processEvent() {
+						downloadPhotos();
+					}
+				});
 		this.getComponentMenu().addMenuItem("calendar.png",
 				new CFComponentMenuItemListener() {
 
@@ -82,33 +117,110 @@ public class CFMobileDeviceProxy extends CFComponent{
 						downloadCalendar();
 					}
 				});
-		this.getComponentMenu().addMenuItem("pdf.png", new CFComponentMenuItemListener() {
+		this.getComponentMenu().addMenuItem("pdf.png",
+				new CFComponentMenuItemListener() {
 
-			@Override
-			public void processEvent() {
-				downloadPdf();
-			}
-		});
+					@Override
+					public void processEvent() {
+						downloadPdf();
+					}
+				});
 		this.getComponentMenu().repositionMenuItemsInCircle();
 	}
 
+	/**
+	 * Dummy method that is called when a user taps the calendar icon.
+	 */
 	private void downloadCalendar() {
 		System.out.println("Download calendar");
 	}
 
+	/**
+	 * Dummy method that is called when a user taps the pdf icon.
+	 */
 	private void downloadPdf() {
 		System.out.println("Download pdf");
 	}
 
+	/**
+	 * Method that is called when a user taps the photo icon. It sets the status
+	 * of the client to REQUESTING_PHOTOS and starts the spinner.
+	 */
 	private void downloadPhotos() {
-		this.getTabletopClientManager().setStatus(this.getClientName(), CFTabletopClient.REQUESTING_MUSIC);
+		this.getTabletopClientManager().setStatus(this.getClientName(),
+				CFTabletopClient.REQUESTING_MUSIC);
 		this.startSpinner();
 	}
 
+	/**
+	 * Returns the name of the client being represented by the proxy.
+	 * 
+	 * @return
+	 */
+	public String getClientName() {
+		return clientName;
+	}
+
+	/**
+	 * Returns the color associated with this proxy.
+	 * 
+	 * @return
+	 */
+	protected MTColor getColor() {
+		return this.color;
+	}
+
+	/**
+	 * Returns the client manager of the client that is being represented by
+	 * this proxy.
+	 */
 	private CFTabletopClientManager getTabletopClientManager() {
 		return this.tabletopClientManager;
 	}
 
+	/**
+	 * This method is called when users drop an interactive component on the
+	 * proxy. In this case it only reacts when a song is dropped on a proxy, to
+	 * send it to the client device.
+	 */
+	@Override
+	public void handleDroppedCFComponent(CFComponent component) {
+		if (component instanceof CFSong) {
+			CFSong song = (CFSong) component;
+			this.getTabletopClientManager().sendFileToClient(
+					this.getClientName(), song.getFile());
+		}
+	}
+
+	@Override
+	public void handleRotatedCFComponent(CFComponent component) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void handleScaledCFComponent(CFComponent component) {
+		// TODO Auto-generated method stub
+
+	}
+
+	/**
+	 * Published an image on facebook.
+	 * 
+	 * @param cfFile
+	 *            The image that has to be published on fb.
+	 */
+	protected void publishImageOnFacebook(CFFile cfFile) {
+		this.getTabletopClientManager().publishImageOnFacebook(
+				this.getClientName(), cfFile);
+	}
+
+	/**
+	 * Sets up the visual representation of the proxy.
+	 * 
+	 * @param mtApplication
+	 *            The application to which this proxy belongs.
+	 */
 	private void setUpComponent(MTApplication mtApplication) {
 		MTTextArea textField = new MTTextArea(mtApplication, FontManager
 				.getInstance().createFont(mtApplication, "SansSerif", 30,
@@ -120,7 +232,8 @@ public class CFMobileDeviceProxy extends CFComponent{
 		textField.setPickable(false);
 
 		PImage pImage = getCFScene().getMTApplication().loadImage(imagePath);
-		MTRectangle mtImage = new MTRectangle(getCFScene().getMTApplication(), pImage);
+		MTRectangle mtImage = new MTRectangle(getCFScene().getMTApplication(),
+				pImage);
 		mtImage.setNoStroke(true);
 		mtImage.setPickable(false);
 
@@ -128,7 +241,7 @@ public class CFMobileDeviceProxy extends CFComponent{
 		height += mtImage.getHeightXY(TransformSpace.GLOBAL);
 		float width = Math.max(textField.getWidthXY(TransformSpace.GLOBAL),
 				mtImage.getWidthXY(TransformSpace.GLOBAL));
-//		this.component = new MTRectangle(getMTApplication(), width, height);
+		// this.component = new MTRectangle(getMTApplication(), width, height);
 		this.setHeightLocal(height);
 		this.setWidthLocal(width);
 
@@ -137,17 +250,24 @@ public class CFMobileDeviceProxy extends CFComponent{
 		mtImage.translate(new Vector3D(0, textField
 				.getHeightXY(TransformSpace.GLOBAL), 0));
 		this.setFillColor(getColor());
-//		this.turnAutoScaleOff();
-		
-		PImage facebookImage = getCFScene().getMTApplication().loadImage(fbImagePath);
-		MTRectangle facebookLogo = new MTRectangle(getCFScene().getMTApplication(), facebookImage);
+		// this.turnAutoScaleOff();
+
+		PImage facebookImage = getCFScene().getMTApplication().loadImage(
+				fbImagePath);
+		MTRectangle facebookLogo = new MTRectangle(getCFScene()
+				.getMTApplication(), facebookImage);
 		facebookLogo.setNoStroke(true);
 		facebookLogo.setPickable(false);
 		this.addChild(facebookLogo);
-		facebookLogo.setPositionRelativeToParent(new Vector3D(this.getWidthXY(TransformSpace.GLOBAL), this.getHeightXY(TransformSpace.GLOBAL)));
+		facebookLogo.setPositionRelativeToParent(new Vector3D(this
+				.getWidthXY(TransformSpace.GLOBAL), this
+				.getHeightXY(TransformSpace.GLOBAL)));
 	}
 
-	private void setUpGestures(MTApplication mtApplication) {
+	/**
+	 * Sets up the gestures which this proxy has to handle.
+	 */
+	private void setUpGestures() {
 		this.addGestureListener(TapProcessor.class,
 				new IGestureEventListener() {
 
@@ -155,51 +275,37 @@ public class CFMobileDeviceProxy extends CFComponent{
 					public boolean processGestureEvent(MTGestureEvent me) {
 						TapEvent tapEvent = (TapEvent) me;
 						if (tapEvent.isTapped()) {
-							showMenu();
+							toggleVisibilityOfMenu();
 						}
 						return false;
 					}
 				});
 	}
 
-	private void showMenu() {
+	/**
+	 * Starts the spinner of this proxy.
+	 */
+	private void startSpinner() {
+		this.spinner = new CFSpinner(this.getCFScene().getMTApplication(),
+				this.getCFScene(), this);
+		spinner.start();
+	}
+
+	/**
+	 * Stops the spinner of this proxy.
+	 */
+	public void stopSpinner() {
+		spinner.stop();
+	}
+
+	/**
+	 * Switches the visibility of the menu of this proxy.
+	 */
+	private void toggleVisibilityOfMenu() {
 		if (this.getComponentMenu().isVisible()) {
 			this.getComponentMenu().setVisible(false);
 		} else {
 			this.getComponentMenu().setVisible(true);
 		}
-	}
-	
-
-//	protected boolean isMobileProxy() {
-//		return true;
-//	}
-
-	protected void publishImageOnFacebook(CFFile cfFile) {
-		this.getTabletopClientManager().publishImageOnFacebook(this.getClientName(), cfFile);
-	}
-
-	public void stopSpinner() {
-		spinner.stop();
-	}
-
-	@Override
-	public void handleDroppedCFComponent(CFComponent component) {
-		if(component instanceof CFSong){
-			CFSong song = (CFSong)component;
-			this.getTabletopClientManager().sendFileToClient(this.getClientName(), song.getFile());
-		}
-	}
-
-	@Override
-	public void handleScaledCFComponent(CFComponent component) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void handleRotatedCFComponent(CFComponent component) {
-		// TODO Auto-generated method stub
-		
 	}
 }

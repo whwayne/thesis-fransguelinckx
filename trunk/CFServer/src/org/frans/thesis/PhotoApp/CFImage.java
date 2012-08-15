@@ -18,19 +18,20 @@ import org.mt4j.util.math.Vector3D;
 
 import processing.core.PImage;
 
-public class CFImage extends CFComponent implements AutoRotatable, AutoScalable{
+public class CFImage extends CFComponent implements AutoRotatable, AutoScalable {
 
+	private boolean autoRotate = true;
+	private boolean autoScale = true;
 	private MTColor color;
 	private CFFile image;
-	private boolean autoScale = true;
-	private boolean autoRotate = true;
 
 	public CFImage(MTApplication mtApplication, CFFile image, CFScene scene,
 			MTColor color) {
 		super(mtApplication, scene);
 		this.color = color;
 		this.image = image;
-		PImage pImage = this.getCFScene().getMTApplication().loadImage(image.getFile().getPath());
+		PImage pImage = this.getCFScene().getMTApplication()
+				.loadImage(image.getFile().getPath());
 		this.setTexture(pImage);
 		this.scaleComponentToStackSize();
 
@@ -42,20 +43,75 @@ public class CFImage extends CFComponent implements AutoRotatable, AutoScalable{
 		autoScale();
 	}
 
+	@Override
+	public boolean autoRotateIsOn() {
+		return this.autoRotate;
+	}
+
+	@Override
+	public boolean autoScaleIsOn() {
+		return this.autoScale;
+	}
+
+	private void createNewPhotoalbum() {
+		CFPhotoAlbum album = new CFPhotoAlbum(this.getCFScene()
+				.getMTApplication(), this, (CFPhotoScene) getCFScene());
+		album.addImage(this);
+
+	}
+
+	private MTColor getColor() {
+		return this.color;
+	}
+
+	// protected MTRectangle getImage() {
+	// return this;
+	// }
+
+	// @Override
+	// public MTRectangle getMTComponent() {
+	// return this.component;
+	// }
+
 	protected CFFile getFile() {
 		return this.image;
 	}
 
+	@Override
+	public void handleDroppedCFComponent(CFComponent component) {
+		if (component instanceof CFImage) {
+			this.scaleComponentToStackSize();
+			CFImage image = (CFImage) component;
+			image.scaleComponentToStackSize();
+			Vector3D position = this.getPosition();
+			image.reposition(position);
+		}
+	}
+
+	@Override
+	public void handleRotatedCFComponent(CFComponent component) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void handleScaledCFComponent(CFComponent component) {
+		// TODO Auto-generated method stub
+
+	}
+
 	private void setUpGestures(MTApplication mtApplication) {
 		this.registerInputProcessor(new TapAndHoldProcessor(mtApplication, 1500));
-		this.addGestureListener(TapAndHoldProcessor.class,new TapAndHoldVisualizer(mtApplication, this.getCFScene().getCanvas()));
+		this.addGestureListener(TapAndHoldProcessor.class,
+				new TapAndHoldVisualizer(mtApplication, this.getCFScene()
+						.getCanvas()));
 		this.addGestureListener(TapAndHoldProcessor.class,
 				new IGestureEventListener() {
 					@Override
 					public boolean processGestureEvent(MTGestureEvent ge) {
 						TapAndHoldEvent th = (TapAndHoldEvent) ge;
 						switch (th.getId()) {
-						case TapAndHoldEvent.GESTURE_ENDED:
+						case MTGestureEvent.GESTURE_ENDED:
 							if (th.isHoldComplete()) {
 								createNewPhotoalbum();
 							}
@@ -85,10 +141,11 @@ public class CFImage extends CFComponent implements AutoRotatable, AutoScalable{
 					}
 				});
 
-		this.registerInputProcessor(
-				new TapProcessor(mtApplication, 25, true, 350));
+		this.registerInputProcessor(new TapProcessor(mtApplication, 25, true,
+				350));
 		this.addGestureListener(TapProcessor.class,
 				new IGestureEventListener() {
+					@Override
 					public boolean processGestureEvent(MTGestureEvent ge) {
 						TapEvent te = (TapEvent) ge;
 						if (te.isDoubleTap()) {
@@ -100,51 +157,14 @@ public class CFImage extends CFComponent implements AutoRotatable, AutoScalable{
 				});
 	}
 
-	private void createNewPhotoalbum() {
-		CFPhotoAlbum album = new CFPhotoAlbum(this.getCFScene().getMTApplication(), this,(CFPhotoScene) getCFScene());
-		album.addImage(this);
-
-	}
-
-	private MTColor getColor() {
-		return this.color;
-	}
-
-//	protected MTRectangle getImage() {
-//		return this;
-//	}
-
-//	@Override
-//	public MTRectangle getMTComponent() {
-//		return this.component;
-//	}
-
 	@Override
-	public void handleDroppedCFComponent(CFComponent component) {
-		if(component instanceof CFImage){
-			this.scaleComponentToStackSize();
-			CFImage image = (CFImage) component;
-			image.scaleComponentToStackSize();
-			Vector3D position = this.getPosition();
-			image.reposition(position);	
-		}
+	public void turnAutoRotateOff() {
+		this.autoRotate = false;
 	}
 
 	@Override
-	public void handleScaledCFComponent(CFComponent component) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void handleRotatedCFComponent(CFComponent component) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public boolean autoScaleIsOn() {
-		return this.autoScale;
+	public void turnAutoRotateOn() {
+		this.autoRotate = true;
 	}
 
 	@Override
@@ -155,20 +175,5 @@ public class CFImage extends CFComponent implements AutoRotatable, AutoScalable{
 	@Override
 	public void turnAutoScaleOn() {
 		this.autoScale = true;
-	}
-
-	@Override
-	public boolean autoRotateIsOn() {
-		return this.autoRotate;
-	}
-
-	@Override
-	public void turnAutoRotateOff() {
-		this.autoRotate = false;
-	}
-
-	@Override
-	public void turnAutoRotateOn() {
-		this.autoRotate = true;
 	}
 }
