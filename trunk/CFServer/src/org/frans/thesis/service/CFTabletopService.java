@@ -26,8 +26,14 @@ import org.alljoyn.bus.SessionOpts;
 import org.alljoyn.bus.SessionPortListener;
 import org.alljoyn.bus.Status;
 
+/**
+ * A class that communicates directly with mobile devices. It implements the CFTabletopServiceInterface, which contains methods that can be called by connected clients.
+ */
 public class CFTabletopService implements CFTabletopServiceInterface, BusObject {
 
+	/**
+	 * AllJoyn code.
+	 */
 	private static class MyBusListener extends BusListener {
 		@Override
 		public void nameOwnerChanged(String busName, String previousOwner,
@@ -38,29 +44,46 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 			}
 		}
 	}
-	
+
 	private static final short CONTACT_PORT = 42;
 	private static boolean sessionEstablished = false;
-	
+
 	static {
 		System.loadLibrary("alljoyn_java");
 	}
-	
+
+	/**
+	 * The client manager of this service which manages all connected clients.
+	 */
 	private CFTabletopClientManager clientManager;
 
+	/**
+	 * A list of tabletop service listeners that get notified when a client connects or disconnects, when a file has completely been sent to the tabletop or when the status of a client was set to IDLE. 
+	 */
 	private Vector<CFTabletopServiceListener> listeners;
 
+	/**
+	 * Public constructor.
+	 */
 	public CFTabletopService() {
 		this.clientManager = new CFTabletopClientManager(this);
 		this.listeners = new Vector<CFTabletopServiceListener>();
 	}
 
+	/**
+	 * Adds a new service listener of it is not already in the list.
+	 * @param listener
+	 * The listener to be added.
+	 */
 	public void addTabletopServiceListener(CFTabletopServiceListener listener) {
 		if (!this.getListeners().contains(listener)) {
 			this.getListeners().add(listener);
 		}
 	}
 
+	/**
+	 * Adds a new client to this service. The client manager and all service listeners get notified.
+	 */
 	@Override
 	public boolean attach(String clientName) throws BusException {
 		this.getClientManager().addTabletopClient(clientName);
@@ -70,6 +93,9 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 		return true;
 	}
 
+	/**
+	 * Publishes this service in the local wifi network so clients can discover it and connect with it.
+	 */
 	public void connect() {
 		BusAttachment mBus;
 		mBus = new BusAttachment("AppName", BusAttachment.RemoteMessage.Receive);
@@ -178,31 +204,63 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 		return true;
 	}
 
-	protected void fileFinished(CFFile file, String name){
-		for(CFTabletopServiceListener listener : this.getListeners()){
+	/**
+	 * Notifies this service that a file has been completely transferred to the tabletop.
+	 * @param file
+	 * The file that has been transferred.
+	 * @param name
+	 * The name of the client that has sent the file.
+	 */
+	protected void fileFinished(CFFile file, String name) {
+		for (CFTabletopServiceListener listener : this.getListeners()) {
 			listener.fileFinished(file, name);
 		}
 	}
-	private CFTabletopClientManager getClientManager(){
+
+	/**
+	 * Returns the client manager of this service.
+	 */
+	private CFTabletopClientManager getClientManager() {
 		return this.clientManager;
 	}
-	
+
+	@Override
+	public String getFileToPublish(String clientName) {
+		return this.getClientManager().getFileToPublish(clientName);
+	}
+
+	/**
+	 * Returns the list of service listeners.
+	 */
 	private synchronized Vector<CFTabletopServiceListener> getListeners() {
 		return listeners;
 	}
-	
+
+	@Override
+	public byte[] getNextOutgoingFileBuffer(String clientName) {
+		return this.getClientManager().getNextOutgoingFileBuffer(clientName);
+	}
+
 	@Override
 	public int getStatus(String name) throws BusException {
 		return this.getClientManager().getStatus(name);
 	}
-	
+
 	@Override
-    public boolean receivePieceOfFile(String path, String clientName, byte[] buf, boolean lastPiece) throws BusException{
-		this.getClientManager().receivePieceOfFile(path, clientName, buf, lastPiece);
+	public boolean receivePieceOfFile(String path, String clientName,
+			byte[] buf, boolean lastPiece) throws BusException {
+		this.getClientManager().receivePieceOfFile(path, clientName, buf,
+				lastPiece);
 		return true;
 	}
 
-	protected void removeTabletopServiceListener(CFTabletopServiceListener listener) {
+	/**
+	 * Removes a given service listener from this service
+	 * @param listener
+	 * The listener that has to be removed.
+	 */
+	protected void removeTabletopServiceListener(
+			CFTabletopServiceListener listener) {
 		if (this.getListeners().contains(listener)) {
 			this.getListeners().remove(listener);
 		}
@@ -215,15 +273,5 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 			listener.setIdle(name);
 		}
 		return false;
-	}
-
-	@Override
-	public String getFileToPublish(String clientName){
-		return this.getClientManager().getFileToPublish(clientName);
-	}
-
-	@Override
-	public byte[] getMusicFile(String clientName) {
-		return this.getClientManager().getNextFileBuffer(clientName);
 	}
 }

@@ -1,9 +1,11 @@
 package org.frans.thesis.GUI;
 
 /**
- * An interface that represents objects that can act as listener for a menu item, more precisely when a user taps an item.
+ * An interface that represents objects that can act as listener for a menu
+ * item, more precisely when a user taps an item.
+ * 
  * @author fransguelinckx
- *
+ * 
  */
 public interface CFComponentMenuItemListener {
 

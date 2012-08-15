@@ -124,12 +124,13 @@ public class CFComponentMenu extends CFComponent {
 	 *            Indicates wheter this menu should be visible or not. True ->
 	 *            visible and vice versa.
 	 */
+	@Override
 	public void setVisible(boolean visible) {
 		super.setVisible(visible);
-		if(this.getMenuItems() != null){
-		for (CFComponentMenuItem item : this.getMenuItems()) {
-			item.setVisible(visible);
-		}
+		if (this.getMenuItems() != null) {
+			for (CFComponentMenuItem item : this.getMenuItems()) {
+				item.setVisible(visible);
+			}
 		}
 	}
 
