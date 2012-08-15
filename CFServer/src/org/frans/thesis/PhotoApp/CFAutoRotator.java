@@ -2,16 +2,22 @@ package org.frans.thesis.PhotoApp;
 
 import org.frans.thesis.GUI.CFComponentModifiable;
 import org.frans.thesis.GUI.CFComponentModifier;
-import org.mt4j.components.TransformSpace;
 import org.mt4j.util.math.Vector3D;
 
+/**
+ * A class that extends CFComponentModifier, so it is notified autmoatically when a interactive component on the tabletop has been moved by a user.
+ */
 public class CFAutoRotator extends CFComponentModifier {
 
+	/**
+	 * The only method in this class is inherited from CFComponentModifier.
+	 * When an interactive component crosses certain boundaries, it is automatically rotated towards the edge of the tabletop.
+	 */
 	@Override
 	public void handleMovedCFComponent(CFComponentModifiable rotatable) {
 		CFAutoRotatable component = (CFAutoRotatable) rotatable;
 
-		Vector3D position = component.getPosition(TransformSpace.GLOBAL);
+		Vector3D position = component.getPosition();
 
 		if (component.autoRotateIsOn()) {
 			if (position.x < X_LOW_TRESHHOLD && position.y < Y_LOW_TRESHHOLD) {

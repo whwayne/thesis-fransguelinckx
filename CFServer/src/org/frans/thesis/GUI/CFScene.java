@@ -2,6 +2,7 @@ package org.frans.thesis.GUI;
 
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
 import org.frans.thesis.PhotoApp.CFTrashCan;
 import org.mt4j.MTApplication;
 import org.mt4j.sceneManagement.AbstractScene;
@@ -13,6 +14,8 @@ import org.mt4j.util.math.Vector3D;
  */
 public abstract class CFScene extends AbstractScene {
 
+	private static Logger logger = Logger.getLogger(CFScene.class);
+	
 	/**
 	 * An list of all interactive components that this scene contains.
 	 */
@@ -61,6 +64,7 @@ public abstract class CFScene extends AbstractScene {
 			component.setPositionGlobal(new Vector3D(this.getMTApplication()
 					.getWidth() / 2, this.getMTApplication().getHeight() / 2));
 			this.getCfComponents().add(component);
+			logger.info("CFComponent added.");
 		}
 	}
 

@@ -8,20 +8,60 @@ import org.frans.thesis.GUI.CFComponentMenuItemListener;
 import org.mt4j.components.TransformSpace;
 import org.mt4j.util.math.Vector3D;
 
+/**
+ * A class to represent a photo album on the tabletop.
+ */
 public class CFPhotoAlbum extends CFComponent implements CFAutoRotatable,
 		CFAutoScalable {
 
+	/**
+	 * Boolean to indicate whether the auto rotation is on or off.
+	 */
 	private boolean autoRotate = true;
+
+	/**
+	 * Boolean to indicate whether auto scale is on or off.
+	 */
 	private boolean autoScale = true;
+
+	/**
+	 * The default width of an album.
+	 */
 	private float DIMENSION_X = 500;
+
+	/**
+	 * The default height of an album.
+	 */
 	private float DIMENSION_Y = 350;
+
+	/**
+	 * An array of images in an album.
+	 */
 	private ArrayList<CFImage> images;
+
+	/**
+	 * The relative position of the left image inside the square of the photo album.
+	 */
 	private Vector3D leftImagePosition;
+
+	/**
+	 * The page number, 0 by default. Each page in an album shows two images.
+	 */
 	private int pageNumber = 0;
+
+	/**
+	 * The relative position of the right image inside the square of the photo album.
+	 */
 	private Vector3D rightImagePosition;
 
-	public CFPhotoAlbum(CFImage initialImage,
-			CFPhotoScene scene) {
+	/**
+	 * Public constructor for an album. Sets up the visual representation and
+	 * the buttons to page through the album.
+	 * 
+	 * @param scene
+	 *            The scene to which this album belongs.
+	 */
+	public CFPhotoAlbum(CFPhotoScene scene) {
 		super(scene);
 		((CFPhotoScene) this.getCFScene()).addPhotoalbum(this);
 		this.setHeightLocal(DIMENSION_Y);
@@ -35,6 +75,12 @@ public class CFPhotoAlbum extends CFComponent implements CFAutoRotatable,
 				DIMENSION_Y / 2);
 	}
 
+	/**
+	 * Adds an image to this photo.
+	 * 
+	 * @param image
+	 *            The image that has to be added.
+	 */
 	protected void addImage(CFImage image) {
 		if (!this.getImages().contains(image)) {
 			this.getImages().add(image);
@@ -55,6 +101,9 @@ public class CFPhotoAlbum extends CFComponent implements CFAutoRotatable,
 		return this.autoScale;
 	}
 
+	/**
+	 * Creates the menu of an album to be able to page through it.
+	 */
 	private void createMenu() {
 		this.setComponentMenu(new CFComponentMenu(this));
 		this.getComponentMenu().addMenuItem("left_arrow.png",
@@ -77,14 +126,27 @@ public class CFPhotoAlbum extends CFComponent implements CFAutoRotatable,
 		this.getComponentMenu().setVisible(true);
 	}
 
+	/**
+	 * Returns the list of images in this album.
+	 */
 	protected ArrayList<CFImage> getImages() {
 		return this.images;
 	}
 
+	/**
+	 * Returns the current page number.
+	 * @return
+	 * 0 for page 1
+	 * 1 for page 2
+	 * etc.
+	 */
 	protected int getPageNumber() {
 		return this.pageNumber;
 	}
 
+	/**
+	 * Handles images being dropped on this album by adding them to the album.
+	 */
 	@Override
 	public void handleDroppedCFComponent(CFComponent component) {
 		if (component instanceof CFImage) {
@@ -106,10 +168,9 @@ public class CFPhotoAlbum extends CFComponent implements CFAutoRotatable,
 
 	}
 
-	protected boolean isPhotoAlbum() {
-		return true;
-	}
-
+	/**
+	 * Loads two images to be visible, according to the current page number.
+	 */
 	protected void loadImages() {
 		CFImage leftImage = null;
 		CFImage rightImage = null;
@@ -120,21 +181,20 @@ public class CFPhotoAlbum extends CFComponent implements CFAutoRotatable,
 			rightImage = this.getImages().get((this.getPageNumber() * 2) + 1);
 		}
 		if (leftImage != null) {
-			// this.getMTComponent().addChild(leftImage.getImage());
 			leftImage.setVisible(true);
 			this.resizeImage(leftImage);
-			// leftImage.rotateTo(this.getAngle());
 			leftImage.setPositionRelativeToParent(leftImagePosition);
 		}
 		if (rightImage != null) {
-			// this.getMTComponent().addChild(rightImage.getImage());
 			rightImage.setVisible(true);
 			this.resizeImage(rightImage);
-			// rightImage.rotateTo(this.getAngle());
 			rightImage.setPositionRelativeToParent(rightImagePosition);
 		}
 	}
 
+	/**
+	 * Lowers the page number by one and takes care of showing the correct images according to the page number.
+	 */
 	protected void pageDown() {
 		if (pageNumber > 0) {
 			unloadImages();
@@ -142,7 +202,10 @@ public class CFPhotoAlbum extends CFComponent implements CFAutoRotatable,
 			loadImages();
 		}
 	}
-
+	
+	/**
+	 * Increases the page number by one and takes care of showing the correct images according to the page number.
+	 */
 	protected void pageUp() {
 		if (this.getImages().size() >= ((this.getPageNumber() + 1) * 2) + 1) {
 			unloadImages();
@@ -151,16 +214,11 @@ public class CFPhotoAlbum extends CFComponent implements CFAutoRotatable,
 		}
 	}
 
-	protected void removeImage(CFImage image) {
-		if (this.getImages().contains(image)) {
-			this.getImages().remove(image);
-			image.removeFromParent();
-			this.getParent().addChild(image);
-			image.setPickable(true);
-			loadImages();
-		}
-	}
-
+	/**
+	 * Resizes an image so it fits inside the album.
+	 * @param image
+	 * The image that has to be resized.
+	 */
 	private void resizeImage(CFImage image) {
 		float scaleFactorX = (this.DIMENSION_X / 2)
 				/ image.getWidthXY(TransformSpace.GLOBAL);
@@ -197,6 +255,9 @@ public class CFPhotoAlbum extends CFComponent implements CFAutoRotatable,
 		this.autoScale = true;
 	}
 
+	/**
+	 * Makes the images on the current page number invisible.
+	 */
 	protected void unloadImages() {
 		CFImage leftImage = null;
 		CFImage rightImage = null;
@@ -207,11 +268,9 @@ public class CFPhotoAlbum extends CFComponent implements CFAutoRotatable,
 			rightImage = this.getImages().get((this.getPageNumber() * 2) + 1);
 		}
 		if (leftImage != null) {
-			// this.getMTComponent().removeChild(leftImage.getImage());
 			leftImage.setVisible(false);
 		}
 		if (rightImage != null) {
-			// this.getMTComponent().removeChild(rightImage.getImage());
 			rightImage.setVisible(false);
 		}
 	}

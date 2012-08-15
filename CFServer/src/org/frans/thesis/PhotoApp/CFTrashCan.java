@@ -10,20 +10,29 @@ import org.mt4j.input.inputProcessors.componentProcessors.rotateProcessor.Rotate
 
 import processing.core.PImage;
 
-public class CFTrashCan extends CFComponent implements CFAutoRotatable,
-		CFAutoScalable {
+/**
+ * A class that represents a trashcan.
+ */
+public class CFTrashCan extends CFComponent {
 
-	private boolean autoRotate = true;
-	private boolean autoScale = true;
+	/**
+	 * The path the the image of a trashcan.
+	 */
 	private String imagePath = "org" + MTApplication.separator + "frans"
 			+ MTApplication.separator + "thesis" + MTApplication.separator
 			+ "GUI" + MTApplication.separator + "data"
 			+ MTApplication.separator + "trashcan.png";
 
+	/**
+	 * Public constructor for this class. Sets up the visual component and the
+	 * gestures to which this component has to react.
+	 * 
+	 * @param scene
+	 *            The scene to which this component belongs.
+	 */
 	public CFTrashCan(CFScene scene) {
 		super(scene);
 		PImage pImage = scene.getMTApplication().loadImage(imagePath);
-		// this.component = new MTRectangle(mtApplication, pImage);
 		this.setTexture(pImage);
 		this.scaleComponentToStackSize();
 
@@ -41,22 +50,8 @@ public class CFTrashCan extends CFComponent implements CFAutoRotatable,
 	}
 
 	@Override
-	public boolean autoRotateIsOn() {
-		return this.autoRotate;
-	}
-
-	@Override
-	public boolean autoScaleIsOn() {
-		return this.autoScale;
-	}
-
-	@Override
 	public void handleDroppedCFComponent(CFComponent component) {
-		if (component instanceof CFImage) {
-			this.getCFScene().removeCFComponent(component);
-		} else if (component instanceof CFPhotoAlbum) {
-			this.getCFScene().removeCFComponent(component);
-		}
+		// TODO Auto-generated method stub
 	}
 
 	@Override
@@ -70,29 +65,4 @@ public class CFTrashCan extends CFComponent implements CFAutoRotatable,
 		// TODO Auto-generated method stub
 
 	}
-
-	protected boolean isTrashCan() {
-		return true;
-	}
-
-	@Override
-	public void turnAutoRotateOff() {
-		this.autoRotate = false;
-	}
-
-	@Override
-	public void turnAutoRotateOn() {
-		this.autoRotate = true;
-	}
-
-	@Override
-	public void turnAutoScaleOff() {
-		this.autoScale = false;
-	}
-
-	@Override
-	public void turnAutoScaleOn() {
-		this.autoScale = true;
-	}
-
 }

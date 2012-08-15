@@ -25,6 +25,7 @@ import org.alljoyn.bus.Mutable;
 import org.alljoyn.bus.SessionOpts;
 import org.alljoyn.bus.SessionPortListener;
 import org.alljoyn.bus.Status;
+import org.apache.log4j.Logger;
 
 /**
  * A class that communicates directly with mobile devices. It implements the
@@ -33,6 +34,8 @@ import org.alljoyn.bus.Status;
  */
 public class CFTabletopService implements CFTabletopServiceInterface, BusObject {
 
+	private static Logger logger = Logger.getLogger(CFTabletopService.class);
+	
 	/**
 	 * AllJoyn code.
 	 */
@@ -41,7 +44,7 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 		public void nameOwnerChanged(String busName, String previousOwner,
 				String newOwner) {
 			if ("org.alljoyn.bus.samples.simple".equals(busName)) {
-				System.out.println("BusAttachement.nameOwnerChanged(" + busName
+				logger.info("BusAttachement.nameOwnerChanged(" + busName
 						+ ", " + previousOwner + ", " + newOwner);
 			}
 		}
@@ -96,6 +99,7 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 		for (CFTabletopServiceListener listener : this.getListeners()) {
 			listener.addMobileDevice(clientName, this.getClientManager());
 		}
+		logger.info("New client connected: " + clientName);
 		return true;
 	}
 
@@ -113,7 +117,7 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 			System.exit(0);
 			return;
 		}
-		System.out.println("BusAttachment.registerBusObject successful");
+		logger.info("BusAttachment.registerBusObject successful");
 
 		BusListener listener = new MyBusListener();
 		mBus.registerBusListener(listener);
@@ -123,7 +127,7 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 			System.exit(0);
 			return;
 		}
-		System.out.println("BusAttachment.connect successful on "
+		logger.info("BusAttachment.connect successful on "
 				+ System.getProperty("org.alljoyn.bus.samples.simple"));
 
 		Mutable.ShortValue contactPort = new Mutable.ShortValue(CONTACT_PORT);
@@ -150,7 +154,7 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 					@Override
 					public void sessionJoined(short sessionPort, int id,
 							String joiner) {
-						System.out.println(String
+						logger.info(String
 								.format("SessionPortListener.sessionJoined(%d, %d, %s)",
 										sessionPort, id, joiner));
 						// sessionId = id;
@@ -161,7 +165,7 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 			System.exit(0);
 			return;
 		}
-		System.out.println("BusAttachment.bindSessionPort successful");
+		logger.info("BusAttachment.bindSessionPort successful");
 
 		int flags = 0; // do not use any request name flags
 		status = mBus.requestName("org.alljoyn.bus.samples.simple", flags);
@@ -175,7 +179,7 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 		status = mBus.advertiseName("org.alljoyn.bus.samples.simple",
 				SessionOpts.TRANSPORT_ANY);
 		if (status != Status.OK) {
-			System.out.println("Status = " + status);
+			logger.info("Status = " + status);
 			mBus.releaseName("org.alljoyn.bus.samples.simple");
 			System.exit(0);
 			return;
@@ -187,17 +191,17 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 			try {
 				Thread.sleep(10);
 			} catch (InterruptedException e) {
-				System.out.println("Thead Exception caught");
+				logger.info("Thead Exception caught");
 				e.printStackTrace();
 			}
 		}
-		System.out.println("BusAttachment session established");
+		logger.info("BusAttachment session established");
 
 		while (true) {
 			try {
 				Thread.sleep(10000);
 			} catch (InterruptedException e) {
-				System.out.println("Thead Exception caught");
+				logger.info("Thead Exception caught");
 				e.printStackTrace();
 			}
 		}
@@ -208,6 +212,7 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 		for (CFTabletopServiceListener listener : this.getListeners()) {
 			listener.removeMobileDevice(name);
 		}
+		logger.info("Client disconnected: " + name);
 		return true;
 	}
 
@@ -224,6 +229,7 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 		for (CFTabletopServiceListener listener : this.getListeners()) {
 			listener.fileFinished(file, name);
 		}
+		logger.info("File transfer complete: " + file.getPath());
 	}
 
 	/**

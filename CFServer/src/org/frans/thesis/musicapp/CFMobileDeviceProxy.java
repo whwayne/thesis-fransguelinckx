@@ -103,7 +103,7 @@ public class CFMobileDeviceProxy extends CFComponent {
 
 					@Override
 					public void processEvent() {
-						downloadPhotos();
+						downloadMusicFiles();
 					}
 				});
 		this.getComponentMenu().addMenuItem("calendar.png",
@@ -140,10 +140,10 @@ public class CFMobileDeviceProxy extends CFComponent {
 	}
 
 	/**
-	 * Method that is called when a user taps the photo icon. It sets the status
-	 * of the client to REQUESTING_PHOTOS and starts the spinner.
+	 * Method that is called when a user taps the music icon. It sets the status
+	 * of the client to REQUESTING_MUSIC and starts the spinner.
 	 */
-	private void downloadPhotos() {
+	private void downloadMusicFiles() {
 		this.getTabletopClientManager().setStatus(this.getClientName(),
 				CFTabletopClient.REQUESTING_MUSIC);
 		this.startSpinner();
@@ -263,6 +263,7 @@ public class CFMobileDeviceProxy extends CFComponent {
 
 	/**
 	 * Sets up the gestures which this proxy has to handle.
+	 * In this case a listener is added to handle taps so the menu is shown or hidden.
 	 */
 	private void setUpGestures() {
 		this.addGestureListener(TapProcessor.class,
