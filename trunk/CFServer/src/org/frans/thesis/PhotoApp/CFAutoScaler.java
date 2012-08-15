@@ -10,7 +10,7 @@ public class CFAutoScaler extends CFComponentModifier {
 	@Override
 	public void handleMovedCFComponent(CFComponentModifiable component) {
 		// TODO Auto-generated method stub
-		AutoScalable scalable = (AutoScalable) component;
+		CFAutoScalable scalable = (CFAutoScalable) component;
 		Vector3D position = scalable.getPosition(TransformSpace.GLOBAL);
 
 		if (scalable.autoScaleIsOn()) {

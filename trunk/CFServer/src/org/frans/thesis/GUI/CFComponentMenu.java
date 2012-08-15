@@ -2,7 +2,6 @@ package org.frans.thesis.GUI;
 
 import java.util.ArrayList;
 
-import org.mt4j.MTApplication;
 import org.mt4j.components.TransformSpace;
 import org.mt4j.util.math.Vector3D;
 
@@ -26,11 +25,9 @@ public class CFComponentMenu extends CFComponent {
 	 * 
 	 * @param component
 	 *            The owner-component of this menu.
-	 * @param mtApplication
-	 *            The application to which this menu belongs.
 	 */
-	public CFComponentMenu(CFComponent component, MTApplication mtApplication) {
-		super(mtApplication, component.getCFScene());
+	public CFComponentMenu(CFComponent component) {
+		super(component.getCFScene());
 		this.owner = component;
 		this.menuItems = new ArrayList<CFComponentMenuItem>();
 	}
@@ -46,7 +43,7 @@ public class CFComponentMenu extends CFComponent {
 	public void addMenuItem(String fileName,
 			CFComponentMenuItemListener listener) {
 		CFComponentMenuItem menuItem = new CFComponentMenuItem(fileName,
-				listener, this.getCFScene().getMTApplication(), this.getOwner()
+				listener, this.getOwner()
 						.getCFScene());
 		this.menuItems.add(menuItem);
 		this.getOwner().addChild(menuItem);

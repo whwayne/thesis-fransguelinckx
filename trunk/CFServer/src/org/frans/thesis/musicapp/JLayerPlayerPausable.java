@@ -13,6 +13,12 @@ import javazoom.jl.decoder.SampleBuffer;
 import javazoom.jl.player.AudioDevice;
 import javazoom.jl.player.FactoryRegistry;
 
+/**
+ * Class to play and pause mp3-files.
+ * Source: http://thiscouldbebetter.wordpress.com/2011/07/04/pausing-an-mp3-file-using-jlayer/
+ * http://pastebin.com/yZnCa6Nx
+ * http://pastebin.com/2K5Bbw4g
+ */
 //use with JLayerPausableTest
 public class JLayerPlayerPausable {
 	// This class is loosely based on javazoom.jl.player.AdvancedPlayer.

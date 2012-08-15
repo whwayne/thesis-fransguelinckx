@@ -1,6 +1,5 @@
 package org.frans.thesis.GUI;
 
-import org.mt4j.MTApplication;
 import org.mt4j.components.TransformSpace;
 import org.mt4j.components.visibleComponents.shapes.MTRectangle;
 import org.mt4j.input.gestureAction.DefaultDragAction;
@@ -57,8 +56,8 @@ public abstract class CFComponent extends MTRectangle implements
 	 * @param scene
 	 *            The scene to which this component belongs.
 	 */
-	public CFComponent(MTApplication mtApplication, CFScene scene) {
-		super(mtApplication, 100, 100);
+	public CFComponent(CFScene scene) {
+		super(scene.getMTApplication(), 100, 100);
 		this.scene = scene;
 		setUpGestures();
 	}

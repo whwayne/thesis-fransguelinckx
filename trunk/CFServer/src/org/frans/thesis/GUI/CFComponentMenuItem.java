@@ -35,17 +35,15 @@ public class CFComponentMenuItem extends CFComponent {
 	 *            The filename of the image that should be shown as menu item.
 	 * @param listener
 	 *            The listener that should be noticed when a user taps the item.
-	 * @param mtApplication
-	 *            The application to which this item belongs.
 	 * @param scene
 	 *            The scene to which this item belongs.
 	 */
 	public CFComponentMenuItem(String fileName,
-			CFComponentMenuItemListener listener, MTApplication mtApplication,
+			CFComponentMenuItemListener listener,
 			CFScene scene) {
-		super(mtApplication, scene);
+		super(scene);
 		this.listener = listener;
-		PImage pImage = mtApplication.loadImage(imagePath + fileName);
+		PImage pImage = scene.getMTApplication().loadImage(imagePath + fileName);
 		this.setTexture(pImage);
 		this.setWidthXYGlobal(75);
 		this.setHeightXYGlobal(75);
@@ -53,7 +51,7 @@ public class CFComponentMenuItem extends CFComponent {
 		this.setNoStroke(true);
 		this.unregisterAllInputProcessors();
 		this.removeAllGestureEventListeners();
-		this.registerInputProcessor(new TapProcessor(mtApplication));
+		this.registerInputProcessor(new TapProcessor(scene.getMTApplication()));
 		this.addGestureListener(TapProcessor.class,
 				new IGestureEventListener() {
 					@Override

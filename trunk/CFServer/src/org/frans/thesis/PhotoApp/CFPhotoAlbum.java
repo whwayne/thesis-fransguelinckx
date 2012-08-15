@@ -5,12 +5,11 @@ import java.util.ArrayList;
 import org.frans.thesis.GUI.CFComponent;
 import org.frans.thesis.GUI.CFComponentMenu;
 import org.frans.thesis.GUI.CFComponentMenuItemListener;
-import org.mt4j.MTApplication;
 import org.mt4j.components.TransformSpace;
 import org.mt4j.util.math.Vector3D;
 
-public class CFPhotoAlbum extends CFComponent implements AutoRotatable,
-		AutoScalable {
+public class CFPhotoAlbum extends CFComponent implements CFAutoRotatable,
+		CFAutoScalable {
 
 	private boolean autoRotate = true;
 	private boolean autoScale = true;
@@ -18,17 +17,13 @@ public class CFPhotoAlbum extends CFComponent implements AutoRotatable,
 	private float DIMENSION_Y = 350;
 	private ArrayList<CFImage> images;
 	private Vector3D leftImagePosition;
-	private MTApplication mtApplication;
 	private int pageNumber = 0;
 	private Vector3D rightImagePosition;
 
-	public CFPhotoAlbum(MTApplication application, CFImage initialImage,
+	public CFPhotoAlbum(CFImage initialImage,
 			CFPhotoScene scene) {
-		super(application, scene);
+		super(scene);
 		((CFPhotoScene) this.getCFScene()).addPhotoalbum(this);
-		this.mtApplication = application;
-		// this.component = new MTRectangle(application, DIMENSION_X,
-		// DIMENSION_Y);
 		this.setHeightLocal(DIMENSION_Y);
 		this.setWidthLocal(DIMENSION_X);
 		this.setNoFill(true);
@@ -38,7 +33,6 @@ public class CFPhotoAlbum extends CFComponent implements AutoRotatable,
 		leftImagePosition = new Vector3D(DIMENSION_X / 4, DIMENSION_Y / 2);
 		rightImagePosition = new Vector3D((3 * DIMENSION_X) / 4,
 				DIMENSION_Y / 2);
-		// this.addImage(initialImage);
 	}
 
 	protected void addImage(CFImage image) {
@@ -62,7 +56,7 @@ public class CFPhotoAlbum extends CFComponent implements AutoRotatable,
 	}
 
 	private void createMenu() {
-		this.setComponentMenu(new CFComponentMenu(this, mtApplication));
+		this.setComponentMenu(new CFComponentMenu(this));
 		this.getComponentMenu().addMenuItem("left_arrow.png",
 				new CFComponentMenuItemListener() {
 

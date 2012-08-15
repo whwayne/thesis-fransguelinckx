@@ -44,8 +44,8 @@ public abstract class CFScene extends AbstractScene {
 		super(mtApplication, name);
 		this.cfComponents = new ArrayList<CFComponent>();
 		this.componentModifiers = new ArrayList<CFComponentModifier>();
-		this.addCFComponent(new CFTrashCan(mtApplication, this));
-		this.addCFComponent(new CFTrashCan(mtApplication, this));
+		this.addCFComponent(new CFTrashCan(this));
+		this.addCFComponent(new CFTrashCan(this));
 	}
 
 	/**

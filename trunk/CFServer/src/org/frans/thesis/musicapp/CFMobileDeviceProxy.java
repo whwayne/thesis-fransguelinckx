@@ -70,8 +70,6 @@ public class CFMobileDeviceProxy extends CFComponent {
 	 * Public constructor for this class. It sets up the component, scales it to
 	 * stack size, sets up the necessary gestures and creates the menu.
 	 * 
-	 * @param mtApplication
-	 *            The application to which this proxy belongs.
 	 * @param clientName
 	 *            The name of the client represented by this proxy.
 	 * @param scene
@@ -81,14 +79,14 @@ public class CFMobileDeviceProxy extends CFComponent {
 	 * @param color
 	 *            The color associated with this proxy.
 	 */
-	public CFMobileDeviceProxy(MTApplication mtApplication, String clientName,
+	public CFMobileDeviceProxy(String clientName,
 			CFScene scene, CFTabletopClientManager tabletopClientManager,
 			MTColor color) {
-		super(mtApplication, scene);
+		super(scene);
 		this.color = color;
 		this.clientName = clientName;
 		this.tabletopClientManager = tabletopClientManager;
-		setUpComponent(mtApplication);
+		setUpComponent(scene.getMTApplication());
 		this.scaleComponentToStackSize();
 		setUpGestures();
 		this.setStrokeColor(this.getColor());
@@ -99,8 +97,7 @@ public class CFMobileDeviceProxy extends CFComponent {
 	 * Creates the menu of a proxy with three buttons.
 	 */
 	private void createMenu() {
-		this.setComponentMenu(new CFComponentMenu(this, this.getCFScene()
-				.getMTApplication()));
+		this.setComponentMenu(new CFComponentMenu(this));
 		this.getComponentMenu().addMenuItem("photos.png",
 				new CFComponentMenuItemListener() {
 
@@ -286,8 +283,7 @@ public class CFMobileDeviceProxy extends CFComponent {
 	 * Starts the spinner of this proxy.
 	 */
 	private void startSpinner() {
-		this.spinner = new CFSpinner(this.getCFScene().getMTApplication(),
-				this.getCFScene(), this);
+		this.spinner = new CFSpinner(this.getCFScene(), this);
 		spinner.start();
 	}
 

@@ -42,8 +42,7 @@ public class CFMusicScene extends CFScene implements CFTabletopServiceListener {
 		if (!this.getCfMobileDeviceProxies().keySet().contains(clientName)) {
 			MTColor color = MTColor.randomColor();
 			color.setAlpha(MTColor.ALPHA_HALF_TRANSPARENCY);
-			CFMobileDeviceProxy proxy = new CFMobileDeviceProxy(
-					getMTApplication(), clientName, this,
+			CFMobileDeviceProxy proxy = new CFMobileDeviceProxy(clientName, this,
 					tabletopClientManager, color);
 			this.getCfMobileDeviceProxies().put(clientName, proxy);
 			this.getCfComponents().add(proxy);
@@ -59,7 +58,7 @@ public class CFMusicScene extends CFScene implements CFTabletopServiceListener {
 	 */
 	@Override
 	public void fileFinished(CFFile file, String name) {
-		this.addCFComponent(new CFSong(getMTApplication(), this, file));
+		this.addCFComponent(new CFSong(this, file));
 	}
 
 	/**

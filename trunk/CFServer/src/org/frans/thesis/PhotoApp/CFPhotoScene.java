@@ -29,8 +29,7 @@ public class CFPhotoScene extends CFScene implements CFTabletopServiceListener {
 		if (!this.getCfMobileDeviceProxies().keySet().contains(clientName)) {
 			MTColor color = MTColor.randomColor();
 			color.setAlpha(MTColor.ALPHA_HALF_TRANSPARENCY);
-			CFMobileDeviceProxy proxy = new CFMobileDeviceProxy(
-					getMTApplication(), clientName, this,
+			CFMobileDeviceProxy proxy = new CFMobileDeviceProxy(clientName, this,
 					tabletopClientManager, color);
 			this.getCfMobileDeviceProxies().put(clientName, proxy);
 			this.getCfComponents().add(proxy);
@@ -47,7 +46,7 @@ public class CFPhotoScene extends CFScene implements CFTabletopServiceListener {
 	@Override
 	public void fileFinished(CFFile file, String name) {
 		MTColor color = this.getCfMobileDeviceProxies().get(name).getColor();
-		new CFImage(getMTApplication(), file, this, color);
+		new CFImage(file, this, color);
 	}
 
 	private HashMap<String, CFMobileDeviceProxy> getCfMobileDeviceProxies() {

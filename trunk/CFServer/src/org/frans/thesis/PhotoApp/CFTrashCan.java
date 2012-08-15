@@ -10,8 +10,8 @@ import org.mt4j.input.inputProcessors.componentProcessors.rotateProcessor.Rotate
 
 import processing.core.PImage;
 
-public class CFTrashCan extends CFComponent implements AutoRotatable,
-		AutoScalable {
+public class CFTrashCan extends CFComponent implements CFAutoRotatable,
+		CFAutoScalable {
 
 	private boolean autoRotate = true;
 	private boolean autoScale = true;
@@ -20,9 +20,9 @@ public class CFTrashCan extends CFComponent implements AutoRotatable,
 			+ "GUI" + MTApplication.separator + "data"
 			+ MTApplication.separator + "trashcan.png";
 
-	public CFTrashCan(MTApplication mtApplication, CFScene scene) {
-		super(mtApplication, scene);
-		PImage pImage = mtApplication.loadImage(imagePath);
+	public CFTrashCan(CFScene scene) {
+		super(scene);
+		PImage pImage = scene.getMTApplication().loadImage(imagePath);
 		// this.component = new MTRectangle(mtApplication, pImage);
 		this.setTexture(pImage);
 		this.scaleComponentToStackSize();
