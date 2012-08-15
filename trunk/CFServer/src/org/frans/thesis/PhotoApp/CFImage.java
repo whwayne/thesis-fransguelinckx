@@ -3,7 +3,6 @@ package org.frans.thesis.PhotoApp;
 import org.frans.thesis.GUI.CFComponent;
 import org.frans.thesis.GUI.CFScene;
 import org.frans.thesis.service.CFFile;
-import org.mt4j.MTApplication;
 import org.mt4j.input.gestureAction.TapAndHoldVisualizer;
 import org.mt4j.input.inputProcessors.IGestureEventListener;
 import org.mt4j.input.inputProcessors.MTGestureEvent;
@@ -18,29 +17,54 @@ import org.mt4j.util.math.Vector3D;
 
 import processing.core.PImage;
 
-public class CFImage extends CFComponent implements CFAutoRotatable, CFAutoScalable {
+/**
+ * CFImage represents an image on the tabletop that is usually transferred from a mobile device. 
+ */
+public class CFImage extends CFComponent implements CFAutoRotatable,
+		CFAutoScalable {
 
+	/**
+	 * The autorotation functionality is on by default.
+	 */
 	private boolean autoRotate = true;
+	
+	/**
+	 * The autoscale functionality is on by default.
+	 */
 	private boolean autoScale = true;
-	private MTColor color;
+	
+	/**
+	 * The color of the edge around an image.
+	 */
+	private MTColor edgeColor;
+	
+	/**
+	 * The image file.
+	 */
 	private CFFile image;
 
-	public CFImage(CFFile image, CFScene scene,
-			MTColor color) {
+	/**
+	 * Public constructor for CFImage. Sets the image file, scene and color. Also sets up the visual representation and extra gestures. By default the image is scaled to a large size.
+	 * @param image
+	 * The file containing the actual image.
+	 * @param scene
+	 * The scene to which this image belongs.
+	 * @param color
+	 * The color of the edge around the image.
+	 */
+	public CFImage(CFFile image, CFScene scene, MTColor color) {
 		super(scene);
-		this.color = color;
+		this.edgeColor = color;
 		this.image = image;
 		PImage pImage = this.getCFScene().getMTApplication()
 				.loadImage(image.getFile().getPath());
 		this.setTexture(pImage);
 		this.scaleComponentToStackSize();
-
-		setUpGestures(scene.getMTApplication());
-
-		this.setStrokeColor(this.getColor());
+		setUpGestures();
+		this.setStrokeColor(this.getEdgeColor());
 		this.setStrokeWeight(5);
 		this.getCFScene().addCFComponent(this);
-		autoScale();
+		scaleComponentToLargeSize();
 	}
 
 	@Override
@@ -53,29 +77,32 @@ public class CFImage extends CFComponent implements CFAutoRotatable, CFAutoScala
 		return this.autoScale;
 	}
 
+	/**
+	 * Creates a new photo album and adds this image to the album.
+	 */
 	private void createNewPhotoalbum() {
-		CFPhotoAlbum album = new CFPhotoAlbum(this, (CFPhotoScene) getCFScene());
+		CFPhotoAlbum album = new CFPhotoAlbum((CFPhotoScene) getCFScene());
 		album.addImage(this);
 
 	}
 
-	private MTColor getColor() {
-		return this.color;
+	/**
+	 * Returns the color of the edge around the image.
+	 */
+	private MTColor getEdgeColor() {
+		return this.edgeColor;
 	}
-
-	// protected MTRectangle getImage() {
-	// return this;
-	// }
-
-	// @Override
-	// public MTRectangle getMTComponent() {
-	// return this.component;
-	// }
-
+	
+	/**
+	 * Returns the file containing the actual image.
+	 */
 	protected CFFile getFile() {
 		return this.image;
 	}
 
+	/**
+	 * If a user drops an image on top of another, they are both scale to stack size and repositioned to the same location, thus creating a stack.
+	 */
 	@Override
 	public void handleDroppedCFComponent(CFComponent component) {
 		if (component instanceof CFImage) {
@@ -99,10 +126,17 @@ public class CFImage extends CFComponent implements CFAutoRotatable, CFAutoScala
 
 	}
 
-	private void setUpGestures(MTApplication mtApplication) {
-		this.registerInputProcessor(new TapAndHoldProcessor(mtApplication, 1500));
+	/**
+	 * Sets up extra gestures for CFImage:
+	 * When a user taps and holds an image, it creates a photo album.
+	 * When a user scales an image, it turns off the autoscale functionality
+	 * When a user rotates an image, it turns off the autorotation funtionality.
+	 * When a user double taps an image, it turns the autorotation and autoscale funationalities back on.
+	 */
+	private void setUpGestures() {
+		this.registerInputProcessor(new TapAndHoldProcessor(this.getCFScene().getMTApplication(), 1500));
 		this.addGestureListener(TapAndHoldProcessor.class,
-				new TapAndHoldVisualizer(mtApplication, this.getCFScene()
+				new TapAndHoldVisualizer(this.getCFScene().getMTApplication(), this.getCFScene()
 						.getCanvas()));
 		this.addGestureListener(TapAndHoldProcessor.class,
 				new IGestureEventListener() {
@@ -140,7 +174,7 @@ public class CFImage extends CFComponent implements CFAutoRotatable, CFAutoScala
 					}
 				});
 
-		this.registerInputProcessor(new TapProcessor(mtApplication, 25, true,
+		this.registerInputProcessor(new TapProcessor(getCFScene().getMTApplication(), 25, true,
 				350));
 		this.addGestureListener(TapProcessor.class,
 				new IGestureEventListener() {

@@ -66,7 +66,7 @@ public abstract class CFComponent extends MTRectangle implements
 	 * Autoscales this component so its fits into a square with length X_WIDTH
 	 * as side.
 	 */
-	public void autoScale() {
+	public void scaleComponentToLargeSize() {
 		float scalefactor = X_WIDTH / this.getWidth();
 		this.scaleImage(scalefactor);
 	}
@@ -133,7 +133,7 @@ public abstract class CFComponent extends MTRectangle implements
 	/**
 	 * Returns the current position of this component.
 	 */
-	protected Vector3D getPosition() {
+	public Vector3D getPosition() {
 		return this.getPosition(TransformSpace.GLOBAL);
 	}
 
