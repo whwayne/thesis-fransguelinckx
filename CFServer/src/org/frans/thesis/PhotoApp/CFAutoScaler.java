@@ -11,12 +11,10 @@ public class CFAutoScaler extends CFComponentModifier {
 	public void handleMovedCFComponent(CFComponentModifiable component) {
 		// TODO Auto-generated method stub
 		AutoScalable scalable = (AutoScalable) component;
-		Vector3D position = scalable.getPosition(
-				TransformSpace.GLOBAL);
+		Vector3D position = scalable.getPosition(TransformSpace.GLOBAL);
 
 		if (scalable.autoScaleIsOn()) {
-			if (position.x < X_LOW_TRESHHOLD
-					&& position.y < Y_LOW_TRESHHOLD) {
+			if (position.x < X_LOW_TRESHHOLD && position.y < Y_LOW_TRESHHOLD) {
 				// System.out.println("zone 1");
 				scalable.scaleComponentToStackSize();
 			} else if (position.x > X_LOW_TRESHHOLD
@@ -55,7 +53,7 @@ public class CFAutoScaler extends CFComponentModifier {
 				scalable.autoScale();
 			}
 		}
-		
+
 	}
 
 }
