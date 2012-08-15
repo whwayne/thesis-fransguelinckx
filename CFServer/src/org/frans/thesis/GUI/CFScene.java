@@ -19,17 +19,17 @@ public abstract class CFScene extends AbstractScene {
 	private ArrayList<CFComponent> cfComponents;
 
 	/**
+	 * A list of component modifiers that belong to this scene.
+	 */
+	private ArrayList<CFComponentModifier> componentModifiers;
+
+	/**
 	 * The minimum distance (in pixels) between the centers of two interactive
 	 * components for them to be considered "on top of each other". When a user
 	 * drops an interactive component on top of the other, the method
 	 * handleDroppedComponent() gets called automatically.
 	 */
 	protected final float CRITICAL_STACK_DISTANCE = 100;
-
-	/**
-	 * A list of component modifiers that belong to this scene.
-	 */
-	private ArrayList<CFComponentModifier> componentModifiers;
 
 	/**
 	 * The public constructor for CFScene. Adds two trashcans to the scene by
@@ -49,23 +49,6 @@ public abstract class CFScene extends AbstractScene {
 	}
 
 	/**
-	 * Adds a component modifier to this scene.
-	 */
-	public void addComponentModifier(CFComponentModifier modifier) {
-		if (modifier != null
-				&& !this.getComponentModifiers().contains(modifier)) {
-			this.componentModifiers.add(modifier);
-		}
-	}
-
-	/**
-	 * Returns the list of component modifiers.
-	 */
-	private ArrayList<CFComponentModifier> getComponentModifiers() {
-		return this.componentModifiers;
-	}
-
-	/**
 	 * Adds an instance of CFComponent to the center of the scene.
 	 * 
 	 * @param component
@@ -82,10 +65,103 @@ public abstract class CFScene extends AbstractScene {
 	}
 
 	/**
+	 * Adds a component modifier to this scene.
+	 */
+	public void addComponentModifier(CFComponentModifier modifier) {
+		if (modifier != null
+				&& !this.getComponentModifiers().contains(modifier)) {
+			this.componentModifiers.add(modifier);
+		}
+	}
+
+	/**
+	 * A method that is called when a user releases an interactive component. It
+	 * looks up all nearby interactive components and notifies them of the newly
+	 * dropped component.
+	 * 
+	 * @param component
+	 *            The component that has been released by a user.
+	 */
+	protected void cFComponentDropped(CFComponent component) {
+		for (CFComponent otherComponent : this.getCfComponents()) {
+			if (!component.equals(otherComponent)
+					&& component.getDistanceto(otherComponent) < this.CRITICAL_STACK_DISTANCE) {
+				otherComponent.handleDroppedCFComponent(component);
+			}
+		}
+	}
+
+	/**
+	 * A method that is called when a user moved an interactive component. It
+	 * notifies all components in this scene about the moved component.
+	 * 
+	 * @param component
+	 *            The component that was moved.
+	 */
+	public void cfComponentMoved(CFComponentModifiable component) {
+		for (CFComponentModifier modifier : this.componentModifiers) {
+			modifier.handleMovedCFComponent(component);
+		}
+
+	}
+
+	/**
+	 * A method that is called when a user rotated an interactive component. It
+	 * notifies all components in this scene about the rotated component.
+	 * 
+	 * @param component
+	 *            The component that was rotated.
+	 */
+	protected void cFComponentRotated(CFComponent component) {
+		for (CFComponent otherComponent : this.getCfComponents()) {
+			otherComponent.handleRotatedCFComponent(component);
+		}
+	}
+
+	/**
+	 * A method that is called when a user scaled an interactive component. It
+	 * notifies all components in this scene about the scaled component.
+	 * 
+	 * @param component
+	 */
+	protected void cFComponentScaled(CFComponent component) {
+		for (CFComponent otherComponent : this.getCfComponents()) {
+			otherComponent.handleScaledCFComponent(component);
+		}
+	}
+
+	/**
 	 * Returns the list of CFComponents in this scene.
 	 */
 	protected ArrayList<CFComponent> getCfComponents() {
 		return cfComponents;
+	}
+
+	/**
+	 * Returns the list of component modifiers.
+	 */
+	private ArrayList<CFComponentModifier> getComponentModifiers() {
+		return this.componentModifiers;
+	}
+
+	/**
+	 * Gets all nearby components of a given component. More precisely: all
+	 * components that are closer than CRITICAL_STACK_DISTANCE.
+	 * 
+	 * @param component
+	 *            The component from which all nearby components have to be
+	 *            returned.
+	 * @return An array list containing all nearby components.
+	 */
+	protected ArrayList<CFComponent> getNearbyCFComponents(CFComponent component) {
+		ArrayList<CFComponent> result = new ArrayList<CFComponent>();
+		for (CFComponent component2 : this.getCfComponents()) {
+			if (!component2.equals(component)
+					&& component.getDistanceto(component2) < this.CRITICAL_STACK_DISTANCE) {
+				result.add(component2);
+			}
+		}
+		return result;
 	}
 
 	@Override
@@ -119,82 +195,17 @@ public abstract class CFScene extends AbstractScene {
 	}
 
 	/**
-	 * Gets all nearby components of a given component. More precisely: all components that are closer than CRITICAL_STACK_DISTANCE.
-	 * @param component
-	 * The component from which all nearby components have to be returned.
-	 * @return
-	 * An array list containing all nearby components.
-	 */
-	protected ArrayList<CFComponent> getNearbyCFComponents(
-			CFComponent component) {
-		ArrayList<CFComponent> result = new ArrayList<CFComponent>();
-		for (CFComponent component2 : this.getCfComponents()) {
-			if (!component2.equals(component)
-					&& component.getDistanceto(component2) < this.CRITICAL_STACK_DISTANCE) {
-				result.add(component2);
-			}
-		}
-		return result;
-	}
-
-	@Override
-	public void shutDown() {
-	}
-
-	/**
-	 * A method that is called when a user releases an interactive component. It looks up all nearby interactive components and notifies them of the newly dropped component.
-	 * @param component
-	 * The component that has been released by a user.
-	 */
-	protected void cFComponentDropped(CFComponent component) {
-		for (CFComponent otherComponent : this.getCfComponents()) {
-			if (!component.equals(otherComponent)
-					&& component.getDistanceto(otherComponent) < this.CRITICAL_STACK_DISTANCE) {
-				otherComponent.handleDroppedCFComponent(component);
-			}
-		}
-	}
-
-	/**
-	 * A method that is called when a user rotated an interactive component. It notifies all components in this scene about the rotated component.
-	 * @param component
-	 * The component that was rotated.
-	 */
-	protected void cFComponentRotated(CFComponent component) {
-		for (CFComponent otherComponent : this.getCfComponents()) {
-			otherComponent.handleRotatedCFComponent(component);
-		}
-	}
-
-	/**
-	 * A method that is called when a user scaled an interactive component. It notifies all components in this scene about the scaled component.
-	 * @param component
-	 */
-	protected void cFComponentScaled(CFComponent component) {
-		for (CFComponent otherComponent : this.getCfComponents()) {
-			otherComponent.handleScaledCFComponent(component);
-		}
-	}
-
-	/**
 	 * Removes an interactive component from this scene.
+	 * 
 	 * @param component
-	 * The component that has to be removed.
+	 *            The component that has to be removed.
 	 */
 	public void removeCFComponent(CFComponent component) {
 		// this.getCfComponents().remove(component);
 		this.getCanvas().removeChild(component);
 	}
 
-	/**
-	 * A method that is called when a user moved an interactive component. It notifies all components in this scene about the moved component.
-	 * @param component
-	 * The component that was moved.
-	 */
-	public void cfComponentMoved(CFComponentModifiable component) {
-		for (CFComponentModifier modifier : this.componentModifiers) {
-			modifier.handleMovedCFComponent(component);
-		}
-
+	@Override
+	public void shutDown() {
 	}
 }

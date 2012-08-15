@@ -21,25 +21,28 @@ public class CFComponentMenuItem extends CFComponent {
 			+ MTApplication.separator + "thesis" + MTApplication.separator
 			+ "GUI" + MTApplication.separator + "data"
 			+ MTApplication.separator;
-	
+
 	/**
 	 * The listener that should be called when a user taps a menu item.
 	 */
 	private CFComponentMenuItemListener listener;
-	
+
 	/**
-	 * The public constructor for a menu item of 75px by 75px. By default a menu item is invisible.
+	 * The public constructor for a menu item of 75px by 75px. By default a menu
+	 * item is invisible.
+	 * 
 	 * @param fileName
-	 * The filename of the image that should be shown as menu item.
+	 *            The filename of the image that should be shown as menu item.
 	 * @param listener
-	 * The listener that should be noticed when a user taps the item.
+	 *            The listener that should be noticed when a user taps the item.
 	 * @param mtApplication
-	 * The application to which this item belongs.
+	 *            The application to which this item belongs.
 	 * @param scene
-	 * The scene to which this item belongs.
+	 *            The scene to which this item belongs.
 	 */
 	public CFComponentMenuItem(String fileName,
-			CFComponentMenuItemListener listener, MTApplication mtApplication, CFScene scene) {
+			CFComponentMenuItemListener listener, MTApplication mtApplication,
+			CFScene scene) {
 		super(mtApplication, scene);
 		this.listener = listener;
 		PImage pImage = mtApplication.loadImage(imagePath + fileName);
@@ -50,8 +53,7 @@ public class CFComponentMenuItem extends CFComponent {
 		this.setNoStroke(true);
 		this.unregisterAllInputProcessors();
 		this.removeAllGestureEventListeners();
-		this.registerInputProcessor(
-				new TapProcessor(mtApplication));
+		this.registerInputProcessor(new TapProcessor(mtApplication));
 		this.addGestureListener(TapProcessor.class,
 				new IGestureEventListener() {
 					@Override
@@ -68,18 +70,18 @@ public class CFComponentMenuItem extends CFComponent {
 	@Override
 	public void handleDroppedCFComponent(CFComponent component) {
 		// TODO Auto-generated method stub
-		
-	}
 
-	@Override
-	public void handleScaledCFComponent(CFComponent component) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void handleRotatedCFComponent(CFComponent component) {
 		// TODO Auto-generated method stub
-		
+
+	}
+
+	@Override
+	public void handleScaledCFComponent(CFComponent component) {
+		// TODO Auto-generated method stub
+
 	}
 }
