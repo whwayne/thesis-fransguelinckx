@@ -1,9 +1,9 @@
-package org.frans.thesis.test;
+package org.frans.thesis.PhotoApp;
 
-import org.frans.thesis.musicapp.CFMusicScene;
 import org.frans.thesis.service.CFTabletopServiceListener;
+import org.frans.thesis.test.CFApplication;
 
-public class CFMusicApplication extends CFApplication {
+public class CFPhotoApplication extends CFApplication {
 
 	private static final long serialVersionUID = 1093780567228664551L;
 
@@ -14,7 +14,9 @@ public class CFMusicApplication extends CFApplication {
 
 	@Override
 	public void setupScene() {
-		scene = new CFMusicScene(this, "CFPhotoScene");
+		scene = new CFPhotoScene(this, "CFPhotoScene");
+		scene.addComponentModifier(new CFAutoRotator());
+		scene.addComponentModifier(new CFAutoScaler());
 		service.addTabletopServiceListener((CFTabletopServiceListener) scene);
 	}
 

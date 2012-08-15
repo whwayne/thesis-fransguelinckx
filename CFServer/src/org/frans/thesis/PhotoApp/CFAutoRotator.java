@@ -9,7 +9,7 @@ public class CFAutoRotator extends CFComponentModifier {
 
 	@Override
 	public void handleMovedCFComponent(CFComponentModifiable rotatable) {
-		AutoRotatable component = (AutoRotatable) rotatable;
+		CFAutoRotatable component = (CFAutoRotatable) rotatable;
 
 		Vector3D position = component.getPosition(TransformSpace.GLOBAL);
 

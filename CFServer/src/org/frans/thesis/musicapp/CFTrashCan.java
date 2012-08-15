@@ -10,19 +10,31 @@ import org.mt4j.input.inputProcessors.componentProcessors.rotateProcessor.Rotate
 
 import processing.core.PImage;
 
+/**
+ * A class that represents a trashcan.
+ */
 public class CFTrashCan extends CFComponent {
 
+	/**
+	 * The path the the image of a trashcan.
+	 */
 	private String imagePath = "org" + MTApplication.separator + "frans"
 			+ MTApplication.separator + "thesis" + MTApplication.separator
 			+ "GUI" + MTApplication.separator + "data"
 			+ MTApplication.separator + "trashcan.png";
 
-	public CFTrashCan(MTApplication mtApplication, CFScene scene) {
-		super(mtApplication, scene);
-		PImage pImage = mtApplication.loadImage(imagePath);
+	/**
+	 * Public constructor for this class. Sets up the visual component and the
+	 * gestures to which this component has to react.
+	 * 
+	 * @param scene
+	 *            The scene to which this component belongs.
+	 */
+	public CFTrashCan(CFScene scene) {
+		super(scene);
+		PImage pImage = scene.getMTApplication().loadImage(imagePath);
 		this.setTexture(pImage);
 		this.scaleComponentToStackSize();
-		this.getCFScene().addCFComponent(this);
 
 		this.unregisterAllInputProcessors();
 		this.removeAllGestureEventListeners();
@@ -53,9 +65,4 @@ public class CFTrashCan extends CFComponent {
 		// TODO Auto-generated method stub
 
 	}
-
-	protected boolean isTrashCan() {
-		return true;
-	}
-
 }

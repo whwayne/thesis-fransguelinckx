@@ -18,16 +18,16 @@ import org.mt4j.util.math.Vector3D;
 
 import processing.core.PImage;
 
-public class CFImage extends CFComponent implements AutoRotatable, AutoScalable {
+public class CFImage extends CFComponent implements CFAutoRotatable, CFAutoScalable {
 
 	private boolean autoRotate = true;
 	private boolean autoScale = true;
 	private MTColor color;
 	private CFFile image;
 
-	public CFImage(MTApplication mtApplication, CFFile image, CFScene scene,
+	public CFImage(CFFile image, CFScene scene,
 			MTColor color) {
-		super(mtApplication, scene);
+		super(scene);
 		this.color = color;
 		this.image = image;
 		PImage pImage = this.getCFScene().getMTApplication()
@@ -35,7 +35,7 @@ public class CFImage extends CFComponent implements AutoRotatable, AutoScalable 
 		this.setTexture(pImage);
 		this.scaleComponentToStackSize();
 
-		setUpGestures(mtApplication);
+		setUpGestures(scene.getMTApplication());
 
 		this.setStrokeColor(this.getColor());
 		this.setStrokeWeight(5);
@@ -54,8 +54,7 @@ public class CFImage extends CFComponent implements AutoRotatable, AutoScalable 
 	}
 
 	private void createNewPhotoalbum() {
-		CFPhotoAlbum album = new CFPhotoAlbum(this.getCFScene()
-				.getMTApplication(), this, (CFPhotoScene) getCFScene());
+		CFPhotoAlbum album = new CFPhotoAlbum(this, (CFPhotoScene) getCFScene());
 		album.addImage(this);
 
 	}

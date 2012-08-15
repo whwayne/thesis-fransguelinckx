@@ -4,18 +4,18 @@ import org.frans.thesis.GUI.CFComponentModifiable;
 import org.mt4j.components.TransformSpace;
 import org.mt4j.util.math.Vector3D;
 
-public interface AutoScalable extends CFComponentModifiable {
+public interface CFAutoRotatable extends CFComponentModifiable {
 
-	public void autoScale();
-
-	public boolean autoScaleIsOn();
+	public boolean autoRotateIsOn();
 
 	public Vector3D getPosition(TransformSpace global);
 
+	public void rotateTo(int i);
+
 	public void scaleComponentToStackSize();
 
-	public void turnAutoScaleOff();
+	public void turnAutoRotateOff();
 
-	public void turnAutoScaleOn();
+	public void turnAutoRotateOn();
 
 }

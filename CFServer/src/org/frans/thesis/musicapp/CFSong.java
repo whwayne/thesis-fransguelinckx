@@ -7,42 +7,57 @@ import org.frans.thesis.GUI.CFComponentMenu;
 import org.frans.thesis.GUI.CFComponentMenuItemListener;
 import org.frans.thesis.GUI.CFScene;
 import org.frans.thesis.service.CFFile;
-import org.mt4j.MTApplication;
 
+/**
+ * A simple interactive component to represent an mp3-file on the tabletop GUI.
+ */
 public class CFSong extends CFComponent {
 
+	/**
+	 * The actual music file of this song.
+	 */
 	private CFFile file;
 
-	// private String imagePath = "org" + MTApplication.separator + "frans"
-	// + MTApplication.separator + "thesis" + MTApplication.separator
-	// + "GUI" + MTApplication.separator + "data"
-	// + MTApplication.separator;
-	private SoundJLayer sound;
+	/**
+	 * The class that is responsible for playing and pausing the song.
+	 */
+	private SoundJLayer player;
 
-	public CFSong(MTApplication application, CFScene scene, CFFile file) {
-		super(application, scene);
+	/**
+	 * Public constructor for this class. Sets up the player, the interactive component and the play-button.
+	 * @param scene
+	 * The scene to which this song belongs.
+	 * @param file
+	 * The mp3-file.
+	 */
+	public CFSong(CFScene scene, CFFile file) {
+		super(scene);
 		this.file = file;
-		System.out.println(file.getFile().getPath());
-		sound = new SoundJLayer(file.getFile().getPath());
+		player = new SoundJLayer(file.getFile().getPath());
 		this.setNoStroke(true);
 		this.setNoFill(true);
 		this.createMenu();
 		this.getComponentMenu().setVisible(true);
 	}
 
+	/**
+	 * Creates the menu, which has only one button to start/stop the song.
+	 */
 	private void createMenu() {
-		this.setComponentMenu(new CFComponentMenu(this, this.getCFScene()
-				.getMTApplication()));
+		this.setComponentMenu(new CFComponentMenu(this));
 		this.getComponentMenu().addMenuItem("play.png",
 				new CFComponentMenuItemListener() {
 
 					@Override
 					public void processEvent() {
-						sound.pauseToggle();
+						player.pauseToggle();
 					}
 				});
 	}
 
+	/**
+	 * Returns the mp3-file.
+	 */
 	public CFFile getFile() {
 		return file;
 	}
@@ -67,6 +82,12 @@ public class CFSong extends CFComponent {
 
 }
 
+/**
+ * Class that can play and pause MP3-files.
+ * Source: http://thiscouldbebetter.wordpress.com/2011/07/04/pausing-an-mp3-file-using-jlayer/
+ * http://pastebin.com/yZnCa6Nx
+ * http://pastebin.com/2K5Bbw4g
+ */
 class SoundJLayer implements Runnable {
 	private static class PlaybackListener extends
 			JLayerPlayerPausable.PlaybackAdapter {

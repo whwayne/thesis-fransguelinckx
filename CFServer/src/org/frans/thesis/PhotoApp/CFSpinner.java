@@ -16,14 +16,14 @@ public class CFSpinner extends CFComponent {
 			+ MTApplication.separator + "spinner.gif";
 	private CFComponent parent;
 
-	public CFSpinner(MTApplication mtApplication, CFScene scene,
+	public CFSpinner(CFScene scene,
 			CFComponent parent) {
-		super(mtApplication, scene);
+		super(scene);
 		this.setHeightLocal(50);
 		this.setWidthLocal(50);
 		this.setNoStroke(true);
 		this.parent = parent;
-		animation = new Gif(mtApplication, imagePath);
+		animation = new Gif(scene.getMTApplication(), imagePath);
 		// this.component.setPositionGlobal(this.parent.getPosition());
 		this.setTexture(animation);
 		this.setVisible(false);

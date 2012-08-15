@@ -21,8 +21,8 @@ import org.mt4j.util.math.Vector3D;
 
 import processing.core.PImage;
 
-public class CFMobileDeviceProxy extends CFComponent implements AutoRotatable,
-		AutoScalable {
+public class CFMobileDeviceProxy extends CFComponent implements CFAutoRotatable,
+		CFAutoScalable {
 
 	private boolean autoRotate = true;
 	private boolean autoScale = true;
@@ -41,16 +41,16 @@ public class CFMobileDeviceProxy extends CFComponent implements AutoRotatable,
 
 	private CFTabletopClientManager tabletopClientManager;
 
-	public CFMobileDeviceProxy(MTApplication mtApplication, String clientName,
+	public CFMobileDeviceProxy(String clientName,
 			CFScene scene, CFTabletopClientManager tabletopClientManager,
 			MTColor color) {
-		super(mtApplication, scene);
+		super(scene);
 		this.color = color;
 		this.clientName = clientName;
 		this.tabletopClientManager = tabletopClientManager;
-		setUpComponent(mtApplication);
+		setUpComponent(scene.getMTApplication());
 		this.scaleComponentToStackSize();
-		setUpGestures(mtApplication);
+		setUpGestures(scene.getMTApplication());
 		this.setStrokeColor(this.getColor());
 		createMenu();
 	}
@@ -65,8 +65,7 @@ public class CFMobileDeviceProxy extends CFComponent implements AutoRotatable,
 	}
 
 	private void createMenu() {
-		this.setComponentMenu(new CFComponentMenu(this, this.getCFScene()
-				.getMTApplication()));
+		this.setComponentMenu(new CFComponentMenu(this));
 		this.getComponentMenu().addMenuItem("photos.png",
 				new CFComponentMenuItemListener() {
 
@@ -219,8 +218,7 @@ public class CFMobileDeviceProxy extends CFComponent implements AutoRotatable,
 	}
 
 	private void startSpinner() {
-		this.spinner = new CFSpinner(this.getCFScene().getMTApplication(),
-				this.getCFScene(), this);
+		this.spinner = new CFSpinner(this.getCFScene(), this);
 		spinner.start();
 	}
 
