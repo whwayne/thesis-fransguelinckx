@@ -50,7 +50,7 @@ public class CFPhotoScene extends CFScene implements CFTabletopServiceListener {
 	 *      can have the same name.
 	 */
 	@Override
-	public void addMobileDevice(String clientName,
+	public void mobileDeviceConnected(String clientName,
 			CFTabletopClientManager tabletopClientManager) {
 		if (!this.getCfMobileDeviceProxies().keySet().contains(clientName)) {
 			MTColor color = MTColor.randomColor();
@@ -78,7 +78,7 @@ public class CFPhotoScene extends CFScene implements CFTabletopServiceListener {
 	 * Adds a new image to the scene and assigns it the same color as the client that sent it.
 	 */
 	@Override
-	public void fileFinished(CFFile file, String name) {
+	public void fileTransferred(CFFile file, String name) {
 		MTColor color = this.getCfMobileDeviceProxies().get(name).getColor();
 		new CFImage(file, this, color);
 	}
@@ -150,7 +150,7 @@ public class CFPhotoScene extends CFScene implements CFTabletopServiceListener {
 	 * Removes a mobile device with given name from the scene.
 	 */
 	@Override
-	public void removeMobileDevice(String name) {
+	public void mobileDeviceDisconnected(String name) {
 		if (this.getCfMobileDeviceProxies().containsKey(name)) {
 			CFMobileDeviceProxy proxy = this.getCfMobileDeviceProxies().get(
 					name);
@@ -163,7 +163,7 @@ public class CFPhotoScene extends CFScene implements CFTabletopServiceListener {
 	 * Stops the spinner of a client with a given name.
 	 */
 	@Override
-	public void setIdle(String name) {
+	public void clientIsIdle(String name) {
 		this.getCfMobileDeviceProxies().get(name).stopSpinner();
 	}
 

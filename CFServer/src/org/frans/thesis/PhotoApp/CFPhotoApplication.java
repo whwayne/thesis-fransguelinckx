@@ -17,7 +17,7 @@ public class CFPhotoApplication extends CFApplication {
 	 */
 	public static void main(String[] args) {
 		initialize();
-		service.connect();
+		service.start();
 	}
 
 	/**
