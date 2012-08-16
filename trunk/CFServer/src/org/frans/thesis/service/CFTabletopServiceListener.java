@@ -14,7 +14,7 @@ public interface CFTabletopServiceListener {
 	 * @param tabletopClientManager
 	 *            The client manager that manages the new client.
 	 */
-	public void addMobileDevice(String clientName,
+	public void mobileDeviceConnected(String clientName,
 			CFTabletopClientManager tabletopClientManager);
 
 	/**
@@ -25,7 +25,7 @@ public interface CFTabletopServiceListener {
 	 * @param name
 	 *            The name of the client that has sent the file.
 	 */
-	public void fileFinished(CFFile file, String name);
+	public void fileTransferred(CFFile file, String name);
 
 	/**
 	 * Notifies this listener about a client that has disconnected from the
@@ -34,7 +34,7 @@ public interface CFTabletopServiceListener {
 	 * @param name
 	 *            The name of the disconnected client.
 	 */
-	public void removeMobileDevice(String name);
+	public void mobileDeviceDisconnected(String name);
 
 	/**
 	 * Notifies this listener about the status of a client that has been set to
@@ -43,6 +43,6 @@ public interface CFTabletopServiceListener {
 	 * @param name
 	 *            The name of the client in question.
 	 */
-	public void setIdle(String name);
+	public void clientIsIdle(String name);
 
 }

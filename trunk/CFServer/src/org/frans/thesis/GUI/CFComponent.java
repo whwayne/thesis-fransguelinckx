@@ -13,6 +13,8 @@ import org.mt4j.input.inputProcessors.componentProcessors.scaleProcessor.ScaleEv
 import org.mt4j.input.inputProcessors.componentProcessors.scaleProcessor.ScaleProcessor;
 import org.mt4j.util.math.Vector3D;
 
+import processing.core.PImage;
+
 /**
  * This abstract class represents a visual, interactive component on the
  * tabletop and inherits from MTComponent (part of the MT4j-framework)
@@ -59,6 +61,8 @@ public abstract class CFComponent extends MTRectangle implements
 	public CFComponent(CFScene scene) {
 		super(scene.getMTApplication(), 100, 100);
 		this.scene = scene;
+		this.setNoStroke(true);
+		this.setNoFill(true);
 		setUpGestures();
 	}
 
@@ -290,5 +294,16 @@ public abstract class CFComponent extends MTRectangle implements
 						return false;
 					}
 				});
+	}
+
+	/**
+	 * Sets an image as texture for this CFComponent.
+	 * 
+	 * @param path
+	 *            The path of the image.
+	 */
+	protected void setImage(String path) {
+		PImage pImage = this.getCFScene().getMTApplication().loadImage(path);
+		this.setTexture(pImage);
 	}
 }

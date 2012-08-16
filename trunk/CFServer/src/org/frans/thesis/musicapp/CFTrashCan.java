@@ -1,4 +1,4 @@
-package org.frans.thesis.musicapp;
+ package org.frans.thesis.musicapp;
 
 import org.frans.thesis.GUI.CFComponent;
 import org.frans.thesis.GUI.CFScene;
@@ -7,8 +7,6 @@ import org.mt4j.input.gestureAction.DefaultDragAction;
 import org.mt4j.input.gestureAction.DefaultRotateAction;
 import org.mt4j.input.inputProcessors.componentProcessors.dragProcessor.DragProcessor;
 import org.mt4j.input.inputProcessors.componentProcessors.rotateProcessor.RotateProcessor;
-
-import processing.core.PImage;
 
 /**
  * A class that represents a trashcan.
@@ -32,10 +30,15 @@ public class CFTrashCan extends CFComponent {
 	 */
 	public CFTrashCan(CFScene scene) {
 		super(scene);
-		PImage pImage = scene.getMTApplication().loadImage(imagePath);
-		this.setTexture(pImage);
+		this.setImage(imagePath);
 		this.scaleComponentToStackSize();
+		setupGestures();
+	}
 
+	/**
+	 * Sets up new gestures for CFtrashCan: default drag and rotation gestures.
+	 */
+	private void setupGestures() {
 		this.unregisterAllInputProcessors();
 		this.removeAllGestureEventListeners();
 		this.registerInputProcessor(new DragProcessor(this.getCFScene()
@@ -45,13 +48,13 @@ public class CFTrashCan extends CFComponent {
 				.getMTApplication()));
 		this.addGestureListener(RotateProcessor.class,
 				new DefaultRotateAction());
-
-		this.setNoStroke(true);
 	}
 
 	@Override
 	public void handleDroppedCFComponent(CFComponent component) {
-		// TODO Auto-generated method stub
+		if(component instanceof CFSong){
+			this.getCFScene().removeCFComponent(component);
+		}
 	}
 
 	@Override

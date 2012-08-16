@@ -207,6 +207,7 @@ public abstract class CFScene extends AbstractScene {
 	public void removeCFComponent(CFComponent component) {
 		// this.getCfComponents().remove(component);
 		this.getCanvas().removeChild(component);
+		this.getCfComponents().remove(component);
 	}
 
 	@Override

@@ -7,8 +7,6 @@ import org.frans.thesis.service.CFFile;
 import org.frans.thesis.service.CFTabletopClientManager;
 import org.frans.thesis.service.CFTabletopServiceListener;
 import org.mt4j.MTApplication;
-import org.mt4j.util.MTColor;
-import org.mt4j.util.math.Vector3D;
 
 /**
  * A music scene, inherits from CFScene and implements the CFTabletopServiceListener/
@@ -18,7 +16,7 @@ public class CFMusicScene extends CFScene implements CFTabletopServiceListener {
 	/**
 	 * A hash map of the mobile device proxies in this scene, mapped to their client names.
 	 */
-	private HashMap<String, CFMobileDeviceProxy> cfMobileDeviceProxies;
+	private HashMap<String, CFMobileDeviceProxy> cfMobileDeviceProxies = new HashMap<String, CFMobileDeviceProxy>();
 
 	/**
 	 * Public constructor for this class.
@@ -29,7 +27,6 @@ public class CFMusicScene extends CFScene implements CFTabletopServiceListener {
 	 */
 	public CFMusicScene(MTApplication mtApplication, String name) {
 		super(mtApplication, name);
-		this.cfMobileDeviceProxies = new HashMap<String, CFMobileDeviceProxy>();
 	}
 
 	/**
@@ -37,18 +34,15 @@ public class CFMusicScene extends CFScene implements CFTabletopServiceListener {
 	 * Adds an instance of CFMobileDeviceProxy to the scene.
 	 */
 	@Override
-	public void addMobileDevice(String clientName,
+	public void mobileDeviceConnected(String clientName,
 			CFTabletopClientManager tabletopClientManager) {
 		if (!this.getCfMobileDeviceProxies().keySet().contains(clientName)) {
-			MTColor color = MTColor.randomColor();
-			color.setAlpha(MTColor.ALPHA_HALF_TRANSPARENCY);
-			CFMobileDeviceProxy proxy = new CFMobileDeviceProxy(clientName, this,
-					tabletopClientManager, color);
+			CFMobileDeviceProxy proxy = new CFMobileDeviceProxy(this, tabletopClientManager.getClient(clientName));
 			this.getCfMobileDeviceProxies().put(clientName, proxy);
-			this.getCfComponents().add(proxy);
-			proxy.setPositionGlobal(new Vector3D(this.getMTApplication()
-					.getWidth() / 2, this.getMTApplication().getHeight() / 2));
-			this.getCanvas().addChild(proxy);
+//			this.getCfComponents().add(proxy);
+//			proxy.setPositionGlobal(new Vector3D(this.getMTApplication()
+//					.getWidth() / 2, this.getMTApplication().getHeight() / 2));
+			this.addCFComponent(proxy);
 		}
 	}
 
@@ -57,7 +51,7 @@ public class CFMusicScene extends CFScene implements CFTabletopServiceListener {
 	 * Adds an instance of CFSong to this scene.
 	 */
 	@Override
-	public void fileFinished(CFFile file, String name) {
+	public void fileTransferred(CFFile file, String name) {
 		this.addCFComponent(new CFSong(this, file));
 	}
 
@@ -73,12 +67,13 @@ public class CFMusicScene extends CFScene implements CFTabletopServiceListener {
 	 * Removes the mobile device proxy from the scene.
 	 */
 	@Override
-	public void removeMobileDevice(String name) {
+	public void mobileDeviceDisconnected(String name) {
 		if (this.getCfMobileDeviceProxies().containsKey(name)) {
 			CFMobileDeviceProxy proxy = this.getCfMobileDeviceProxies().get(
 					name);
-			this.getCanvas().removeChild(proxy);
+//			this.getCanvas().removeChild(proxy);
 			this.getCfMobileDeviceProxies().remove(proxy);
+			this.removeCFComponent(proxy);
 		}
 	}
 
@@ -87,7 +82,7 @@ public class CFMusicScene extends CFScene implements CFTabletopServiceListener {
 	 * Stops the spinner of said client.
 	 */
 	@Override
-	public void setIdle(String name) {
+	public void clientIsIdle(String name) {
 		this.getCfMobileDeviceProxies().get(name).stopSpinner();
 	}
 

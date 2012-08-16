@@ -6,7 +6,6 @@ import org.frans.thesis.GUI.CFComponentMenuItemListener;
 import org.frans.thesis.GUI.CFScene;
 import org.frans.thesis.service.CFFile;
 import org.frans.thesis.service.CFTabletopClient;
-import org.frans.thesis.service.CFTabletopClientManager;
 import org.mt4j.MTApplication;
 import org.mt4j.components.TransformSpace;
 import org.mt4j.components.visibleComponents.font.FontManager;
@@ -29,22 +28,9 @@ import processing.core.PImage;
 public class CFMobileDeviceProxy extends CFComponent {
 
 	/**
-	 * The name of the client that is represented by this proxy.
-	 */
-	private String clientName;
-
-	/**
 	 * The color associated by this proxy.
 	 */
 	private MTColor color;
-
-	/**
-	 * The path to a facebook logo.
-	 */
-	private String fbImagePath = "org" + MTApplication.separator + "frans"
-			+ MTApplication.separator + "thesis" + MTApplication.separator
-			+ "GUI" + MTApplication.separator + "data"
-			+ MTApplication.separator + "facebook_logo.png";
 
 	/**
 	 * The path to an android logo.
@@ -64,39 +50,33 @@ public class CFMobileDeviceProxy extends CFComponent {
 	 * The client manager that manages the client that is represented by this
 	 * proxy.
 	 */
-	private CFTabletopClientManager tabletopClientManager;
+	private CFTabletopClient tabletopClient;
 
 	/**
 	 * Public constructor for this class. It sets up the component, scales it to
 	 * stack size, sets up the necessary gestures and creates the menu.
-	 * 
-	 * @param clientName
-	 *            The name of the client represented by this proxy.
 	 * @param scene
 	 *            The scene to which this proxy belongs.
-	 * @param tabletopClientManager
-	 *            The clientmanager of the client represented by this proxy.
-	 * @param color
-	 *            The color associated with this proxy.
+	 * @param tabletopClient
+	 *            The client represented by this proxy.
 	 */
-	public CFMobileDeviceProxy(String clientName,
-			CFScene scene, CFTabletopClientManager tabletopClientManager,
-			MTColor color) {
+	public CFMobileDeviceProxy(CFScene scene, CFTabletopClient tabletopClient) {
 		super(scene);
-		this.color = color;
-		this.clientName = clientName;
-		this.tabletopClientManager = tabletopClientManager;
-		setUpComponent(scene.getMTApplication());
+		this.tabletopClient = tabletopClient;
+		setupStroke();
+		setupComponent();
 		this.scaleComponentToStackSize();
-		setUpGestures();
-		this.setStrokeColor(this.getColor());
-		createMenu();
+		setupGestures();
+		setupMenu();
+	}
+
+	private void setupStroke() {
 	}
 
 	/**
 	 * Creates the menu of a proxy with three buttons.
 	 */
-	private void createMenu() {
+	private void setupMenu() {
 		this.setComponentMenu(new CFComponentMenu(this));
 		this.getComponentMenu().addMenuItem("photos.png",
 				new CFComponentMenuItemListener() {
@@ -144,18 +124,8 @@ public class CFMobileDeviceProxy extends CFComponent {
 	 * of the client to REQUESTING_MUSIC and starts the spinner.
 	 */
 	private void downloadMusicFiles() {
-		this.getTabletopClientManager().setStatus(this.getClientName(),
-				CFTabletopClient.REQUESTING_MUSIC);
+		this.getTabletopClient().setStatus(CFTabletopClient.REQUESTING_MUSIC);
 		this.startSpinner();
-	}
-
-	/**
-	 * Returns the name of the client being represented by the proxy.
-	 * 
-	 * @return
-	 */
-	public String getClientName() {
-		return clientName;
 	}
 
 	/**
@@ -171,8 +141,8 @@ public class CFMobileDeviceProxy extends CFComponent {
 	 * Returns the client manager of the client that is being represented by
 	 * this proxy.
 	 */
-	private CFTabletopClientManager getTabletopClientManager() {
-		return this.tabletopClientManager;
+	private CFTabletopClient getTabletopClient() {
+		return this.tabletopClient;
 	}
 
 	/**
@@ -184,8 +154,7 @@ public class CFMobileDeviceProxy extends CFComponent {
 	public void handleDroppedCFComponent(CFComponent component) {
 		if (component instanceof CFSong) {
 			CFSong song = (CFSong) component;
-			this.getTabletopClientManager().sendFileToClient(
-					this.getClientName(), song.getFile());
+			this.getTabletopClient().sendFile(song.getFile());
 		}
 	}
 
@@ -208,8 +177,7 @@ public class CFMobileDeviceProxy extends CFComponent {
 	 *            The image that has to be published on fb.
 	 */
 	protected void publishImageOnFacebook(CFFile cfFile) {
-		this.getTabletopClientManager().publishImageOnFacebook(
-				this.getClientName(), cfFile);
+		this.getTabletopClient().publishImageOnFacebook(cfFile);
 	}
 
 	/**
@@ -218,14 +186,18 @@ public class CFMobileDeviceProxy extends CFComponent {
 	 * @param mtApplication
 	 *            The application to which this proxy belongs.
 	 */
-	private void setUpComponent(MTApplication mtApplication) {
-		MTTextArea textField = new MTTextArea(mtApplication, FontManager
-				.getInstance().createFont(mtApplication, "SansSerif", 30,
+	private void setupComponent() {
+		this.color = MTColor.randomColor();
+		this.color.setAlpha(MTColor.ALPHA_HALF_TRANSPARENCY);
+		this.setStrokeColor(this.getColor());
+		
+		MTTextArea textField = new MTTextArea(this.getCFScene().getMTApplication(), FontManager
+				.getInstance().createFont(this.getCFScene().getMTApplication(), "SansSerif", 30,
 						new MTColor(255, 255, 255)));
 		// Create a textfield
 		textField.setNoStroke(true);
 		textField.setNoFill(true);
-		textField.setText(this.clientName);
+		textField.setText(this.getTabletopClient().getName());
 		textField.setPickable(false);
 
 		PImage pImage = getCFScene().getMTApplication().loadImage(imagePath);
@@ -247,28 +219,15 @@ public class CFMobileDeviceProxy extends CFComponent {
 		mtImage.translate(new Vector3D(0, textField
 				.getHeightXY(TransformSpace.GLOBAL), 0));
 		this.setFillColor(getColor());
-		// this.turnAutoScaleOff();
-
-		PImage facebookImage = getCFScene().getMTApplication().loadImage(
-				fbImagePath);
-		MTRectangle facebookLogo = new MTRectangle(getCFScene()
-				.getMTApplication(), facebookImage);
-		facebookLogo.setNoStroke(true);
-		facebookLogo.setPickable(false);
-		this.addChild(facebookLogo);
-		facebookLogo.setPositionRelativeToParent(new Vector3D(this
-				.getWidthXY(TransformSpace.GLOBAL), this
-				.getHeightXY(TransformSpace.GLOBAL)));
 	}
 
 	/**
 	 * Sets up the gestures which this proxy has to handle.
 	 * In this case a listener is added to handle taps so the menu is shown or hidden.
 	 */
-	private void setUpGestures() {
+	private void setupGestures() {
 		this.addGestureListener(TapProcessor.class,
 				new IGestureEventListener() {
-
 					@Override
 					public boolean processGestureEvent(MTGestureEvent me) {
 						TapEvent tapEvent = (TapEvent) me;

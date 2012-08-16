@@ -62,6 +62,18 @@ public class CFTabletopClientManager {
 	}
 
 	/**
+	 * Returns a client with a given name.
+	 * 
+	 * @param name
+	 *            The name of the client that should be returned.
+	 * @return The instance of CFTabletopClient with the given name if it
+	 *         exists, null otherwise.
+	 */
+	public CFTabletopClient getClient(String name) {
+		return this.getClients().get(name);
+	}
+
+	/**
 	 * Gets the next file that has to be published on facebook.
 	 * 
 	 * @param clientName

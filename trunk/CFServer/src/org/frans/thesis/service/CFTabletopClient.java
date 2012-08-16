@@ -150,7 +150,7 @@ public class CFTabletopClient {
 	/**
 	 * Returns the name of this client.
 	 */
-	private String getName() {
+	public String getName() {
 		return this.name;
 	}
 

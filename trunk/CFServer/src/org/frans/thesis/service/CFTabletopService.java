@@ -97,7 +97,7 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 	public boolean attach(String clientName) throws BusException {
 		this.getClientManager().addTabletopClient(clientName);
 		for (CFTabletopServiceListener listener : this.getListeners()) {
-			listener.addMobileDevice(clientName, this.getClientManager());
+			listener.mobileDeviceConnected(clientName, this.getClientManager());
 		}
 		logger.info("New client connected: " + clientName);
 		return true;
@@ -107,7 +107,7 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 	 * Publishes this service in the local wifi network so clients can discover
 	 * it and connect with it.
 	 */
-	public void connect() {
+	public void start() {
 		BusAttachment mBus;
 		mBus = new BusAttachment("AppName", BusAttachment.RemoteMessage.Receive);
 		Status status;
@@ -210,7 +210,7 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 	@Override
 	public boolean detach(String name) throws BusException {
 		for (CFTabletopServiceListener listener : this.getListeners()) {
-			listener.removeMobileDevice(name);
+			listener.mobileDeviceDisconnected(name);
 		}
 		logger.info("Client disconnected: " + name);
 		return true;
@@ -227,7 +227,7 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 	 */
 	protected void fileFinished(CFFile file, String name) {
 		for (CFTabletopServiceListener listener : this.getListeners()) {
-			listener.fileFinished(file, name);
+			listener.fileTransferred(file, name);
 		}
 		logger.info("File transfer complete: " + file.getPath());
 	}
@@ -286,7 +286,7 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 	public boolean setIdle(String name) throws BusException {
 		this.getClientManager().setIdle(name);
 		for (CFTabletopServiceListener listener : this.getListeners()) {
-			listener.setIdle(name);
+			listener.clientIsIdle(name);
 		}
 		return false;
 	}

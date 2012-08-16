@@ -12,14 +12,13 @@ public class CFMusicApplication extends CFApplication {
 		initialize();
 		logger.info("Initializing GUI: OK");
 		logger.info("Publishing tabletop service in wireless network");
-		service.connect();
 		logger.info("Publishing tabletop service in wireless network: OK");
 	}
 
 	@Override
 	public void setupScene() {
-		scene = new CFMusicScene(this, "CFPhotoScene");
+		this.setScene(new CFMusicScene(this, "CFMusicScene"));
 		service.addTabletopServiceListener((CFTabletopServiceListener) scene);
+		service.start();
 	}
-
 }
