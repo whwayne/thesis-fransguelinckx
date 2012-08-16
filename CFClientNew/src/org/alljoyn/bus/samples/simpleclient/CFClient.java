@@ -22,16 +22,15 @@ import android.os.Bundle;
 import android.os.HandlerThread;
 import android.util.Log;
 
-//import com.facebook.android.Facebook;
+import com.facebook.android.DialogError;
+import com.facebook.android.Facebook;
+import com.facebook.android.Facebook.DialogListener;
+import com.facebook.android.FacebookError;
 
 public class CFClient extends Activity {
-//	private Facebook facebook = new Facebook("292760657458958");
+	private Facebook facebook = new Facebook("292760657458958");
 	private static final String TAG = "SimpleClient";
-	/* Load the native alljoyn_java library. */
-	static {
-		System.loadLibrary("alljoyn_java");
-	}
-
+	
 	/* Handler used to make calls to AllJoyn methods. See onCreate(). */
 	private CFBusHandler mBusHandler;
 
@@ -48,37 +47,37 @@ public class CFClient extends Activity {
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 
-//		facebook.authorizeCallback(requestCode, resultCode, data);
+		facebook.authorizeCallback(requestCode, resultCode, data);
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-//		String[] permissions = { "offline_access", "publish_stream",
-//				"user_photos", "publish_checkins", "photo_upload" };
-//
-//		facebook.authorize(this, permissions, new DialogListener() {
-//			@Override
-//			public void onCancel() {
-//				logInfo("Cancelled");
-//			}
-//
-//			@Override
-//			public void onComplete(Bundle values) {
-//				logInfo("Facebook login complete.");
-//			}
-//
-//			@Override
-//			public void onError(DialogError e) {
-//				logInfo(e.getMessage());
-//			}
-//
-//			@Override
-//			public void onFacebookError(FacebookError error) {
-//				logInfo(error.getMessage());
-//			}
-//		});
+		String[] permissions = { "offline_access", "publish_stream",
+				"user_photos", "publish_checkins", "photo_upload" };
+
+		facebook.authorize(this, permissions, new DialogListener() {
+			@Override
+			public void onCancel() {
+				logInfo("Cancelled");
+			}
+
+			@Override
+			public void onComplete(Bundle values) {
+				logInfo("Facebook login complete.");
+			}
+
+			@Override
+			public void onError(DialogError e) {
+				logInfo(e.getMessage());
+			}
+
+			@Override
+			public void onFacebookError(FacebookError error) {
+				logInfo(error.getMessage());
+			}
+		});
 
 		/*
 		 * Make all AllJoyn calls through a separate handler thread to prevent
@@ -88,7 +87,7 @@ public class CFClient extends Activity {
 		HandlerThread busThread = new HandlerThread("BusHandler");
 		busThread.start();
 		logInfo("busthread started");
-		mBusHandler = new CFBusHandler(busThread.getLooper());
+		mBusHandler = new CFBusHandler(busThread.getLooper(), facebook);
 		logInfo("new bus handler created");
 		/* Connect to an AllJoyn object. */
 		mBusHandler.sendEmptyMessage(CFBusHandler.CONNECT);
