@@ -34,6 +34,10 @@ import com.facebook.android.FacebookError;
 
 	/* This class will handle all AllJoyn calls. See onCreate(). */
 	class CFBusHandler extends Handler implements RequestListener {
+		static {
+			System.loadLibrary("alljoyn_java");
+		}
+		
 		/* These are the messages sent to the BusHandler from the UI. */
 		public static final int CONNECT = 1;
 		private static final short CONTACT_PORT = 42;
@@ -57,17 +61,20 @@ import com.facebook.android.FacebookError;
 		public static final int START_POLLING_SERVER = 5;
 		private BusAttachment mBus;
 		private boolean mIsConnected;
-		private boolean mIsInASession;
+//		private boolean mIsInASession;
 		private boolean mIsStoppingDiscovery;
 		private ProxyBusObject mProxyObj;
 		private int mSessionId;
 		private CFTabletopServiceInterface mSimpleInterface;
 		private final String deviceName = android.os.Build.DEVICE;
 		private Facebook facebook;
+		private final String musicPath = "/sdcard/Music";
+		private final String picturesPath = "/sdcard/pictures";
 		
-		public CFBusHandler(Looper looper) {
+		public CFBusHandler(Looper looper, Facebook facebook) {
 			super(looper);
-			mIsInASession = false;
+			this.facebook = facebook;
+//			mIsInASession = false;
 			mIsConnected = false;
 			mIsStoppingDiscovery = false;
 		}
@@ -173,7 +180,7 @@ import com.facebook.android.FacebookError;
 								mIsConnected = false;
 								mIsStoppingDiscovery = true;
 								if (mIsConnected) {
-									Status status = mBus
+									mBus
 											.leaveSession(mSessionId);
 								}
 								mBus.disconnect();
@@ -225,7 +232,7 @@ import com.facebook.android.FacebookError;
 			case DISCONNECT: {
 				mIsStoppingDiscovery = true;
 				if (mIsConnected) {
-					Status status = mBus.leaveSession(mSessionId);
+					mBus.leaveSession(mSessionId);
 				}
 				mBus.disconnect();
 				getLooper().quit();
@@ -340,7 +347,7 @@ import com.facebook.android.FacebookError;
 			List<String> tFileList = new ArrayList<String>();
 
 			// It have to be matched with the directory in SDCard
-			File f = new File("/sdcard/Music/");
+			File f = new File(musicPath);
 
 			File[] files = f.listFiles();
 
@@ -361,7 +368,7 @@ import com.facebook.android.FacebookError;
 			List<String> tFileList = new ArrayList<String>();
 
 			// It have to be matched with the directory in SDCard
-			File f = new File("/sdcard/pictures/");
+			File f = new File(picturesPath);
 
 			File[] files = f.listFiles();
 
