@@ -53,8 +53,6 @@ public abstract class CFComponent extends MTRectangle implements
 	 * Public constructor for this abstract component. Sets two arguments and
 	 * calls setUpGestures().
 	 * 
-	 * @param mtApplication
-	 *            The application to which this component belongs.
 	 * @param scene
 	 *            The scene to which this component belongs.
 	 */

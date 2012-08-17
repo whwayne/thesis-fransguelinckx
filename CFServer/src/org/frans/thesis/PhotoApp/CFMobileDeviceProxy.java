@@ -182,8 +182,6 @@ public class CFMobileDeviceProxy extends CFComponent implements
 
 	/**
 	 * Returns the color associated with this proxy.
-	 * 
-	 * @return
 	 */
 	protected MTColor getColor() {
 		return this.color;
