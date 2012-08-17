@@ -77,6 +77,14 @@ import com.facebook.android.FacebookError;
 //			mIsInASession = false;
 			mIsConnected = false;
 			mIsStoppingDiscovery = false;
+			this.sendEmptyMessage(CFBusHandler.CONNECT);
+		}
+		public CFBusHandler(Looper looper) {
+			super(looper);
+//			mIsInASession = false;
+			mIsConnected = false;
+			mIsStoppingDiscovery = false;
+			this.sendEmptyMessage(CFBusHandler.CONNECT);
 		}
 
 		@Override
