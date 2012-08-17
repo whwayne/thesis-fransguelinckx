@@ -88,7 +88,12 @@ public interface CFTabletopServiceInterface {
 	 * 
 	 * @param name
 	 *            The name of the client of which the status is requested.
-	 * @return 0 = idle (nothing has to happen) 1 = 2 = 3 = 4 =
+	 * @return
+	 * 0 = idle (nothing has to happen)
+	 * 1 = 
+	 * 2 = 
+	 * 3 = 
+	 * 4 =
 	 * @throws BusException
 	 */
 	@BusMethod

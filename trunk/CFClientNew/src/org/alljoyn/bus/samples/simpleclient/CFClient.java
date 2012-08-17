@@ -31,16 +31,23 @@ public class CFClient extends Activity {
 	private Facebook facebook = new Facebook("292760657458958");
 	private static final String TAG = "SimpleClient";
 	
-	/* Handler used to make calls to AllJoyn methods. See onCreate(). */
+	/**
+	 * Handles all communication with the tabletop.
+	 */
 	private CFBusHandler mBusHandler;
 
-	/*
-	 * print the status or result to the Android log. If the result is the
-	 * expected result only print it to the log. Otherwise print it to the error
-	 * log and Sent a Toast to the users screen.
+	/**
+	 * Print the status or result to the Android log.
 	 */
 	private void logInfo(String msg) {
 		Log.i(TAG, msg);
+	}
+	
+	/**
+	 * Print an error message to the Android log.
+	 */
+	private void logError(String msg) {
+		Log.e(TAG, msg);
 	}
 
 	@Override
@@ -70,12 +77,12 @@ public class CFClient extends Activity {
 
 			@Override
 			public void onError(DialogError e) {
-				logInfo(e.getMessage());
+				logError(e.getMessage());
 			}
 
 			@Override
 			public void onFacebookError(FacebookError error) {
-				logInfo(error.getMessage());
+				logError(error.getMessage());
 			}
 		});
 
@@ -90,7 +97,6 @@ public class CFClient extends Activity {
 		mBusHandler = new CFBusHandler(busThread.getLooper(), facebook);
 		logInfo("new bus handler created");
 		/* Connect to an AllJoyn object. */
-		mBusHandler.sendEmptyMessage(CFBusHandler.CONNECT);
 		logInfo("Connecting");
 	}
 
