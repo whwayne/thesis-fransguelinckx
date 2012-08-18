@@ -42,7 +42,7 @@ public abstract class CFComponent extends MTRectangle implements
 	/**
 	 * A contextual menu that belongs to this component.
 	 */
-	private CFComponentMenu menu;
+	protected CFComponentMenu menu;
 
 	/**
 	 * The scene to which this component belongs.
