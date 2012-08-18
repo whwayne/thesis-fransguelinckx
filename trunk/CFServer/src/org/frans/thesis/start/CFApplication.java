@@ -1,4 +1,4 @@
-package org.frans.thesis.test;
+package org.frans.thesis.start;
 
 import org.apache.log4j.Logger;
 import org.frans.thesis.GUI.CFScene;

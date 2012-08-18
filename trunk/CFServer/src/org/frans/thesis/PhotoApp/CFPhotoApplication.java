@@ -1,7 +1,7 @@
 package org.frans.thesis.PhotoApp;
 
 import org.frans.thesis.service.CFTabletopServiceListener;
-import org.frans.thesis.test.CFApplication;
+import org.frans.thesis.start.CFApplication;
 
 /**
  * The main class to start the application.

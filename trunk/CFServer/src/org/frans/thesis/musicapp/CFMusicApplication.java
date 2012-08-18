@@ -1,7 +1,7 @@
 package org.frans.thesis.musicapp;
 
 import org.frans.thesis.service.CFTabletopServiceListener;
-import org.frans.thesis.test.CFApplication;
+import org.frans.thesis.start.CFApplication;
 
 public class CFMusicApplication extends CFApplication {
 
