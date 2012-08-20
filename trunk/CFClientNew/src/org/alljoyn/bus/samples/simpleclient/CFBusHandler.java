@@ -70,14 +70,11 @@ import com.facebook.android.FacebookError;
 		private Facebook facebook;
 		private final String musicPath = "/sdcard/Music";
 		private final String picturesPath = "/sdcard/pictures";
+		private boolean secure;
 		
 		public CFBusHandler(Looper looper, Facebook facebook) {
-			super(looper);
+			this(looper);
 			this.facebook = facebook;
-//			mIsInASession = false;
-			mIsConnected = false;
-			mIsStoppingDiscovery = false;
-			this.sendEmptyMessage(CFBusHandler.CONNECT);
 		}
 		public CFBusHandler(Looper looper) {
 			super(looper);
