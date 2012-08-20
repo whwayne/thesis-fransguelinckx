@@ -1,5 +1,6 @@
 package org.frans.thesis.PhotoApp;
 
+import org.frans.thesis.service.CFTabletopService;
 import org.frans.thesis.service.CFTabletopServiceListener;
 import org.frans.thesis.start.CFApplication;
 
@@ -16,6 +17,7 @@ public class CFPhotoApplication extends CFApplication {
 	 * service.connect(): Published the tabletop service in the local wireless network.
 	 */
 	public static void main(String[] args) {
+		service = new CFTabletopService(false);
 		initialize();
 		service.start();
 	}

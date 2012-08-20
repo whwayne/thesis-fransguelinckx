@@ -1,63 +1,43 @@
 package org.frans.thesis.test;
 
-import static org.junit.Assert.*;
+import org.frans.thesis.GUI.CFScene;
+import org.mt4j.MTApplication;
+import org.mt4j.components.MTCanvas;
+import org.mt4j.test.AbstractWindowTestcase;
+import org.mt4j.test.testUtil.TestRunnable;
 
-import org.frans.thesis.start.CFApplication;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.mt4j.util.math.Vector3D;
+public class CFComponentTest extends AbstractWindowTestcase {
 
-public class CFComponentTest {
+	private CFComponentNotAbstract parent;
+	private MTApplication app;
+	private CFScene scene;
 	
-	CFComponentNotAbstract component;
-	CFSceneNotAbstract scene;
-	CFApplication application;
-
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
+	public void testComponentAddRemove(){
+		runTest(new TestRunnable() {
+			@Override
+			public void runMTTestCode() {
+				assertEquals(parent.getCFScene(), scene);
+				assertEquals(null, parent.getComponentMenu());
+				assertEquals(100.0, parent.getHeight());
+				assertEquals(100.0, parent.getWidth());
+			}
+		});
 	}
 
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-	}
-
-	@Before
-	public void setUp() throws Exception {
-		application = new CFApplicationNotABstract();
-		scene = new CFSceneNotAbstract(application, "testscene");
-		component = new CFComponentNotAbstract(scene);
-	}
-
-	@After
-	public void tearDown() throws Exception {
-	}
-
-	@Test
-	public void testConstructor() {
-		assertEquals(scene, component.getCFScene());
-		assertEquals(component.getComponentMenu(), null);
-	}
-	
-	@Test
-	public void testResize() {
-		float width = component.getWidth();
-		float height = component.getHeight();
-		assertEquals(width, 100, 0);
-		assertEquals(height, 100, 0);
+	@Override
+	public void inStartUp(MTApplication app) {
+		this.app = app;
+		//Add a scene to the mt application
+		this.scene = new CFSceneNotAbstract(app, "Dummy Scene");
+		app.addScene(scene);
 		
-		component.scaleImage(3);
-		assertEquals(width, 300, 0);
-		assertEquals(height, 300, 0);
+		//Set up components
+		parent = new CFComponentNotAbstract(scene);
+		getCanvas().addChild(parent);
 	}
 	
-	@Test
-	public void testReposition(){
-		Vector3D position = new Vector3D(123, 456);
-		component.reposition(position);
-		assertEquals(position, component.getPosition());
+	public MTCanvas getCanvas(){
+		return this.scene.getCanvas();
 	}
 
 }
