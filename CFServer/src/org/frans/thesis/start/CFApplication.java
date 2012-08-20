@@ -8,7 +8,7 @@ import org.mt4j.MTApplication;
 public abstract class CFApplication extends MTApplication {
 
 	private static final long serialVersionUID = 7630065981396687470L;
-	protected static CFTabletopService service = new CFTabletopService();
+	protected static CFTabletopService service;
 	protected CFScene scene;
 	
 	public void setScene(CFScene scene) {

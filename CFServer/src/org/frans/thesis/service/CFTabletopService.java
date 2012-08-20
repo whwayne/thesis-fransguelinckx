@@ -15,8 +15,11 @@
  */
 package org.frans.thesis.service;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 
+import org.alljoyn.bus.AuthListener;
 import org.alljoyn.bus.BusAttachment;
 import org.alljoyn.bus.BusException;
 import org.alljoyn.bus.BusListener;
@@ -35,7 +38,7 @@ import org.apache.log4j.Logger;
 public class CFTabletopService implements CFTabletopServiceInterface, BusObject {
 
 	private static Logger logger = Logger.getLogger(CFTabletopService.class);
-	
+
 	/**
 	 * AllJoyn code.
 	 */
@@ -44,8 +47,8 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 		public void nameOwnerChanged(String busName, String previousOwner,
 				String newOwner) {
 			if ("org.alljoyn.bus.samples.simple".equals(busName)) {
-				logger.info("BusAttachement.nameOwnerChanged(" + busName
-						+ ", " + previousOwner + ", " + newOwner);
+				logger.info("BusAttachement.nameOwnerChanged(" + busName + ", "
+						+ previousOwner + ", " + newOwner);
 			}
 		}
 	}
@@ -68,13 +71,15 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 	 * tabletop or when the status of a client was set to IDLE.
 	 */
 	private Vector<CFTabletopServiceListener> listeners;
+	private boolean secure;
 
 	/**
 	 * Public constructor.
 	 */
-	public CFTabletopService() {
+	public CFTabletopService(boolean secure) {
 		this.clientManager = new CFTabletopClientManager(this);
 		this.listeners = new Vector<CFTabletopServiceListener>();
+		this.secure = secure;
 	}
 
 	/**
@@ -111,6 +116,16 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 		BusAttachment mBus;
 		mBus = new BusAttachment("AppName", BusAttachment.RemoteMessage.Receive);
 		Status status;
+
+		if (this.isSecure()) {
+			SrpLogonListener myAuthListener = new SrpLogonListener();
+
+			status = mBus.registerAuthListener("ALLJOYN_SRP_LOGON",
+					myAuthListener);
+			if (status != Status.OK) {
+				return;
+			}
+		}
 
 		status = mBus.registerBusObject(this, "/SimpleService");
 		if (status != Status.OK) {
@@ -207,6 +222,10 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 		}
 	}
 
+	private boolean isSecure() {
+		return this.secure;
+	}
+
 	@Override
 	public boolean detach(String name) throws BusException {
 		for (CFTabletopServiceListener listener : this.getListeners()) {
@@ -289,5 +308,40 @@ public class CFTabletopService implements CFTabletopServiceInterface, BusObject 
 			listener.clientIsIdle(name);
 		}
 		return false;
+	}
+
+	class SrpLogonListener implements AuthListener {
+		private Map<String, char[]> mUserNamePassword;
+
+		/* Populate the user name and password table used by this listener. */
+		public SrpLogonListener() {
+			mUserNamePassword = new HashMap<String, char[]>();
+			mUserNamePassword.put("user1", "password1".toCharArray());
+			mUserNamePassword.put("user2", "password2".toCharArray());
+		}
+
+		/*
+		 * Given the user name, look up the password. Returning true without
+		 * setting the password tells the authentication engine to ask the peer
+		 * for the user name again.
+		 */
+		public boolean requested(String mechanism, String peerName, int count,
+				String userName, AuthRequest[] requests) {
+			char[] password = mUserNamePassword.get(userName);
+			if (password != null) {
+				for (AuthRequest request : requests) {
+					if (request instanceof PasswordRequest) {
+						((PasswordRequest) request).setPassword(password);
+					}
+				}
+			}
+			return true;
+		}
+
+		@Override
+		public void completed(String arg0, String arg1, boolean arg2) {
+			// TODO Auto-generated method stub
+
+		}
 	}
 }

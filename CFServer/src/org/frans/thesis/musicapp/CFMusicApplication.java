@@ -1,5 +1,6 @@
 package org.frans.thesis.musicapp;
 
+import org.frans.thesis.service.CFTabletopService;
 import org.frans.thesis.service.CFTabletopServiceListener;
 import org.frans.thesis.start.CFApplication;
 
@@ -8,6 +9,7 @@ public class CFMusicApplication extends CFApplication {
 	private static final long serialVersionUID = 1093780567228664551L;
 
 	public static void main(String[] args) {
+		service = new CFTabletopService(false);
 	    logger.info("Initializing GUI");
 		initialize();
 		logger.info("Initializing GUI: OK");
