@@ -11,7 +11,7 @@ public class FtpListDemo {
 		try {
 			client.connect("fransguelinckx.be");
 			client.login("fransguelinckx.be", "A0bRXGDp");
-			String[] names = client.listNames();
+			String[] names = client.listNames("Music");
 			for (String name : names) {
 				System.out.println("Name = " + name);
 			}
@@ -22,7 +22,14 @@ public class FtpListDemo {
 					System.out.println("FTPFile: "
 							+ ftpFile.getName()
 							+ "; ");
+					
 				}
+			}
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 			client.logout();
 		} catch (IOException e) {
